@@ -1,0 +1,53 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Build output
+dist/
+build/
+out/
+*.tsbuildinfo
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Test output
+coverage/
+.vitest-cache/
+*.snap.tmp
+
+# Editors
+.vscode/
+!.vscode/extensions.json
+!.vscode/settings.recommended.json
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Local Remotion outputs (the showreel composition writes here)
+out/
+*.mp4
+*.webm
+
+# Local audio you've supplied to the showreel — by convention, don't commit it
+src/showreel/public/music/
+public/music/
+
+# Misc
+*.log
+.cache/
+.parcel-cache/
+.next/
+.turbo/

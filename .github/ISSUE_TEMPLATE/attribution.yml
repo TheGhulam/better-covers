@@ -1,0 +1,54 @@
+name: Attribution issue
+description: Report a missing, incorrect, or improper credit
+labels: ["attribution"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for helping us keep the credit record accurate. We take
+        these seriously.
+
+  - type: input
+    id: where
+    attributes:
+      label: Where in the project does the issue appear?
+      placeholder: "README.md table row 02 / ATTRIBUTIONS.md §05 / src/renderers/12-flow.ts doc comment"
+    validations:
+      required: true
+
+  - type: textarea
+    id: what
+    attributes:
+      label: What is currently said?
+      placeholder: Quote the line(s).
+    validations:
+      required: true
+
+  - type: textarea
+    id: correction
+    attributes:
+      label: What should it say, and why?
+      description: |
+        Please cite the primary source supporting the correction.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Kind of issue
+      options:
+        - Missing credit
+        - Incorrect date or attribution
+        - Improper use of a name (your name or your work)
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: relationship
+    attributes:
+      label: Your relationship to the work (optional)
+      description: |
+        Are you the original author, an heir/estate, a co-author, or an
+        independent observer? This helps us prioritize.

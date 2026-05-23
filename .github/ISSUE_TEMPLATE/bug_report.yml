@@ -1,0 +1,74 @@
+name: Bug report
+description: Something is broken or behaves unexpectedly
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to file a report. The more concretely you
+        can describe the problem, the faster we can fix it.
+
+        For security issues, please use the security advisory flow instead.
+        See [SECURITY.md](../blob/main/SECURITY.md).
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: A clear, concrete description.
+      placeholder: |
+        renderHoarfrost produces a blank canvas when called with seed
+        "long-string-with-many-characters" in Firefox 130.
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Minimal reproduction
+      description: Code we can run that triggers the bug.
+      render: tsx
+      placeholder: |
+        import { renderHoarfrost, hashStr } from "better-covers";
+
+        const canvas = document.createElement("canvas");
+        canvas.width = 1200; canvas.height = 630;
+        renderHoarfrost(canvas.getContext("2d")!, 1200, 630, hashStr("repro"));
+    validations:
+      required: true
+
+  - type: input
+    id: better-covers-version
+    attributes:
+      label: better-covers version
+      placeholder: "0.1.0"
+    validations:
+      required: true
+
+  - type: input
+    id: runtime
+    attributes:
+      label: Runtime
+      description: Browser + version, or Node version, or edge runtime.
+      placeholder: "Chrome 130 / Node 22.5 / Cloudflare Workers"
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: determinism
+    attributes:
+      label: Determinism check
+      description: |
+        The library promises that the same `(W, H, SEED)` always produces
+        the same pixels. If you're reporting non-determinism (different
+        pixels on different runs), please tick the box below.
+      options:
+        - label: "I ran the renderer twice with the same seed and got different output."
+        - label: "I am running on multiple machines / runtimes and getting different output."

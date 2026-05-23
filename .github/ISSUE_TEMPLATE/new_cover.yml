@@ -1,0 +1,75 @@
+name: New cover proposal
+description: Propose a new renderer for the collection
+labels: ["proposal", "renderer"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        The collection sits at fifteen for a reason — we'd rather swap one
+        than grow. Use this template to make the case for either a new
+        cover or a replacement.
+
+        Please read [CONTRIBUTING.md](../blob/main/CONTRIBUTING.md) first.
+
+  - type: input
+    id: name
+    attributes:
+      label: Proposed cover name
+      placeholder: "Rayleigh–Bénard convection"
+    validations:
+      required: true
+
+  - type: textarea
+    id: phenomenon
+    attributes:
+      label: What is the phenomenon, algorithm, or tradition?
+      description: One paragraph. Imagine you're describing it to a friend.
+    validations:
+      required: true
+
+  - type: textarea
+    id: source
+    attributes:
+      label: Primary source
+      description: |
+        A specific paper, book, or dated publication. DOI / ISBN / URL.
+        For artistic traditions, the canonical reference (book or
+        artist + dated work).
+      placeholder: |
+        Rayleigh, Lord. "On convection currents in a horizontal layer of
+        fluid..." Phil. Mag. Series 6, 32:192 (1916).
+    validations:
+      required: true
+
+  - type: textarea
+    id: visual
+    attributes:
+      label: What should it look like?
+      description: |
+        A mockup, hand drawing, or text description of the target output
+        at 1200×630. Links to existing renderings are welcome.
+    validations:
+      required: true
+
+  - type: textarea
+    id: justification
+    attributes:
+      label: Why this one?
+      description: |
+        What part of the visual / conceptual space do the current fifteen
+        not cover? If it's a replacement, which existing cover is closest,
+        and why is the proposal an improvement?
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: rules
+    attributes:
+      label: Confirm
+      options:
+        - label: "I have read CONTRIBUTING.md."
+          required: true
+        - label: "This is not a verbatim reproduction of a named artwork."
+          required: true
+        - label: "The renderer will be deterministic and free of network calls."
+          required: true
