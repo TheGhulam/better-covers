@@ -27,7 +27,8 @@
  * - T. Hobbs, "Fidenza" (Art Blocks, 11 June 2021),
  *   <https://www.artblocks.io/collection/fidenza-by-tyler-hobbs>.
  * - T. Hobbs, "Flow Fields," <https://www.tylerxhobbs.com/words/flow-fields>.
- * - K. Mitchell, "Flow field methods in art," ca. 2005 (early prior art).
+ * - K. Mitchell, "Modeling Vortical Flows" (early prior art in algorithmic
+ *   generative work).
  *
  * @module renderers/flow
  */

@@ -14,19 +14,19 @@
  * brighter regions for the look of a tungsten-lit lab photograph.
  *
  * Historical notes
- * - Robert Hooke noticed the effect with two candles and a concave lens
- *   in 1665.
+ * - Robert Hooke, *Micrographia* (1665), Observation LVIII — early notice
+ *   of thermal refraction in air.
  * - Foucault's 1859 knife-edge test for telescope mirrors used the same
  *   geometry.
  * - August Toepler applied the technique to fluid flow in 1864 and named it.
- * - Schardin systematized variants (focusing, color, background-oriented)
- *   in 1942.
+ * - Schardin systematized variants in VDI-Forschungsheft 367 (1934) and
+ *   a 1942 review in *Ergebnisse der exakten Naturwissenschaften*.
  *
  * References
  * - A. Toepler, *Beobachtungen nach einer neuen optischen Methode* (Cohen &
  *   Sohn, Bonn, 1864).
  * - H. Schardin, *Das Toeplersche Schlierenverfahren*, VDI-Forschungsheft
- *   367 (1942).
+ *   367 (1934).
  * - G. S. Settles, *Schlieren and Shadowgraph Techniques* (Springer, 2001) —
  *   modern reference.
  *

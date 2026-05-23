@@ -12,15 +12,15 @@
  * This variant modulates the minimum-distance radius by a density field
  * (a Gaussian sphere plus a low-frequency fBm wobble), so the stippling
  * darkens toward the upper-left "subject" and lightens toward the edges —
- * the same trick Mitchell's 1987 paper called "importance sampling."
+ * region-varying density in the spirit of Mitchell (1987).
  *
  * References
  * - R. Bridson, "Fast Poisson disk sampling in arbitrary dimensions,"
  *   ACM SIGGRAPH 2007 Sketches, Article 22.
  *   <https://doi.org/10.1145/1278780.1278807>
  * - D. P. Mitchell, "Generating antialiased images at low sampling
- *   densities," ACM SIGGRAPH Computer Graphics 21:4, 65–72 (1987) — origin
- *   of importance-modulated sample density.
+ *   densities," ACM SIGGRAPH Computer Graphics 21:4, 65–72 (1987) —
+ *   conceptual precedent for region-varying sample density.
  *
  * @module renderers/stippling
  */

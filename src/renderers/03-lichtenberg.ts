@@ -1,24 +1,25 @@
 /**
  * 03 · Lichtenberg — single-source upward DLA with η > 1 stickiness
  *
- * Same Laplacian-growth family as ordinary diffusion-limited aggregation,
- * but with a tip-favoring stickiness rule: walkers touching a single
- * neighbor stick with probability 1.0; walkers touching two or more neighbors
- * stick only with probability 0.3. The result is a sparser, thirstier
- * fractal — the η ≈ 2 regime — that hunts for low-density paths the way a
- * real dielectric discharge does.
+ * Random-walker DLA with a tip-favoring stickiness heuristic: walkers
+ * touching a single neighbor stick with probability 1.0; walkers touching
+ * two or more neighbors stick only with probability 0.3. The result is a
+ * sparser, thirstier fractal inspired by the η > 1 dielectric-breakdown
+ * regime (Niemeyer et al. 1984), not a Laplacian DBM simulation.
  *
  * Visually: charge a block of acrylic with a particle accelerator, then
  * ground it; the trapped charge punches its way out and leaves a branching
  * crystallographic discharge frozen inside.
  *
  * References
- * - G. C. Lichtenberg, *Super nova methodo motum ac naturam fluidi electrici
- *   investigandi*, Novi Commentarii Societatis Regiae Scientiarum
- *   Gottingensis VII (Göttingen, 1777).
+ * - G. C. Lichtenberg, *De nova methodo naturam ac motum fluidi electrici
+ *   investigandi* (Commentatio prior), Novi Commentarii Societatis Regiae
+ *   Scientiarum Gottingensis VIII (Göttingen, 1778), 168–180.
  * - L. Niemeyer, L. Pietronero, H. J. Wiesmann, "Fractal Dimension of
- *   Dielectric Breakdown," Phys. Rev. Lett. 52, 1033 (1984) — the η > 1
- *   generalization of DLA used here.
+ *   Dielectric Breakdown," Phys. Rev. Lett. 52, 1033 (1984).
+ *   <https://doi.org/10.1103/PhysRevLett.52.1033>
+ * - T. A. Witten & L. M. Sander (1981/1983) — underlying random-walker DLA
+ *   (see also cover 01).
  *
  * @module renderers/lichtenberg
  */

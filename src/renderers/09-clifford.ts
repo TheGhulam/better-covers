@@ -21,8 +21,9 @@
  *
  * References
  * - C. A. Pickover, *Computers, Pattern, Chaos and Beauty* (St. Martin's
- *   Press, 1990) — the original published source for the four-parameter
- *   form used here.
+ *   Press, 1990) — published source for Pickover's Clifford (addition-form)
+ *   variant used here (de Jong's subtraction-form map appeared in Dewdney
+ *   1987, three years earlier).
  * - A. K. Dewdney, "Computer Recreations: Probing the strange attractions
  *   of chaos," Scientific American 257:1, 108–111 (July 1987) — Peter de
  *   Jong's attractor (close cousin).

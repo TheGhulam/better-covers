@@ -5,7 +5,8 @@
  * or more grains "topples," sending one grain to each of its four orthogonal
  * neighbors. Iterate until everything is stable. The result is the four-tone
  * Persian-miniature fractal of self-organized criticality whose continuum
- * limit is still being worked out (Levine & Pegden, Pegden & Smart, c. 2013–).
+ * limit was proved by Pegden & Smart (2013); fine structure by Levine,
+ * Pegden & Smart (2016).
  *
  * The model is "Abelian" because the final stable configuration is
  * independent of the order in which unstable sites are toppled — Dhar's
@@ -16,9 +17,11 @@
  *   explanation of 1/f noise," Phys. Rev. Lett. 59, 381–384 (1987).
  *   <https://doi.org/10.1103/PhysRevLett.59.381>
  * - D. Dhar, "Self-organized critical state of sandpile automaton models,"
- *   Phys. Rev. Lett. 64, 1613 (1990).
- * - L. Levine & W. Pegden, "Limiting shapes for deterministic centrally
- *   seeded growth models," J. Stat. Phys. (2009) and follow-ups.
+ *   Phys. Rev. Lett. 64, 1613–1616 (1990).
+ *   <https://doi.org/10.1103/PhysRevLett.64.1613>
+ * - W. Pegden & C. K. Smart, "Convergence of the abelian sandpile,"
+ *   Duke Math. J. 162(4), 627–642 (2013).
+ *   <https://doi.org/10.1215/00127094-2079677>
  *
  * @module renderers/sandpile
  */

@@ -14,14 +14,14 @@
  * statistically independent.
  *
  * References
- * - USGS, "US Topo Topographic Map Specifications," for the warm-ochre on
- *   charcoal convention.
- *   <https://www.usgs.gov/programs/national-geospatial-program/us-topo>
- * - W. E. Lorensen & H. E. Cline, "Marching cubes: A high-resolution 3D
+ * - USGS US Topo elevation symbology for brown/ochre contour ink (charcoal
+ *   background is cover-art styling, not USGS convention).
+ *   <https://www.usgs.gov/ngp-standards-and-specifications/us-topo-cartographic-specifications-elevation>
+ * - W. E. Lorensen & H. E. Cline, "Marching cubes: A high resolution 3D
  *   surface construction algorithm," ACM SIGGRAPH 21:4, 163–169 (1987) —
- *   parent algorithm; this renderer uses the 2D "marching squares"
- *   degenerate case, implicitly, by detecting threshold-crossings
- *   per-pixel.
+ *   iso-surface extraction lineage; this renderer uses scalar-field banding
+ *   at 14 thresholds, not marching squares.
+ *   <https://doi.org/10.1145/37402.37422>
  *
  * @module renderers/topo
  */
@@ -52,8 +52,7 @@ export const renderTopo: Renderer = (ctx, W, H, SEED) => {
       const dy = y - peakY;
       const bump = Math.exp(-(dx * dx + dy * dy) * invTwoSigSq) * peakStrength;
       const h = fbm(x * 0.004, y * 0.004, SEED, 5) + bump;
-      // "On line" = within 4.5 % of a threshold; this is implicit marching
-      // squares — we detect threshold crossings per pixel.
+      // Iso-line banding: pixels near each of 14 evenly spaced thresholds.
       const banded = (h * 14) % 1;
       const onLine = banded < 0.045 || banded > 0.955;
       const i = (y * W + x) * 4;

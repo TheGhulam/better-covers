@@ -10,10 +10,10 @@
  *   thin  → 1 thin  + 1 fat
  *   fat   → 2 fat   + 1 thin
  *
- * Start with a "sun" of ten fat triangles around the origin, recurse six
- * levels of the inflation rule, color by deflation depth. The result
- * recovers the quasicrystalline palette Lu & Steinhardt identified in 2007
- * on the 15th-century Darb-i Imam shrine in Isfahan.
+ * Start with a "sun" of ten thin triangles around the origin, recurse six
+ * levels of the inflation rule, and color tiles pseudo-randomly. The palette
+ * is Islamic-tile-inspired; Lu & Steinhardt (2007) identified the quasi-
+ * crystalline geometry at the 15th-century Darb-i Imam shrine in Isfahan.
  *
  * References
  * - R. Penrose, "The role of aesthetics in pure and applied mathematical

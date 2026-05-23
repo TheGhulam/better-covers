@@ -18,6 +18,8 @@
  *   <https://doi.org/10.1103/PhysRevLett.47.1400>
  * - T. A. Witten & L. M. Sander, "Diffusion-limited aggregation,"
  *   Phys. Rev. B 27, 5686 (1983).
+ * - B. Davidovich & I. Procaccia, Europhys. Lett. 48, 547 (1999) — theory
+ *   bounds on DLA fractal dimension (numerical consensus ≈ 1.71).
  *
  * @module renderers/hoarfrost
  */

@@ -12,8 +12,9 @@
  * a single line.
  *
  * Historical notes
- * - The first device described in print was Hugh Blackburn's V-string
- *   pendulum at Glasgow, 1844 — the basis for the so-called Blackburn pendulum.
+ * - Hugh Blackburn reinvented the Y/V-string pendulum ~1844 as a Cambridge
+ *   student (Glasgow professor from 1849) — the basis for the Blackburn
+ *   pendulum. Dean & Bowditch (1815) described the geometry earlier.
  * - The term "harmonograph" is first attested in the 1870s with A. E. Donkin
  *   and Samuel Charles Tisley.
  * - Joseph Goold of Nottingham contributed a "twin elliptic pendulum

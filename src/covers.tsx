@@ -98,7 +98,7 @@ export const COVERS: CoverEntry[] = [
         dendrites, just thirstier for low-density paths.
       </>
     ),
-    refs: "Lichtenberg 1777 · Niemeyer–Pietronero–Wiesmann 1984 · η ≈ 2 DLA",
+    refs: "Lichtenberg 1778 · Niemeyer–Pietronero–Wiesmann 1984 · tip-biased DLA heuristic",
   },
   {
     render: renderSandpile,
@@ -112,7 +112,7 @@ export const COVERS: CoverEntry[] = [
         A cell with four or more grains topples one grain to each neighbor;
         iterate until everything is stable. Drop a large pile at a single origin
         and the stabilized lattice is a Persian-miniature four-tone fractal
-        whose continuum limit is still being worked out by Levine and Pegden.
+        whose continuum limit was proved by Pegden & Smart (2013).
       </>
     ),
     refs: "Bak–Tang–Wiesenfeld 1987 · Dhar 1990 · topple-stabilize",
@@ -140,7 +140,7 @@ export const COVERS: CoverEntry[] = [
     seed: "schlieren",
     title: "Schlieren",
     subtitle: "A heat plume rendered by its refractive-index gradient",
-    num: "06 · Schlieren / shadowgraph",
+    num: "06 · Schlieren (Toepler knife-edge)",
     h2: "The optics of a knife-edge cutoff",
     body: (
       <>
@@ -151,7 +151,7 @@ export const COVERS: CoverEntry[] = [
         density field, gradient in y, sigmoid through a one-sided cutoff.
       </>
     ),
-    refs: "Toepler 1864 · Schardin 1942 · ∂ρ/∂y → sigmoid luminance",
+    refs: "Toepler 1864 · Schardin 1934 · ∂ρ/∂y → sigmoid luminance",
   },
   {
     render: renderPenrose,
@@ -166,8 +166,9 @@ export const COVERS: CoverEntry[] = [
         with matching rules that prohibit any periodic completion. The inflation
         rule subdivides each fat into two fat and one thin; each thin into one
         fat and one thin. Iterate five or six levels, color tiles by deflation
-        depth, and you recover the Darb-i Imam quasicrystalline palette Lu and
-        Steinhardt identified in 2007.
+        depth, and you get an Islamic-tile-inspired palette over quasi-
+        crystalline geometry — the structure Lu and Steinhardt identified at
+        the Darb-i Imam shrine in 2007.
       </>
     ),
     refs: "Penrose 1974 · de Bruijn 1981 · Lu & Steinhardt 2007 · inflation rule",
@@ -243,8 +244,8 @@ export const COVERS: CoverEntry[] = [
         families — Dusk, Earth, Ember — chosen per cover from the slug seed. A
         first blob biased toward the upper-left third anchors the composition;
         the rest float free. A film-grain pass breaks the otherwise
-        machine-clean gradient banding into something closer to a Rothko
-        reproduction than a CSS demo.
+        machine-clean gradient banding into something closer to color-field
+        atmosphere than a CSS demo.
       </>
     ),
     refs: "color-field painting · radial-gradient blobs · slug-seeded grain",
@@ -285,7 +286,7 @@ export const COVERS: CoverEntry[] = [
         perfect bands.
       </>
     ),
-    refs: "USGS contour convention · marching squares · fBm + Gaussian summit",
+    refs: "USGS contour ink · iso-line banding · fBm + Gaussian summit",
   },
   {
     render: renderLife,
@@ -324,6 +325,6 @@ export const COVERS: CoverEntry[] = [
         and rendered through a ramp built from the post's own title characters.
       </>
     ),
-    refs: "ASCII art tradition · aalib 1997 · 4× supersample · γ=0.55 · title-derived ramp",
+    refs: "ASCII art tradition · aalib 1997 · Bourke 1997 · 4× supersample · γ=0.55",
   },
 ];

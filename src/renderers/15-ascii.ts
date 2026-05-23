@@ -16,10 +16,11 @@
  * References
  * - The ASCII art tradition long predates computers: see typewriter art of
  *   the 1900s and figlet/banner-style line printer art of the 1970s–80s.
- * - P. D. Burford, "ASCII Art Programs and Reduction Algorithms"
- *   (textfiles.com archive) — early discussion of brightness-ramp rendering.
- * - Jan Hubicka & contributors, aalib (1997) — the canonical libre
- *   brightness-ramp ASCII renderer.
+ * - Jan Hubicka & contributors, aalib (1997) — canonical libre ASCII
+ *   renderer; established gamma/brightness tuning (this renderer uses
+ *   γ = 0.55 as project tuning; aalib default is 1.0).
+ * - P. Bourke, "Character representation of grey scale images" (1997) —
+ *   fixed brightness-ramp block sampling, closer to this technique.
  *
  * @module renderers/ascii
  */
