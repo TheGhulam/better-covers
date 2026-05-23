@@ -1,7 +1,7 @@
 {
   "name": "better-covers",
-  "version": "0.1.1",
-  "description": "Programmatic 1200×630 OG-image covers. Fifteen deterministic canvas renderers from physics, generative art, and cartographic tradition. No AI, no API calls, just math and your slug.",
+  "version": "0.2.0",
+  "description": "Programmatic 1200×630 OG-image covers. Twenty-three deterministic canvas renderers from physics, generative art, and cartographic tradition. No AI, no API calls, just math and your slug.",
   "keywords": [
     "og-image",
     "open-graph",

@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * The fifteen-cover catalog with gallery metadata.
+ * The twenty-three-cover catalog with gallery metadata.
  *
  * Each entry pairs a renderer with the page chrome that appears around it
  * in the demo gallery: the catalog number, the field-notes headline, the
@@ -29,6 +29,14 @@ import {
   renderTopo,
   renderLife,
   renderAscii,
+  renderGrayScottMaze,
+  renderSpaceColonization,
+  renderRisograph,
+  renderWoodcut,
+  renderBarnsleyFern,
+  renderBatikCrackle,
+  renderHypsometric,
+  renderBriansBrain,
 } from "./renderers";
 import type { Renderer } from "./shared";
 
@@ -326,5 +334,146 @@ export const COVERS: CoverEntry[] = [
       </>
     ),
     refs: "ASCII art tradition · aalib 1997 · Bourke 1997 · 4× supersample · γ=0.55",
+  },
+  {
+    render: renderGrayScottMaze,
+    seed: "gray-scott-maze",
+    title: "Gray-Scott Maze",
+    subtitle: "Labyrinthine channels on a coarse reaction-diffusion grid",
+    num: "16 · Gray-Scott reaction-diffusion (maze)",
+    h2: "Turing chemistry in the labyrinth regime",
+    body: (
+      <>
+        Activator V and substrate U evolve via Laplacian coupling in Pearson's
+        maze regime — elongated channels winding through inhibitor walls on a
+        coarse grid, twelve hundred steps, then upscale. Ochre channels on a
+        dark void, grain to break the perfect symmetry.
+      </>
+    ),
+    refs: "Pearson 1993 · Gray-Scott · F=0.029 k=0.057 · maze regime",
+  },
+  {
+    render: renderSpaceColonization,
+    seed: "space-colonization",
+    title: "Colonization",
+    subtitle: "Attractors in the canopy, branches reaching up",
+    num: "17 · Space colonization",
+    h2: "Trees grown by hunger for light",
+    body: (
+      <>
+        Scatter attractor points in the upper canopy; grow branch tips from a
+        trunk base toward the nearest unconsumed attractor. When a tip enters
+        the kill radius, the attractor vanishes. Two hundred twenty iterations
+        produce the skeletal winter-tree silhouette Runions et al. popularized
+        for botanical modeling.
+      </>
+    ),
+    refs: "Runions et al. 2007 · 90–130 attractors · kill radius 10px",
+  },
+  {
+    render: renderRisograph,
+    seed: "risograph",
+    title: "Risograph",
+    subtitle: "Three misregistered spot-color layers on warm paper",
+    num: "18 · Risograph",
+    dark: true,
+    h2: "Duplicator drift as composition",
+    body: (
+      <>
+        Riso Kagaku's 1980s duplicator prints spot-color masters in sequence;
+        perfect registration is optional. Three seed-offset layers — red, blue,
+        and a mixed third pass — overprint the same fBm blob with deliberate
+        drift. Warm paper stock, grain to sell the physical print.
+      </>
+    ),
+    refs: "Riso Kagaku 1980s · 3 offset layers · master red + blue misregister",
+  },
+  {
+    render: renderWoodcut,
+    seed: "woodcut-hatch",
+    title: "Woodcut",
+    subtitle: "Crosshatched relief lines on ivory paper",
+    num: "19 · Woodcut hatch",
+    dark: true,
+    h2: "Ink lines carved in the Dürer tradition",
+    body: (
+      <>
+        Relief woodcut builds tone from parallel hatch strokes; crossing angles
+        darken the form. An fBm density field plus a Gaussian bump sets where
+        lines land — technique from the Dürer woodcut tradition, not a
+        reproduction of any named print. Ivory paper, warm black ink.
+      </>
+    ),
+    refs: "Dürer woodcut technique · fBm density · dual-angle crosshatch",
+  },
+  {
+    render: renderBarnsleyFern,
+    seed: "barnsley-fern",
+    title: "Barnsley Fern",
+    subtitle: "Fifty thousand IFS points tonemapped by visit density",
+    num: "20 · Barnsley fern IFS",
+    h2: "A fractal fern from four affine maps",
+    body: (
+      <>
+        Michael Barnsley's iterated function system applies four affine
+        transformations with fixed probabilities; fifty thousand points
+        accumulate into a soft botanical silhouette. Density tonemapping gives
+        the frond structure depth without neon-on-black contrast.
+      </>
+    ),
+    refs: "Barnsley 1988 · 4-map IFS · 50 000-point histogram",
+  },
+  {
+    render: renderBatikCrackle,
+    seed: "batik-crackle",
+    title: "Batik Crackle",
+    subtitle: "Wax-resist crackle lines on an indigo ground",
+    num: "21 · Batik crackle",
+    h2: "Resist dyeing made visible",
+    body: (
+      <>
+        Indonesian batik applies wax to cloth before indigo dyeing; the wax
+        cracks under tension and leaves fine warm resist lines. Here, summed
+        sinusoids with seed phase offsets extract a synthetic crackle field —
+        technique inspired by the tradition, not a reproduction of any motif.
+      </>
+    ),
+    refs: "Indonesian batik tradition · nodal crackle threshold 0.22",
+  },
+  {
+    render: renderHypsometric,
+    seed: "hypsometric",
+    title: "Hypsometric Tint",
+    subtitle: "Elevation color bands from deep water to highland",
+    num: "22 · Hypsometric tint",
+    h2: "Cartographic color by elevation",
+    body: (
+      <>
+        NOAA and GEBCO bathymetric charts use discrete hypsometric color bands
+        to read depth and elevation at a glance. A scalar heightfield maps to
+        seven bands from deep water through shallow shelf to lowland and
+        highland — color-band cartography rather than iso-line contours (cover
+        13).
+      </>
+    ),
+    refs: "NOAA/GEBCO symbology · 7 elevation bands · fBm heightfield",
+  },
+  {
+    render: renderBriansBrain,
+    seed: "brians-brain",
+    title: "Brian's Brain",
+    subtitle: "Three-state CA snapshot with glider filaments",
+    num: "23 · Brian's Brain",
+    h2: "Excitable media on a toroidal grid",
+    body: (
+      <>
+        Brian Callahan's three-state cellular automaton: off, firing, and
+        refractory. Off cells ignite when exactly two neighbors are firing;
+        firing cells become refractory on the next tick. Forty-eight
+        generations from a sparse seed yield glider-rich filaments on a dark
+        field — distinct from Conway's B3/S23 snapshot (cover 14).
+      </>
+    ),
+    refs: "Callahan 1996 · 3-state CA · 48 generations · 10% seed density",
   },
 ];

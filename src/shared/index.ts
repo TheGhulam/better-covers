@@ -141,6 +141,77 @@ export function fbm(x: number, y: number, s: number, oct = 4): number {
  * the cover's own SEED. This keeps grain visually consistent across a feed of
  * differently seeded covers.
  */
+/** Bottom gradient for OG title legibility (~55–60% Y). */
+export function addVignette(
+  ctx: CanvasRenderingContext2D,
+  W: number,
+  H: number,
+  strength = 0.65,
+): void {
+  const g = ctx.createLinearGradient(0, H * 0.45, 0, H);
+  g.addColorStop(0, "rgba(0,0,0,0)");
+  g.addColorStop(0.55, `rgba(0,0,0,${strength * 0.35})`);
+  g.addColorStop(1, `rgba(0,0,0,${strength})`);
+  ctx.fillStyle = g;
+  ctx.fillRect(0, 0, W, H);
+}
+
+export function rgb(r: number, g: number, b: number, a = 1): string {
+  return a < 1 ? `rgba(${r},${g},${b},${a})` : `rgb(${r},${g},${b})`;
+}
+
+export function lerp(a: number, b: number, t: number): number {
+  return a + (b - a) * t;
+}
+
+export function clamp(v: number, lo: number, hi: number): number {
+  return Math.max(lo, Math.min(hi, v));
+}
+
+/** Map a 0–1 scalar field to RGB with visible mid-tones. */
+export function toneMapField(
+  t: number,
+  bg: [number, number, number],
+  mid: [number, number, number],
+  hi: [number, number, number],
+): [number, number, number] {
+  const s = clamp(Math.pow(clamp(t, 0, 1), 0.42) * 1.2, 0, 1);
+  if (s < 0.45) {
+    const u = s / 0.45;
+    return [
+      Math.round(lerp(bg[0], mid[0], u)),
+      Math.round(lerp(bg[1], mid[1], u)),
+      Math.round(lerp(bg[2], mid[2], u)),
+    ];
+  }
+  const u = (s - 0.45) / 0.55;
+  return [
+    Math.round(lerp(mid[0], hi[0], u)),
+    Math.round(lerp(mid[1], hi[1], u)),
+    Math.round(lerp(mid[2], hi[2], u)),
+  ];
+}
+
+/** Nearest-seed Voronoi cell index for pixel (px, py). */
+export function voronoiCell(
+  px: number,
+  py: number,
+  seeds: { x: number; y: number }[],
+): number {
+  let best = 0;
+  let bestD = Infinity;
+  for (let i = 0; i < seeds.length; i++) {
+    const dx = px - seeds[i].x;
+    const dy = py - seeds[i].y;
+    const d = dx * dx + dy * dy;
+    if (d < bestD) {
+      bestD = d;
+      best = i;
+    }
+  }
+  return best;
+}
+
 export function addGrain(
   ctx: CanvasRenderingContext2D,
   W: number,

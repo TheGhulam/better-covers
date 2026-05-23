@@ -222,6 +222,59 @@ those are not copied here.
 - The procedural landscape (sun, hills, reflection pillar, tree cluster)
   is project-original.
 
+### 16 · Gray-Scott reaction-diffusion (maze)
+
+- **J. E. Pearson**, *Complex Patterns in a Simple System*, Science **261**,
+  189–192 (1993).
+  [doi:10.1126/science.261.5118.189](https://doi.org/10.1126/science.261.5118.189)
+- **J. C. Gray & P. Scott**, autocatalytic model (1984).
+- The renderer uses Pearson's labyrinth (maze) regime on a coarse grid;
+  ochre channels on dark void, stylized.
+
+### 17 · Space colonization
+
+- **A. Runions, B. Lane & P. Prusinkiewicz**, *Modeling Trees with a Space
+  Colonization Algorithm*, Eurographics Workshop on Natural Phenomena (2007).
+- Simplified 2D branch growth; sage/ochre palette stylized.
+
+### 18 · Risograph
+
+- **Riso Kagaku** duplicator process (1980s).
+- **J. Hug**, *Risomania: The New Spirit of Printing* (Niggli, 2018).
+- Misregistered red/blue master layers; warm paper stock stylized.
+
+### 19 · Woodcut hatch
+
+- **Albrecht Dürer** woodcut crosshatching technique — technique only, not
+  a reproduction of any specific print.
+- **W. M. Ivins Jr.**, *How Prints Look* (Metropolitan Museum of Art, 1943).
+- Ivory paper + warm black ink palette stylized.
+
+### 20 · Barnsley fern
+
+- **M. Barnsley**, *Fractals Everywhere* (Academic Press, 1988).
+- Classic four-map IFS with standard probabilities; 50 000-point density
+  histogram, stylized green tonemapping.
+
+### 21 · Batik crackle
+
+- Indonesian **batik** wax-resist dyeing tradition — crackle texture only,
+  not a reproduction of any sacred motif or named pattern.
+- Synthetic crackle field from summed sinusoids with seed phase offsets.
+
+### 22 · Hypsometric tint
+
+- **NOAA/GEBCO** bathymetric and hypsometric color-band symbology — stylized
+  elevation bands, not a reproduction of any specific chart.
+- Seven discrete bands from deep water to highland; distinct from cover 13
+  iso-line contours.
+
+### 23 · Brian's Brain
+
+- **Brian Callahan**, 1996 (popularization of the three-state rule).
+- Off / firing / refractory cellular automaton on a toroidal grid; distinct
+  from cover 14 Conway B3/S23.
+
 ## Shared utilities
 
 ### `hashStr` — FNV-1a string hash

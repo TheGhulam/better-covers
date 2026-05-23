@@ -22,7 +22,7 @@ export function Gallery() {
       <main className="pg-page">
         <header>
           <div className="eyebrow">
-            PROGRAMMATIC OG COVERS · FIFTEEN TEXTURES
+            PROGRAMMATIC OG COVERS · TWENTY-THREE TEXTURES
           </div>
           <h1>
             Cover textures from physics, generative art, and cartographic
@@ -33,9 +33,11 @@ export function Gallery() {
             (1200×630). Ten are named phenomena — Witten, von Kármán, Toepler,
             Penrose, Pickover, Bridson — and five are house-style candidates
             drawn from generative art (Hobbs's <em>Fidenza</em>), cellular
-            automata (Conway), and cartographic contour conventions. Every
-            algorithm is deterministic from a slug seed, so the same post slug
-            always paints the same cover.
+            automata (Conway), and cartographic contour conventions. Eight more
+            join from the 2026 research pass — Gray-Scott maze, space
+            colonization, risograph, woodcut hatch, Barnsley fern, batik
+            crackle, hypsometric tint, and Brian's Brain. Every algorithm is
+            deterministic so the same post slug always paints the same cover.
           </p>
         </header>
 

@@ -25,6 +25,14 @@ import {
   renderTopo,
   renderLife,
   renderAscii,
+  renderGrayScottMaze,
+  renderSpaceColonization,
+  renderRisograph,
+  renderWoodcut,
+  renderBarnsleyFern,
+  renderBatikCrackle,
+  renderHypsometric,
+  renderBriansBrain,
 } from "../src/renderers";
 import type { Renderer } from "../src/shared";
 
@@ -56,6 +64,14 @@ const COVERS: { slug: string; render: Renderer }[] = [
   { slug: "topo-contour", render: renderTopo },
   { slug: "life-conway", render: renderLife },
   { slug: "ascii-landscape", render: renderAscii },
+  { slug: "gray-scott-maze", render: renderGrayScottMaze },
+  { slug: "space-colonization", render: renderSpaceColonization },
+  { slug: "risograph", render: renderRisograph },
+  { slug: "woodcut-hatch", render: renderWoodcut },
+  { slug: "barnsley-fern", render: renderBarnsleyFern },
+  { slug: "batik-crackle", render: renderBatikCrackle },
+  { slug: "hypsometric", render: renderHypsometric },
+  { slug: "brians-brain", render: renderBriansBrain },
 ];
 
 mkdirSync(OUT_DIR, { recursive: true });

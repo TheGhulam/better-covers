@@ -1,6 +1,6 @@
 # better-covers
 
-> Programmatic 1200 × 630 OG-image covers. Deterministic canvas
+> Programmatic 1200 × 630 OG-image covers. Twenty-three deterministic canvas
 > renderers from physics, generative art, and cartographic tradition.
 > No AI, no API calls, just math and your slug.
 
@@ -81,6 +81,14 @@ export default function GalleryPage() {
 | 13 | <img src="docs/thumbnails/topo-contour.png" width="180" alt="Topographic cover"> | `topo-contour`         | Topographic iso-lines                  | USGS contour ink · iso-line banding        |
 | 14 | <img src="docs/thumbnails/life-conway.png" width="180" alt="Game of Life cover"> | `life-conway`          | Conway's Game of Life                  | Conway / Gardner 1970                      |
 | 15 | <img src="docs/thumbnails/ascii-landscape.png" width="180" alt="ASCII landscape cover"> | `ascii-landscape`      | ASCII brightness-ramp landscape        | ASCII art tradition · aalib 1997 · Bourke 1997 |
+| 16 | <img src="docs/thumbnails/gray-scott-maze.png" width="180" alt="Gray-Scott Maze cover"> | `gray-scott-maze`      | Gray-Scott reaction-diffusion (maze)   | Pearson 1993                               |
+| 17 | <img src="docs/thumbnails/space-colonization.png" width="180" alt="Space colonization cover"> | `space-colonization`   | Space colonization tree growth         | Runions et al. 2007                        |
+| 18 | <img src="docs/thumbnails/risograph.png" width="180" alt="Risograph cover"> | `risograph`            | Risograph misregistration              | Riso Kagaku 1980s                          |
+| 19 | <img src="docs/thumbnails/woodcut-hatch.png" width="180" alt="Woodcut cover"> | `woodcut-hatch`        | Woodcut crosshatching                  | Dürer technique (inspiration)              |
+| 20 | <img src="docs/thumbnails/barnsley-fern.png" width="180" alt="Barnsley Fern cover"> | `barnsley-fern`        | Barnsley fern IFS attractor            | Barnsley 1988                              |
+| 21 | <img src="docs/thumbnails/batik-crackle.png" width="180" alt="Batik Crackle cover"> | `batik-crackle`        | Batik wax-resist crackle               | Indonesian batik tradition                 |
+| 22 | <img src="docs/thumbnails/hypsometric.png" width="180" alt="Hypsometric Tint cover"> | `hypsometric`          | Hypsometric elevation color bands      | NOAA/GEBCO symbology                       |
+| 23 | <img src="docs/thumbnails/brians-brain.png" width="180" alt="Brian's Brain cover"> | `brians-brain`         | Brian's Brain 3-state CA               | Callahan 1996                              |
 
 Full primary-source citations are in [`ATTRIBUTIONS.md`](ATTRIBUTIONS.md) and
 inside the doc comments of each `src/renderers/NN-name.ts` file.
@@ -96,7 +104,7 @@ better-covers/
 │   │   └── index.ts
 │   ├── Cover.tsx          The React component
 │   ├── Gallery.tsx        The demo gallery
-│   ├── covers.tsx         Catalog of all 15 covers with gallery metadata
+│   ├── covers.tsx         Catalog of all 23 covers with gallery metadata
 │   ├── styles.ts          Gallery stylesheet
 │   └── index.ts           Public barrel
 ├── docs/
