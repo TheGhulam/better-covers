@@ -6,6 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-05-23
+
+### Removed
+
+- Remotion showreel under `src/showreel/` (author-only demo video, not part
+  of the library).
+
+## [0.1.0] - 2026-05-23
+
 ### Added
 
 - First public release of the cover library.
@@ -30,8 +39,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - `COVERS` catalog with field-notes metadata for every cover.
 - Shared utilities: `hashStr`, `mulberry32`, `hash2`, `smoothNoise`, `fbm`,
   `addGrain`, and the `Renderer` type signature.
-- Optional Remotion showreel under `src/showreel/` (not exported from the
-  package barrel).
 - `LICENSE` (MIT), `ATTRIBUTIONS.md`, `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`
   (Contributor Covenant 2.1), `SECURITY.md`.
 
@@ -49,11 +56,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Removed
 
-- The `yep-by-fgb.mp3` audio asset previously referenced by the Remotion
-  showreel is **not included** in the public release. Its provenance
-  could not be verified to a permissively licensed source. See
-  [`src/showreel/README.md`](src/showreel/README.md) for guidance on
-  supplying your own audio.
+- N/A — initial release.
 
 ### Security
 

@@ -35,7 +35,6 @@ npm run typecheck
   before starting. The collection sits at fifteen for a reason; we are
   more likely to swap an existing one than to grow.
 - New skins / palettes on an existing renderer.
-- Showreel improvements (the Remotion comp).
 
 **No, sorry:**
 

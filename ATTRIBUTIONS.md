@@ -209,17 +209,7 @@ The demo Gallery loads three Google Fonts via `@import`:
 - **Geist** — Vercel, OFL 1.1.
 - **JetBrains Mono** — JetBrains, OFL 1.1.
 
-A fourth, **Shantell Sans** (OFL 1.1), is loaded only by the optional
-showreel composition.
-
-All four are SIL Open Font License 1.1 and may be redistributed freely.
-
-## Excluded resources
-
-- **`yep-by-fgb.mp3`** — referenced by the optional Remotion showreel,
-  **not included** in this repository. We were unable to identify the
-  original artist with sufficient confidence to redistribute it. See
-  `src/showreel/README.md` for guidance on supplying your own audio.
+All three are SIL Open Font License 1.1 and may be redistributed freely.
 
 ## Reporting an attribution issue
 

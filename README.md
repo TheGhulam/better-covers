@@ -98,8 +98,7 @@ better-covers/
 │   ├── Gallery.tsx        The demo gallery
 │   ├── covers.tsx         Catalog of all 15 covers with gallery metadata
 │   ├── styles.ts          Gallery stylesheet
-│   ├── index.ts           Public barrel
-│   └── showreel/          Optional 30s Remotion video (NOT in the npm package)
+│   └── index.ts           Public barrel
 ├── ATTRIBUTIONS.md
 ├── CONTRIBUTING.md
 ├── CODE_OF_CONDUCT.md

@@ -8,7 +8,7 @@ import reactHooks from "eslint-plugin-react-hooks";
 
 export default [
   {
-    ignores: ["dist", "node_modules", "coverage", "src/showreel", "**/*.snap"],
+    ignores: ["dist", "node_modules", "coverage", "**/*.snap"],
   },
   js.configs.recommended,
   ...tseslint.configs.recommended,

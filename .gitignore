@@ -36,15 +36,6 @@ Thumbs.db
 .env.local
 .env.*.local
 
-# Local Remotion outputs (the showreel composition writes here)
-out/
-*.mp4
-*.webm
-
-# Local audio you've supplied to the showreel — by convention, don't commit it
-src/showreel/public/music/
-public/music/
-
 # Misc
 *.log
 .cache/
