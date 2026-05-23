@@ -101,7 +101,6 @@ better-covers/
 │   └── index.ts           Public barrel
 ├── ATTRIBUTIONS.md
 ├── CONTRIBUTING.md
-├── CODE_OF_CONDUCT.md
 ├── CHANGELOG.md
 ├── LICENSE                MIT
 └── README.md

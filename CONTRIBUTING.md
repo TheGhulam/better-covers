@@ -163,12 +163,6 @@ changed" is a blocker.
 - [ ] If visual output changed, the snapshot diff is included in the PR
       description with a short note on why
 
-## Code of conduct
-
-This project follows the [Contributor Covenant 2.1](CODE_OF_CONDUCT.md).
-The maintainers reserve the right to remove contributions and contributors
-who violate it.
-
 ## Questions
 
 Open a discussion thread — they're better than DMs for things future

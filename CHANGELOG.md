@@ -39,8 +39,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - `COVERS` catalog with field-notes metadata for every cover.
 - Shared utilities: `hashStr`, `mulberry32`, `hash2`, `smoothNoise`, `fbm`,
   `addGrain`, and the `Renderer` type signature.
-- `LICENSE` (MIT), `ATTRIBUTIONS.md`, `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`
-  (Contributor Covenant 2.1), `SECURITY.md`.
+- `LICENSE` (MIT), `ATTRIBUTIONS.md`, `CONTRIBUTING.md`, `SECURITY.md`.
 
 ### Changed
 
