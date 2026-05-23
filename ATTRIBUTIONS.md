@@ -109,7 +109,8 @@ technique is properly credited.
   four-parameter sine-cosine iterated map used here.
 - **A. K. Dewdney** popularized **Peter de Jong**'s closely related
   attractor in *Computer Recreations: Probing the strange attractions of
-  chaos*, Scientific American **256**:7 (July 1987). The de Jong attractor
+  chaos*, Scientific American **257**:1, 108–111 (July 1987). The de Jong
+  attractor
   is the historical sibling; the Clifford attractor is the one
   implemented here.
 
@@ -189,7 +190,7 @@ those are not copied here.
 ### `mulberry32` — PRNG
 
 - **T. Ettinger**, *Mulberry32* gist (2017),
-  <https://gist.github.com/tommyettinger/46a3c5a8a2c4afda6f9fd2d6e3c5b78d>.
+  <https://gist.github.com/tommyettinger/46a874533244883189143505d203312c>.
   Public domain.
 
 ### `smoothNoise` + `fbm` — value-noise lattice

@@ -56,7 +56,7 @@ export function hashStr(s: string): number {
  * call, yields a uniform float in `[0, 1)`.
  *
  * Reference: Tommy Ettinger, "Mulberry32" (2017),
- * <https://gist.github.com/tommyettinger/46a3c5a8a2c4afda6f9fd2d6e3c5b78d>.
+ * <https://gist.github.com/tommyettinger/46a874533244883189143505d203312c>.
  * Public domain.
  */
 export function mulberry32(a: number): () => number {

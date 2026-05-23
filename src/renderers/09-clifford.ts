@@ -16,17 +16,16 @@
  * - "Clifford attractor" specifically refers to Pickover's iterated
  *   sine-cosine map. The closely related Peter de Jong attractor was
  *   popularized by A. K. Dewdney's "Computer Recreations" column,
- *   *Scientific American*, September 1986. Pickover's variant — including
+ *   *Scientific American*, July 1987. Pickover's variant — including
  *   the four-parameter form used here — appeared in his 1990 book.
  *
  * References
  * - C. A. Pickover, *Computers, Pattern, Chaos and Beauty* (St. Martin's
  *   Press, 1990) — the original published source for the four-parameter
  *   form used here.
- * - A. K. Dewdney, "Computer Recreations: Beauty and profundity: the
- *   Mandelbrot set and a flock of its cousins called Julia,"
- *   Scientific American 257:5, 140 (November 1987) — Peter de Jong's
- *   attractor (close cousin).
+ * - A. K. Dewdney, "Computer Recreations: Probing the strange attractions
+ *   of chaos," Scientific American 257:1, 108–111 (July 1987) — Peter de
+ *   Jong's attractor (close cousin).
  *
  * @module renderers/clifford
  */

@@ -18,8 +18,8 @@
  *   the 1900s and figlet/banner-style line printer art of the 1970s–80s.
  * - P. D. Burford, "ASCII Art Programs and Reduction Algorithms"
  *   (textfiles.com archive) — early discussion of brightness-ramp rendering.
- * - Lance Olsen et al., aalib (1997) — the canonical libre brightness-ramp
- *   ASCII renderer.
+ * - Jan Hubicka & contributors, aalib (1997) — the canonical libre
+ *   brightness-ramp ASCII renderer.
  *
  * @module renderers/ascii
  */
