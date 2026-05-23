@@ -50,8 +50,7 @@ export const renderTopo: Renderer = (ctx, W, H, SEED) => {
     for (let x = 0; x < W; x++) {
       const dx = x - peakX;
       const dy = y - peakY;
-      const bump =
-        Math.exp(-(dx * dx + dy * dy) * invTwoSigSq) * peakStrength;
+      const bump = Math.exp(-(dx * dx + dy * dy) * invTwoSigSq) * peakStrength;
       const h = fbm(x * 0.004, y * 0.004, SEED, 5) + bump;
       // "On line" = within 4.5 % of a threshold; this is implicit marching
       // squares — we detect threshold crossings per pixel.

@@ -63,9 +63,9 @@ export function Gallery() {
           Fifteen textures, ten of them named after the physicist, chemist, or
           mathematician who first observed or described them, and five drawn
           from generative-art and cartographic convention. Every algorithm is
-          deterministic from a slug seed — the same post slug always paints
-          the same cover — and none takes more than a second to render at
-          production size with Satori, Takumi, or vanilla canvas.
+          deterministic from a slug seed — the same post slug always paints the
+          same cover — and none takes more than a second to render at production
+          size with Satori, Takumi, or vanilla canvas.
         </footer>
       </main>
     </>

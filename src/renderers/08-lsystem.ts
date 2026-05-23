@@ -67,9 +67,7 @@ export const renderLSystem: Renderer = (ctx, W, H, SEED) => {
         const nx = state.x + Math.cos(state.dir) * step * p.scale;
         const ny = state.y + Math.sin(state.dir) * step * p.scale;
         ctx.strokeStyle =
-          "rgba(220, 180, 130, " +
-          (0.42 + Math.min(0.5, state.lw / 6)) +
-          ")";
+          "rgba(220, 180, 130, " + (0.42 + Math.min(0.5, state.lw / 6)) + ")";
         ctx.lineWidth = Math.max(0.5, state.lw);
         ctx.beginPath();
         ctx.moveTo(state.x, state.y);

@@ -41,7 +41,12 @@ export const renderFlow: Renderer = (ctx, W, H, SEED) => {
   ctx.fillRect(0, 0, W, H);
 
   const wash = ctx.createRadialGradient(
-    W * 0.3, H * 0.4, 0, W * 0.5, H * 0.5, W * 0.8,
+    W * 0.3,
+    H * 0.4,
+    0,
+    W * 0.5,
+    H * 0.5,
+    W * 0.8,
   );
   wash.addColorStop(0, "rgba(80, 50, 40, 0.4)");
   wash.addColorStop(1, "rgba(20, 18, 16, 0)");

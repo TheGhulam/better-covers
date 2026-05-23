@@ -86,7 +86,12 @@ export const renderSchlieren: Renderer = (ctx, W, H, SEED) => {
   ctx.putImageData(id, 0, 0);
 
   const vg = ctx.createRadialGradient(
-    W * 0.42, H * 0.5, W * 0.15, W * 0.5, H * 0.5, W * 0.85,
+    W * 0.42,
+    H * 0.5,
+    W * 0.15,
+    W * 0.5,
+    H * 0.5,
+    W * 0.85,
   );
   vg.addColorStop(0, "rgba(0,0,0,0)");
   vg.addColorStop(1, "rgba(0,0,0,0.55)");

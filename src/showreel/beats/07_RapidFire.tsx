@@ -1,5 +1,13 @@
 import React from "react";
-import { AbsoluteFill, Audio, Img, interpolate, Sequence, useCurrentFrame, staticFile } from "remotion";
+import {
+  AbsoluteFill,
+  Audio,
+  Img,
+  interpolate,
+  Sequence,
+  useCurrentFrame,
+  staticFile,
+} from "remotion";
 import { BEATS, BG, FG, ACCENT, DIM } from "../video-config";
 import { RAPID_FIRE_COVERS } from "../lib/covers";
 import { jetBrainsMono, sourceSerif4 } from "../fonts";
@@ -13,7 +21,7 @@ export const RapidFire: React.FC = () => {
   const frame = useCurrentFrame();
   const coverIndex = Math.min(
     Math.floor(frame / FRAMES_PER_COVER),
-    RAPID_FIRE_COVERS.length - 1
+    RAPID_FIRE_COVERS.length - 1,
   );
   const cover = RAPID_FIRE_COVERS[coverIndex];
 
@@ -32,21 +40,33 @@ export const RapidFire: React.FC = () => {
     <AbsoluteFill style={{ background: BG }}>
       {/* Tick on each cover swap — very low in the mix, like a film leader countdown */}
       {RAPID_FIRE_COVERS.map((_, i) => (
-        <Sequence key={`tick-${i}`} from={i * FRAMES_PER_COVER} durationInFrames={10}>
+        <Sequence
+          key={`tick-${i}`}
+          from={i * FRAMES_PER_COVER}
+          durationInFrames={10}
+        >
           <Audio src={staticFile("sfx/tick.mp3")} volume={0.12} />
         </Sequence>
       ))}
-      <AbsoluteFill style={{ transform: `scale(${punchScale})`, opacity: punchOpacity }}>
+      <AbsoluteFill
+        style={{ transform: `scale(${punchScale})`, opacity: punchOpacity }}
+      >
         <Img
           src={cover.png}
-          style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            display: "block",
+          }}
         />
       </AbsoluteFill>
 
       {/* Gradient for caption legibility */}
       <AbsoluteFill
         style={{
-          background: "linear-gradient(to top, rgba(8,8,10,0.88) 0%, transparent 28%)",
+          background:
+            "linear-gradient(to top, rgba(8,8,10,0.88) 0%, transparent 28%)",
         }}
       />
 
@@ -93,7 +113,6 @@ export const RapidFire: React.FC = () => {
           seed: {cover.slug}
         </div>
       </div>
-
     </AbsoluteFill>
   );
 };

@@ -1,5 +1,15 @@
 import React from "react";
-import { AbsoluteFill, Audio, Img, interpolate, Sequence, spring, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
+import {
+  AbsoluteFill,
+  Audio,
+  Img,
+  interpolate,
+  Sequence,
+  spring,
+  staticFile,
+  useCurrentFrame,
+  useVideoConfig,
+} from "remotion";
 import { BG, ACCENT, BEATS, FG, DIM } from "../video-config";
 import { COVERS, Cover } from "../lib/covers";
 import { sourceSerif4, geist, jetBrainsMono, shantellSans } from "../fonts";
@@ -10,7 +20,10 @@ const TYPE_START = 8;
 const FRAMES_PER_CHAR = 1.5;
 
 function getTypedText(frame: number): string {
-  const chars = Math.min(TEXT.length, Math.max(0, Math.floor((frame - TYPE_START) / FRAMES_PER_CHAR)));
+  const chars = Math.min(
+    TEXT.length,
+    Math.max(0, Math.floor((frame - TYPE_START) / FRAMES_PER_CHAR)),
+  );
   return TEXT.slice(0, chars);
 }
 
@@ -34,10 +47,7 @@ const TOPO_LIGHT: Cover = {
 };
 
 // 15 covers (topo = dark) + topo light as 16th cell for contrast
-const GRID_ITEMS = [
-  ...COVERS,
-  TOPO_LIGHT,
-];
+const GRID_ITEMS = [...COVERS, TOPO_LIGHT];
 
 export const GridReveal: React.FC = () => {
   const frame = useCurrentFrame();
@@ -63,7 +73,8 @@ export const GridReveal: React.FC = () => {
 
   const typedText = getTypedText(frame);
   const isDoneTyping = typedText.length === TEXT.length;
-  const showCursor = !isDoneTyping && frame >= TYPE_START && cursorVisible(frame);
+  const showCursor =
+    !isDoneTyping && frame >= TYPE_START && cursorVisible(frame);
   const textFadeIn = interpolate(frame, [TYPE_START, TYPE_START + 6], [0, 1], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
@@ -71,7 +82,14 @@ export const GridReveal: React.FC = () => {
   const textOpacity = textFadeIn * exitOpacity;
 
   return (
-    <AbsoluteFill style={{ background: BG, display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <AbsoluteFill
+      style={{
+        background: BG,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       <div
         style={{
           width: GRID_WIDTH,
@@ -98,14 +116,17 @@ export const GridReveal: React.FC = () => {
             durationInFrames: 30,
           });
           const mappedScale = interpolate(scale, [0, 1], [0.6, 1]);
-          const opacity = interpolate(scale, [0, 0.3], [0, 1], { extrapolateRight: "clamp" });
+          const opacity = interpolate(scale, [0, 0.3], [0, 1], {
+            extrapolateRight: "clamp",
+          });
 
           // Each cell gets a tiny per-cell bass shimmer, phase-offset by index
           // so the grid feels alive rather than uniformly pulsing.
           const cellSettled = localFrame > 20 ? 1 : 0;
           const cellPhaseOffset = (i % 4) * 0.18; // 0, 0.18, 0.36, 0.54
           const cellBass = Math.max(0, bass - cellPhaseOffset);
-          const cellBassScale = 1 + cellBass * 0.025 * cellSettled * bassEnabled;
+          const cellBassScale =
+            1 + cellBass * 0.025 * cellSettled * bassEnabled;
 
           return (
             <div
@@ -126,7 +147,12 @@ export const GridReveal: React.FC = () => {
                 <>
                   <Img
                     src={cover.png}
-                    style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                      display: "block",
+                    }}
                   />
                   <div
                     style={{
@@ -135,7 +161,8 @@ export const GridReveal: React.FC = () => {
                       left: 0,
                       right: 0,
                       padding: "20px 14px 10px",
-                      background: "linear-gradient(to top, rgba(8,8,10,0.82) 0%, transparent 100%)",
+                      background:
+                        "linear-gradient(to top, rgba(8,8,10,0.82) 0%, transparent 100%)",
                       fontFamily: jetBrainsMono,
                       fontSize: 11,
                       color: ACCENT,
@@ -235,7 +262,11 @@ export const GridReveal: React.FC = () => {
 
       {/* Typing click sounds */}
       {Array.from({ length: TEXT.length }, (_, i) => (
-        <Sequence key={i} from={TYPE_START + Math.round(i * FRAMES_PER_CHAR)} durationInFrames={20}>
+        <Sequence
+          key={i}
+          from={TYPE_START + Math.round(i * FRAMES_PER_CHAR)}
+          durationInFrames={20}
+        >
           <Audio src="https://remotion.media/mouse-click.wav" volume={0.18} />
         </Sequence>
       ))}

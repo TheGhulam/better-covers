@@ -1,5 +1,12 @@
 import React from "react";
-import { AbsoluteFill, Img, interpolate, useCurrentFrame, Easing, staticFile } from "remotion";
+import {
+  AbsoluteFill,
+  Img,
+  interpolate,
+  useCurrentFrame,
+  Easing,
+  staticFile,
+} from "remotion";
 import { BG, FG, DIM, ACCENT } from "../video-config";
 import { sourceSerif4, geist, jetBrainsMono } from "../fonts";
 
@@ -24,13 +31,19 @@ export const HeroFidenza: React.FC = () => {
     extrapolateRight: "clamp",
   });
 
-
   return (
     <AbsoluteFill style={{ background: BG, overflow: "hidden" }}>
-      <AbsoluteFill style={{ transform: `scale(${scale})`, opacity: exitOpacity }}>
+      <AbsoluteFill
+        style={{ transform: `scale(${scale})`, opacity: exitOpacity }}
+      >
         <Img
           src={PNG}
-          style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            display: "block",
+          }}
         />
       </AbsoluteFill>
 

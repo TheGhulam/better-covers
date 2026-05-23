@@ -11,7 +11,7 @@ export const Letterbox: React.FC<{ duration: number }> = ({ duration }) => {
     frame,
     [0, ANIM, duration - ANIM - 1, duration - 1],
     [0, BAR_H, BAR_H, 0],
-    { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
+    { extrapolateLeft: "clamp", extrapolateRight: "clamp" },
   );
 
   if (barH <= 0) return null;

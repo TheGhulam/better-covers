@@ -20,7 +20,10 @@ export const IntroClaims: React.FC = () => {
   const frame = useCurrentFrame();
   const bass = useBassPulse(BEATS.introClaims.from);
 
-  const cardIndex = Math.min(Math.floor(frame / CARD_FRAMES), CLAIMS.length - 1);
+  const cardIndex = Math.min(
+    Math.floor(frame / CARD_FRAMES),
+    CLAIMS.length - 1,
+  );
   const localFrame = frame - cardIndex * CARD_FRAMES;
 
   // Punch-in: scale + tracking + opacity
@@ -51,10 +54,15 @@ export const IntroClaims: React.FC = () => {
 
   // Bass breath: only after the punch-in settles, so it doesn't fight it.
   const breathStart = 8;
-  const breathStrength = interpolate(localFrame, [breathStart, breathStart + 4], [0, 1], {
-    extrapolateLeft: "clamp",
-    extrapolateRight: "clamp",
-  });
+  const breathStrength = interpolate(
+    localFrame,
+    [breathStart, breathStart + 4],
+    [0, 1],
+    {
+      extrapolateLeft: "clamp",
+      extrapolateRight: "clamp",
+    },
+  );
   const breathScale = 1 + bass * 0.012 * breathStrength;
 
   // Pre-label fades in once, stays.

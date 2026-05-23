@@ -100,7 +100,14 @@ function drawAsciiScene(
   }
 
   // 2. Sun disk.
-  const sunGrd = ctx.createRadialGradient(sunX, sunY, 0, sunX, sunY, sunR * 1.2);
+  const sunGrd = ctx.createRadialGradient(
+    sunX,
+    sunY,
+    0,
+    sunX,
+    sunY,
+    sunR * 1.2,
+  );
   sunGrd.addColorStop(0, "#ffffff");
   sunGrd.addColorStop(0.7, "#ffffff");
   sunGrd.addColorStop(1, "rgba(255,255,255,0)");
@@ -181,9 +188,7 @@ function drawAsciiScene(
       const halfW = pillarHalfWidth * widen;
       const a = (1 - depth) * 0.7;
       if (a > 0.04) {
-        const grd = ctx.createLinearGradient(
-          sunX - halfW, 0, sunX + halfW, 0,
-        );
+        const grd = ctx.createLinearGradient(sunX - halfW, 0, sunX + halfW, 0);
         grd.addColorStop(0, "rgba(255,255,255,0)");
         grd.addColorStop(0.5, `rgba(255,255,255,${a.toFixed(3)})`);
         grd.addColorStop(1, "rgba(255,255,255,0)");
@@ -240,7 +245,12 @@ function drawAsciiScene(
 
   // 11. Right-side vignette.
   const vig = ctx.createRadialGradient(
-    W * 0.72, H * 0.45, H * 0.2, W * 0.72, H * 0.45, H * 1.0,
+    W * 0.72,
+    H * 0.45,
+    H * 0.2,
+    W * 0.72,
+    H * 0.45,
+    H * 1.0,
   );
   vig.addColorStop(0, "rgba(0,0,0,0)");
   vig.addColorStop(1, "rgba(0,0,0,0.65)");
@@ -280,8 +290,7 @@ export function renderAsciiWith(title: string): Renderer {
         let acc = 0;
         for (let dy = 0; dy < ASCII_SS; dy++) {
           for (let dx = 0; dx < ASCII_SS; dx++) {
-            const si =
-              ((r * ASCII_SS + dy) * sceneW + (c * ASCII_SS + dx)) * 4;
+            const si = ((r * ASCII_SS + dy) * sceneW + (c * ASCII_SS + dx)) * 4;
             acc += big[si];
           }
         }

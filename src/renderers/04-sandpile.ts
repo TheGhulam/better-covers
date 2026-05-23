@@ -71,7 +71,14 @@ export const renderSandpile: Renderer = (ctx, W, H) => {
 
   // Full-bleed warm wash so the fractal disk sits inside a continuous umber
   // field rather than against a hard black edge.
-  const bgWash = ctx.createRadialGradient(W / 2, H / 2, 0, W / 2, H / 2, W * 0.7);
+  const bgWash = ctx.createRadialGradient(
+    W / 2,
+    H / 2,
+    0,
+    W / 2,
+    H / 2,
+    W * 0.7,
+  );
   bgWash.addColorStop(0, "rgb(64, 42, 24)");
   bgWash.addColorStop(0.55, "rgb(36, 24, 14)");
   bgWash.addColorStop(1, "rgb(14, 10, 6)");
@@ -130,7 +137,12 @@ export const renderSandpile: Renderer = (ctx, W, H) => {
   ctx.putImageData(id, 0, 0);
 
   const vg = ctx.createRadialGradient(
-    W / 2, H / 2, W * 0.25, W / 2, H / 2, W * 0.7,
+    W / 2,
+    H / 2,
+    W * 0.25,
+    W / 2,
+    H / 2,
+    W * 0.7,
   );
   vg.addColorStop(0, "rgba(0,0,0,0)");
   vg.addColorStop(1, "rgba(0,0,0,0.6)");

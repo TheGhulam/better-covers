@@ -1,13 +1,27 @@
 import React from "react";
-import { AbsoluteFill, Audio, Img, interpolate, Sequence, useCurrentFrame, staticFile } from "remotion";
+import {
+  AbsoluteFill,
+  Audio,
+  Img,
+  interpolate,
+  Sequence,
+  useCurrentFrame,
+  staticFile,
+} from "remotion";
 import { BEATS, BG, FG, ACCENT } from "../video-config";
 import { jetBrainsMono } from "../fonts";
 import { useBassPulse } from "../lib/useBassPulse";
 
 const SEEDS = [
-  { slug: "clifford",    png: staticFile("covers/showcase-clifford.png") },
-  { slug: "hello-world", png: staticFile("covers/showcase-clifford-hello-world.png") },
-  { slug: "yep-by-fgb",  png: staticFile("covers/showcase-clifford-yep-by-fgb.png") },
+  { slug: "clifford", png: staticFile("covers/showcase-clifford.png") },
+  {
+    slug: "hello-world",
+    png: staticFile("covers/showcase-clifford-hello-world.png"),
+  },
+  {
+    slug: "yep-by-fgb",
+    png: staticFile("covers/showcase-clifford-yep-by-fgb.png"),
+  },
 ];
 
 const PHASE_DURATION = 40;
@@ -16,20 +30,30 @@ const EXIT_FRAMES = 6;
 
 const CHANNEL_OFFSETS: [number, number][] = [
   [-28, -12],
-  [ 22,  10],
-  [  6, -22],
+  [22, 10],
+  [6, -22],
 ];
 
-const ChannelDrift: React.FC<{ src: string; opacity: number; localFrame: number }> = ({
-  src, opacity, localFrame,
-}) => {
+const ChannelDrift: React.FC<{
+  src: string;
+  opacity: number;
+  localFrame: number;
+}> = ({ src, opacity, localFrame }) => {
   const t = Math.min(1, localFrame / ENTER_FRAMES);
   const eased = 1 - Math.pow(1 - t, 3);
 
   if (t >= 1) {
     return (
       <AbsoluteFill style={{ opacity }}>
-        <Img src={src} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+        <Img
+          src={src}
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            display: "block",
+          }}
+        />
       </AbsoluteFill>
     );
   }
@@ -44,7 +68,15 @@ const ChannelDrift: React.FC<{ src: string; opacity: number; localFrame: number 
             opacity: 0.52,
           }}
         >
-          <Img src={src} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+          <Img
+            src={src}
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              display: "block",
+            }}
+          />
         </AbsoluteFill>
       ))}
     </AbsoluteFill>
@@ -53,11 +85,17 @@ const ChannelDrift: React.FC<{ src: string; opacity: number; localFrame: number 
 
 function phaseOpacity(frame: number, phaseIndex: number): number {
   const start = phaseIndex * PHASE_DURATION;
-  const end   = start + PHASE_DURATION;
+  const end = start + PHASE_DURATION;
   if (frame < start || frame > end) return 0;
   return Math.min(
-    interpolate(frame, [start, start + 4], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }),
-    interpolate(frame, [end - EXIT_FRAMES, end], [1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }),
+    interpolate(frame, [start, start + 4], [0, 1], {
+      extrapolateLeft: "clamp",
+      extrapolateRight: "clamp",
+    }),
+    interpolate(frame, [end - EXIT_FRAMES, end], [1, 0], {
+      extrapolateLeft: "clamp",
+      extrapolateRight: "clamp",
+    }),
   );
 }
 
@@ -66,8 +104,10 @@ function animateSlug(frame: number, phaseIndex: number, slug: string): string {
   const local = frame - start;
   if (local < 0) return "";
   const prev = phaseIndex > 0 ? SEEDS[phaseIndex - 1].slug : slug;
-  if (phaseIndex === 0) return slug.slice(0, Math.floor(Math.min(1, local / 8) * slug.length));
-  if (local < 6) return prev.slice(0, Math.floor(prev.length * (1 - local / 6)));
+  if (phaseIndex === 0)
+    return slug.slice(0, Math.floor(Math.min(1, local / 8) * slug.length));
+  if (local < 6)
+    return prev.slice(0, Math.floor(prev.length * (1 - local / 6)));
   return slug.slice(0, Math.floor(slug.length * Math.min(1, (local - 6) / 8)));
 }
 
@@ -93,7 +133,11 @@ export const HeroClifford: React.FC = () => {
   const bass = useBassPulse(BEATS.heroClifford.from);
 
   const currentPhase = Math.min(Math.floor(frame / PHASE_DURATION), 2);
-  const displayedSlug = animateSlug(frame, currentPhase, SEEDS[currentPhase].slug);
+  const displayedSlug = animateSlug(
+    frame,
+    currentPhase,
+    SEEDS[currentPhase].slug,
+  );
   const caret = Math.floor(frame / 15) % 2 === 0 ? "█" : " ";
 
   const op0 = phaseOpacity(frame, 0);
@@ -113,19 +157,38 @@ export const HeroClifford: React.FC = () => {
       <AbsoluteFill style={{ transform: `scale(${bgScale})` }}>
         {op0 > 0 && (
           <AbsoluteFill style={{ opacity: op0 }}>
-            <Img src={SEEDS[0].png} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+            <Img
+              src={SEEDS[0].png}
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                display: "block",
+              }}
+            />
           </AbsoluteFill>
         )}
         {op1 > 0 && (
-          <ChannelDrift src={SEEDS[1].png} opacity={op1} localFrame={Math.max(0, frame - PHASE_DURATION)} />
+          <ChannelDrift
+            src={SEEDS[1].png}
+            opacity={op1}
+            localFrame={Math.max(0, frame - PHASE_DURATION)}
+          />
         )}
         {op2 > 0 && (
-          <ChannelDrift src={SEEDS[2].png} opacity={op2} localFrame={Math.max(0, frame - 2 * PHASE_DURATION)} />
+          <ChannelDrift
+            src={SEEDS[2].png}
+            opacity={op2}
+            localFrame={Math.max(0, frame - 2 * PHASE_DURATION)}
+          />
         )}
       </AbsoluteFill>
 
       <AbsoluteFill
-        style={{ background: "radial-gradient(ellipse at center, transparent 40%, rgba(8,4,2,0.65) 100%)" }}
+        style={{
+          background:
+            "radial-gradient(ellipse at center, transparent 40%, rgba(8,4,2,0.65) 100%)",
+        }}
       />
 
       {/* Typing click sounds — fires on each character reveal across all phases */}
@@ -135,7 +198,16 @@ export const HeroClifford: React.FC = () => {
         </Sequence>
       ))}
 
-      <div style={{ position: "absolute", bottom: 72, left: 0, right: 0, display: "flex", justifyContent: "center" }}>
+      <div
+        style={{
+          position: "absolute",
+          bottom: 72,
+          left: 0,
+          right: 0,
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
         <div
           style={{
             fontFamily: jetBrainsMono,
@@ -154,8 +226,7 @@ export const HeroClifford: React.FC = () => {
         >
           <span style={{ color: ACCENT }}>$ </span>
           better-covers "
-          <span style={{ color: "#7dd3fc" }}>{displayedSlug}</span>
-          "{caret}
+          <span style={{ color: "#7dd3fc" }}>{displayedSlug}</span>"{caret}
         </div>
       </div>
     </AbsoluteFill>

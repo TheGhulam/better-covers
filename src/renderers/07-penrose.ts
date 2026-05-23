@@ -128,7 +128,12 @@ export const renderPenrose: Renderer = (ctx, W, H) => {
   }
 
   const vg = ctx.createRadialGradient(
-    W / 2, H / 2, W * 0.3, W / 2, H / 2, W * 0.85,
+    W / 2,
+    H / 2,
+    W * 0.3,
+    W / 2,
+    H / 2,
+    W * 0.85,
   );
   vg.addColorStop(0, "rgba(0,0,0,0)");
   vg.addColorStop(1, "rgba(0,0,0,0.45)");

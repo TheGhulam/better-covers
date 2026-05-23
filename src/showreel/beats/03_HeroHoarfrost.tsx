@@ -1,5 +1,12 @@
 import React from "react";
-import { AbsoluteFill, Img, interpolate, useCurrentFrame, Easing, staticFile } from "remotion";
+import {
+  AbsoluteFill,
+  Img,
+  interpolate,
+  useCurrentFrame,
+  Easing,
+  staticFile,
+} from "remotion";
 import { BEATS, BG, FG, DIM, ACCENT } from "../video-config";
 import { sourceSerif4, geist, jetBrainsMono } from "../fonts";
 import { useBassPulse } from "../lib/useBassPulse";
@@ -40,7 +47,12 @@ export const HeroKarman: React.FC = () => {
       >
         <Img
           src={staticFile("covers/showcase-karman.png")}
-          style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            display: "block",
+          }}
         />
       </AbsoluteFill>
 
@@ -89,7 +101,6 @@ export const HeroKarman: React.FC = () => {
           seed: karman
         </div>
       </div>
-
     </AbsoluteFill>
   );
 };

@@ -1,5 +1,13 @@
 import React from "react";
-import { AbsoluteFill, Audio, Img, interpolate, Sequence, useCurrentFrame, staticFile } from "remotion";
+import {
+  AbsoluteFill,
+  Audio,
+  Img,
+  interpolate,
+  Sequence,
+  useCurrentFrame,
+  staticFile,
+} from "remotion";
 import { BG, FG, DIM, ACCENT } from "../video-config";
 import { sourceSerif4, geist, jetBrainsMono } from "../fonts";
 
@@ -13,42 +21,39 @@ export const HarmonographTransition: React.FC = () => {
   const frame = useCurrentFrame();
 
   const t = (frame - DROP_START) / DROP_DURATION;
-  const eased = t <= 0 ? 0 : t >= 1 ? 1 : 1 - Math.pow(1 - Math.max(0, Math.min(1, t)), 3);
+  const eased =
+    t <= 0 ? 0 : t >= 1 ? 1 : 1 - Math.pow(1 - Math.max(0, Math.min(1, t)), 3);
   const radius = interpolate(eased, [0, 1], [0, 120], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
   });
 
   // Caption on dark bg — fades out before the circle fully arrives
-  const darkCaptionOpacity = interpolate(
-    frame,
-    [0, 8, 26, 36],
-    [0, 1, 1, 0],
-    { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
-  );
+  const darkCaptionOpacity = interpolate(frame, [0, 8, 26, 36], [0, 1, 1, 0], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
 
   // Caption on light bg — fades in as circle starts, persists to end
   const lightCaptionOpacity = interpolate(
     frame,
     [28, 38, 82, 90],
     [0, 1, 1, 0],
-    { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
+    { extrapolateLeft: "clamp", extrapolateRight: "clamp" },
   );
 
   // "Dark mode" callout — visible before the drop, fades out as circle starts
-  const darkCalloutOpacity = interpolate(
-    frame,
-    [0, 8, 26, 36],
-    [0, 1, 1, 0],
-    { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
-  );
+  const darkCalloutOpacity = interpolate(frame, [0, 8, 26, 36], [0, 1, 1, 0], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
 
   // "Light mode" callout — fades in right as the circle begins
   const lightCalloutOpacity = interpolate(
     frame,
     [28, 38, 62, 70],
     [0, 1, 1, 0],
-    { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
+    { extrapolateLeft: "clamp", extrapolateRight: "clamp" },
   );
 
   return (
@@ -61,7 +66,12 @@ export const HarmonographTransition: React.FC = () => {
       <AbsoluteFill>
         <Img
           src={DARK_PNG}
-          style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            display: "block",
+          }}
         />
       </AbsoluteFill>
 
@@ -70,7 +80,12 @@ export const HarmonographTransition: React.FC = () => {
         <AbsoluteFill style={{ clipPath: `circle(${radius}% at 50% 50%)` }}>
           <Img
             src={LIGHT_PNG}
-            style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              display: "block",
+            }}
           />
         </AbsoluteFill>
       )}

@@ -97,7 +97,12 @@ export const renderClifford: Renderer = (ctx, W, H) => {
   ctx.putImageData(id, 0, 0);
 
   const vg = ctx.createRadialGradient(
-    W / 2, H / 2, W * 0.25, W / 2, H / 2, W * 0.78,
+    W / 2,
+    H / 2,
+    W * 0.25,
+    W / 2,
+    H / 2,
+    W * 0.78,
   );
   vg.addColorStop(0, "rgba(0,0,0,0)");
   vg.addColorStop(1, "rgba(60,40,20,0.45)");

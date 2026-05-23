@@ -4,8 +4,8 @@ export interface Cover {
   slug: string;
   title: string;
   subtitle: string;
-  num: string;      // e.g. "08 · L-system plants"
-  heading: string;  // e.g. "A grammar for branching"
+  num: string; // e.g. "08 · L-system plants"
+  heading: string; // e.g. "A grammar for branching"
   png: string;
 }
 
@@ -136,13 +136,13 @@ export const COVERS: Cover[] = [
 // Heroes: karman(4), clifford(8), flow/fidenza(11), stippling(9) via harmonograph transition
 // Rapid-fire: 17 covers × 13 frames = 221 frames (fills the 220-frame window)
 export const RAPID_FIRE_COVERS: Cover[] = [
-  COVERS[0],  // Hoarfrost          — 01
-  COVERS[1],  // Harmonograph       — 02
-  COVERS[2],  // Lichtenberg        — 03
-  COVERS[3],  // Sandpile           — 04
-  COVERS[5],  // Schlieren          — 06
-  COVERS[6],  // Penrose            — 07
-  COVERS[7],  // Lindenmayer light  — 08
+  COVERS[0], // Hoarfrost          — 01
+  COVERS[1], // Harmonograph       — 02
+  COVERS[2], // Lichtenberg        — 03
+  COVERS[3], // Sandpile           — 04
+  COVERS[5], // Schlieren          — 06
+  COVERS[6], // Penrose            — 07
+  COVERS[7], // Lindenmayer light  — 08
   COVERS[10], // Atmosphere         — 11
   COVERS[12], // Contour            — 13
   COVERS[13], // Game of Life       — 14

@@ -44,19 +44,40 @@ export const renderHarmonograph: Renderer = (ctx, W, H) => {
   // at different rates.
   const traces = [
     {
-      fx1: 2.01, fx2: 3.0, fy1: 3.0, fy2: 2.01,
-      px1: 0.0, px2: 1.57, py1: 0.78, py2: 0.0,
-      d: 0.0042, color: "rgba(220, 165, 95, 0.55)",
+      fx1: 2.01,
+      fx2: 3.0,
+      fy1: 3.0,
+      fy2: 2.01,
+      px1: 0.0,
+      px2: 1.57,
+      py1: 0.78,
+      py2: 0.0,
+      d: 0.0042,
+      color: "rgba(220, 165, 95, 0.55)",
     },
     {
-      fx1: 2.99, fx2: 2.0, fy1: 1.99, fy2: 3.01,
-      px1: 0.4, px2: 0.0, py1: 0.0, py2: 1.2,
-      d: 0.0055, color: "rgba(200, 130, 70, 0.5)",
+      fx1: 2.99,
+      fx2: 2.0,
+      fy1: 1.99,
+      fy2: 3.01,
+      px1: 0.4,
+      px2: 0.0,
+      py1: 0.0,
+      py2: 1.2,
+      d: 0.0055,
+      color: "rgba(200, 130, 70, 0.5)",
     },
     {
-      fx1: 4.01, fx2: 3.0, fy1: 3.0, fy2: 2.0,
-      px1: 0.0, px2: 0.78, py1: 1.57, py2: 0.0,
-      d: 0.0048, color: "rgba(180, 100, 60, 0.45)",
+      fx1: 4.01,
+      fx2: 3.0,
+      fy1: 3.0,
+      fy2: 2.0,
+      px1: 0.0,
+      px2: 0.78,
+      py1: 1.57,
+      py2: 0.0,
+      d: 0.0048,
+      color: "rgba(180, 100, 60, 0.45)",
     },
   ];
 
@@ -90,7 +111,12 @@ export const renderHarmonograph: Renderer = (ctx, W, H) => {
   }
 
   const vg = ctx.createRadialGradient(
-    W / 2, H / 2, W * 0.35, W / 2, H / 2, W * 0.75,
+    W / 2,
+    H / 2,
+    W * 0.35,
+    W / 2,
+    H / 2,
+    W * 0.75,
   );
   vg.addColorStop(0, "rgba(0,0,0,0)");
   vg.addColorStop(1, "rgba(0,0,0,0.55)");

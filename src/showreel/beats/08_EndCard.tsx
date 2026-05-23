@@ -1,5 +1,12 @@
 import React from "react";
-import { AbsoluteFill, Audio, Img, interpolate, useCurrentFrame, staticFile } from "remotion";
+import {
+  AbsoluteFill,
+  Audio,
+  Img,
+  interpolate,
+  useCurrentFrame,
+  staticFile,
+} from "remotion";
 import { BG, FG, DIM } from "../video-config";
 import { shantellSans, geist, jetBrainsMono } from "../fonts";
 
@@ -39,7 +46,8 @@ export const EndCard: React.FC = () => {
       {/* Dark gradient covering left ~55% so text stays readable */}
       <AbsoluteFill
         style={{
-          background: "linear-gradient(to right, rgba(8,8,10,0.96) 0%, rgba(8,8,10,0.88) 45%, rgba(8,8,10,0.10) 70%, transparent 100%)",
+          background:
+            "linear-gradient(to right, rgba(8,8,10,0.96) 0%, rgba(8,8,10,0.88) 45%, rgba(8,8,10,0.10) 70%, transparent 100%)",
         }}
       />
 

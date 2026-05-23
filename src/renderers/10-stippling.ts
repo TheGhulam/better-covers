@@ -131,7 +131,12 @@ export const renderStippling: Renderer = (ctx, W, H, SEED) => {
   }
 
   const vg = ctx.createRadialGradient(
-    W * 0.36, H * 0.5, W * 0.25, W / 2, H / 2, W * 0.7,
+    W * 0.36,
+    H * 0.5,
+    W * 0.25,
+    W / 2,
+    H / 2,
+    W * 0.7,
   );
   vg.addColorStop(0, "rgba(0,0,0,0)");
   vg.addColorStop(1, "rgba(180, 160, 130, 0.35)");
