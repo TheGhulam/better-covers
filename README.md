@@ -68,19 +68,19 @@ export default function GalleryPage() {
 | -- | ------- | ---------------------- | -------------------------------------- | ------------------------------------------ |
 | 01 | <img src="docs/thumbnails/dla-hoarfrost.png" width="180" alt="Hoarfrost cover"> | `dla-hoarfrost`        | Diffusion-limited aggregation (inverted) | Witten & Sander 1981                       |
 | 02 | <img src="docs/thumbnails/harmonograph.png" width="180" alt="Harmonograph cover"> | `harmonograph`         | Damped-pendulum drawing machine        | Blackburn 1844 · Goold (Whitty 1893)       |
-| 03 | <img src="docs/thumbnails/lichtenberg.png" width="180" alt="Lichtenberg cover"> | `lichtenberg`          | Dielectric breakdown (η > 1 DLA)       | Lichtenberg 1777 · Niemeyer–Pietronero–Wiesmann 1984 |
+| 03 | <img src="docs/thumbnails/lichtenberg.png" width="180" alt="Lichtenberg cover"> | `lichtenberg`          | Dielectric breakdown (tip-biased DLA heuristic) | Lichtenberg 1778 · Niemeyer–Pietronero–Wiesmann 1984 |
 | 04 | <img src="docs/thumbnails/sandpile.png" width="180" alt="Sandpile cover"> | `sandpile`             | Abelian sandpile                       | Bak–Tang–Wiesenfeld 1987 · Dhar 1990       |
 | 05 | <img src="docs/thumbnails/karman.png" width="180" alt="Kármán cover"> | `karman`               | Kármán vortex street                   | Strouhal 1878 · Bénard 1908 · von Kármán 1911 |
-| 06 | <img src="docs/thumbnails/schlieren.png" width="180" alt="Schlieren cover"> | `schlieren`            | Schlieren / shadowgraph optics         | Toepler 1864                               |
+| 06 | <img src="docs/thumbnails/schlieren.png" width="180" alt="Schlieren cover"> | `schlieren`            | Toepler schlieren (knife-edge)         | Toepler 1864 · Schardin 1934               |
 | 07 | <img src="docs/thumbnails/penrose.png" width="180" alt="Penrose cover"> | `penrose`              | P3 rhomb tiling                        | Penrose 1974 · de Bruijn 1981              |
 | 08 | <img src="docs/thumbnails/lsystem.png" width="180" alt="L-system cover"> | `lsystem`              | L-system plants                        | Lindenmayer 1968 · Prusinkiewicz 1990      |
 | 09 | <img src="docs/thumbnails/clifford.png" width="180" alt="Clifford cover"> | `clifford`             | Strange attractor                      | Pickover 1990 (cf. de Jong 1987)           |
-| 10 | <img src="docs/thumbnails/stippling.png" width="180" alt="Stippling cover"> | `stippling`            | Poisson-disk blue noise                | Bridson 2007                               |
-| 11 | <img src="docs/thumbnails/painterly-atmosphere.png" width="180" alt="Atmosphere cover"> | `painterly-atmosphere` | Color-field painting                   | Rothko, Frankenthaler (palette only)       |
+| 10 | <img src="docs/thumbnails/stippling.png" width="180" alt="Stippling cover"> | `stippling`            | Poisson-disk blue noise                | Bridson 2007 · Mitchell 1987               |
+| 11 | <img src="docs/thumbnails/painterly-atmosphere.png" width="180" alt="Atmosphere cover"> | `painterly-atmosphere` | Color-field painting                   | Rothko, Frankenthaler (inspiration)        |
 | 12 | <img src="docs/thumbnails/flow-fidenza.png" width="180" alt="Flow field cover"> | `flow-fidenza`         | Flow-field strokes                     | Hobbs 2021 (technique only)                |
-| 13 | <img src="docs/thumbnails/topo-contour.png" width="180" alt="Topographic cover"> | `topo-contour`         | Topographic iso-lines                  | USGS contour convention                    |
+| 13 | <img src="docs/thumbnails/topo-contour.png" width="180" alt="Topographic cover"> | `topo-contour`         | Topographic iso-lines                  | USGS contour ink · iso-line banding        |
 | 14 | <img src="docs/thumbnails/life-conway.png" width="180" alt="Game of Life cover"> | `life-conway`          | Conway's Game of Life                  | Conway / Gardner 1970                      |
-| 15 | <img src="docs/thumbnails/ascii-landscape.png" width="180" alt="ASCII landscape cover"> | `ascii-landscape`      | ASCII brightness-ramp landscape        | ASCII art tradition · aalib 1997           |
+| 15 | <img src="docs/thumbnails/ascii-landscape.png" width="180" alt="ASCII landscape cover"> | `ascii-landscape`      | ASCII brightness-ramp landscape        | ASCII art tradition · aalib 1997 · Bourke 1997 |
 
 Full primary-source citations are in [`ATTRIBUTIONS.md`](ATTRIBUTIONS.md) and
 inside the doc comments of each `src/renderers/NN-name.ts` file.
