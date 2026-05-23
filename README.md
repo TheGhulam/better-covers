@@ -1,6 +1,6 @@
 # better-covers
 
-> Programmatic 1200 × 630 OG-image covers. Fifteen deterministic canvas
+> Programmatic 1200 × 630 OG-image covers. Deterministic canvas
 > renderers from physics, generative art, and cartographic tradition.
 > No AI, no API calls, just math and your slug.
 
@@ -62,7 +62,7 @@ export default function GalleryPage() {
 }
 ```
 
-## The fifteen covers
+## Covers
 
 | #  | Preview | Slug                   | Phenomenon / convention                | Reference                                  |
 | -- | ------- | ---------------------- | -------------------------------------- | ------------------------------------------ |
