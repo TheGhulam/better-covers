@@ -1,120 +1,129 @@
 /**
- * 08 · L-system — F → F[+F]F[−F]F at 25.7°, depth 4
+ * 08 · Lindenmayer — bushy plant from parallel string-rewriting
  *
- * Lindenmayer's 1968 parallel-rewriting system applies one rule everywhere
- * in a string at once; the result is interpreted as turtle moves with
- * bracketed push (`[`) and pop (`]`). From the single-character axiom `F`
- * and the production `F → F[+F]F[−F]F`, four iterations at a turn angle
- * of 25.7° give a recognizably botanical silhouette.
+ * Lindenmayer's parallel string-rewriting system, interpreted as turtle
+ * graphics. Six iterations of the classic bushy plant rule produce a
+ * long string of moves; a measurement pass walks it once to find the
+ * bounding box, and a draw pass rescales it to fit the canvas. Jitter
+ * values are pre-computed so both passes see the same plant — without
+ * this, the two passes consume the PRNG at different rates and the
+ * "rescale" lands on the wrong figure.
  *
- * Three plants are placed at fixed x positions across the bottom of the
- * canvas; a small per-step angle jitter (±0.06 rad, from the seed-driven
- * PRNG) keeps siblings from reading as perfect copies. A few dozen
- * scattered ochre leaves break up the visual symmetry.
+ * Rule
+ * - X → F-[[X]+X]+F[+FX]-X
+ * - F → FF
+ * - angle ≈ 22.5° per +/-
  *
  * References
  * - A. Lindenmayer, "Mathematical models for cellular interaction in
- *   development, I and II," Journal of Theoretical Biology 18, 280–315
- *   (1968).
- * - P. Prusinkiewicz & A. Lindenmayer, *The Algorithmic Beauty of Plants*
- *   (Springer, 1990) — the canonical reference for the bracketed turtle
- *   interpretation. The 25.7° turn angle and the production rule used here
- *   come from §1.6 of that book.
+ *   development," J. Theor. Biol. 18, 280 (1968).
+ * - P. Prusinkiewicz & A. Lindenmayer, *The Algorithmic Beauty of
+ *   Plants* (Springer, 1990) — bushy-plant rule appears in §1.6.
  *
  * @module renderers/lsystem
  */
 
-import { mulberry32, addGrain, type Renderer } from "../shared";
+import { addGrain, mulberry32, type Renderer } from "../shared";
 
 export const renderLSystem: Renderer = (ctx, W, H, SEED) => {
-  const r = mulberry32(SEED);
-
-  const bg = ctx.createLinearGradient(0, 0, 0, H);
-  bg.addColorStop(0, "#1a1612");
-  bg.addColorStop(1, "#0e0a07");
-  ctx.fillStyle = bg;
+  ctx.fillStyle = "#0a1410";
   ctx.fillRect(0, 0, W, H);
 
-  const rules: Record<string, string> = { F: "F[+F]F[-F]F" };
-  function expand(axiom: string, depth: number): string {
-    let s = axiom;
-    for (let i = 0; i < depth; i++) {
-      let next = "";
-      for (const c of s) next += rules[c] || c;
-      s = next;
-    }
-    return s;
+  // Expand the rule six times.
+  let s = "X";
+  const rules: Record<string, string> = {
+    X: "F-[[X]+X]+F[+FX]-X",
+    F: "FF",
+  };
+  for (let i = 0; i < 6; i++) {
+    let out = "";
+    for (const ch of s) out += rules[ch] || ch;
+    s = out;
   }
 
-  const angle = (25.7 * Math.PI) / 180;
-  const depth = 4;
-  const sysStr = expand("F", depth);
-  const step = 4.5;
+  // Pre-compute angle jitter so the measurement and draw passes see
+  // identical turtle sequences. Without this the rescale lands on the
+  // wrong plant.
+  let plusCount = 0;
+  let minusCount = 0;
+  for (const ch of s) {
+    if (ch === "+") plusCount++;
+    else if (ch === "-") minusCount++;
+  }
+  const r = mulberry32(SEED);
+  const baseAng = (22.5 + (r() - 0.5) * 3) * (Math.PI / 180);
+  const jitterPlus = new Float32Array(plusCount);
+  const jitterMinus = new Float32Array(minusCount);
+  for (let i = 0; i < plusCount; i++) jitterPlus[i] = (r() - 0.5) * 0.05;
+  for (let i = 0; i < minusCount; i++) jitterMinus[i] = (r() - 0.5) * 0.05;
 
-  const plants = [
-    { x: W * 0.18, y: H * 0.96, scale: 0.95, tilt: -0.04 },
-    { x: W * 0.52, y: H * 0.98, scale: 1.0, tilt: 0.02 },
-    { x: W * 0.85, y: H * 0.94, scale: 0.9, tilt: -0.06 },
-  ];
-
-  for (const p of plants) {
-    const state = { x: p.x, y: p.y, dir: -Math.PI / 2 + p.tilt, lw: 3.2 };
-    const stack: { x: number; y: number; dir: number; lw: number }[] = [];
-    ctx.lineCap = "round";
-
-    for (const ch of sysStr) {
+  type Bounds = { minX: number; maxX: number; minY: number; maxY: number };
+  const walk = (
+    drawCtx: CanvasRenderingContext2D | null,
+    sx: number,
+    sy: number,
+    step: number,
+    dir0: number,
+  ): Bounds => {
+    let x = sx;
+    let y = sy;
+    let dir = dir0;
+    const stack: [number, number, number][] = [];
+    let minX = x;
+    let maxX = x;
+    let minY = y;
+    let maxY = y;
+    let pi = 0;
+    let mi = 0;
+    if (drawCtx) drawCtx.beginPath();
+    for (const ch of s) {
       if (ch === "F") {
-        const nx = state.x + Math.cos(state.dir) * step * p.scale;
-        const ny = state.y + Math.sin(state.dir) * step * p.scale;
-        ctx.strokeStyle =
-          "rgba(220, 180, 130, " + (0.42 + Math.min(0.5, state.lw / 6)) + ")";
-        ctx.lineWidth = Math.max(0.5, state.lw);
-        ctx.beginPath();
-        ctx.moveTo(state.x, state.y);
-        ctx.lineTo(nx, ny);
-        ctx.stroke();
-        state.x = nx;
-        state.y = ny;
-      } else if (ch === "+") {
-        state.dir += angle + (r() - 0.5) * 0.06;
-      } else if (ch === "-") {
-        state.dir -= angle + (r() - 0.5) * 0.06;
-      } else if (ch === "[") {
-        stack.push({ x: state.x, y: state.y, dir: state.dir, lw: state.lw });
-        state.lw *= 0.68;
-      } else if (ch === "]") {
-        const top = stack.pop();
-        if (top) {
-          state.x = top.x;
-          state.y = top.y;
-          state.dir = top.dir;
-          state.lw = top.lw;
+        const nx = x + Math.cos(dir) * step;
+        const ny = y + Math.sin(dir) * step;
+        if (drawCtx) {
+          drawCtx.moveTo(x, y);
+          drawCtx.lineTo(nx, ny);
         }
-        state.lw *= 0.68;
+        x = nx;
+        y = ny;
+        if (x < minX) minX = x;
+        if (x > maxX) maxX = x;
+        if (y < minY) minY = y;
+        if (y > maxY) maxY = y;
+      } else if (ch === "+") {
+        dir += baseAng + jitterPlus[pi++];
+      } else if (ch === "-") {
+        dir -= baseAng + jitterMinus[mi++];
+      } else if (ch === "[") {
+        stack.push([x, y, dir]);
+      } else if (ch === "]") {
+        const p = stack.pop()!;
+        x = p[0];
+        y = p[1];
+        dir = p[2];
       }
     }
-  }
+    return { minX, maxX, minY, maxY };
+  };
 
-  // Scattered fallen leaves — tiny elliptical motes for visual texture.
-  for (let i = 0; i < 40; i++) {
-    const x = W * (0.1 + r() * 0.85);
-    const y = H * (0.15 + r() * 0.55);
-    const sz = 4 + r() * 6;
-    ctx.fillStyle = "rgba(186, 130, 70, " + (0.35 + r() * 0.35) + ")";
-    ctx.save();
-    ctx.translate(x, y);
-    ctx.rotate(r() * Math.PI);
-    ctx.beginPath();
-    ctx.ellipse(0, 0, sz, sz * 0.45, 0, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.restore();
-  }
+  // Measurement pass at unit step.
+  const b = walk(null, 0, 0, 1, -Math.PI / 2);
+  const bw = Math.max(1, b.maxX - b.minX);
+  const bh = Math.max(1, b.maxY - b.minY);
+  const step = Math.min((W * 0.85) / bw, (H * 0.85) / bh);
 
-  const guard = ctx.createLinearGradient(0, H * 0.55, 0, H);
-  guard.addColorStop(0, "rgba(0,0,0,0)");
-  guard.addColorStop(1, "rgba(0,0,0,0.78)");
-  ctx.fillStyle = guard;
-  ctx.fillRect(0, 0, W, H);
+  // Position so the bounding box is centred horizontally and the bottom
+  // of the plant rests near the canvas floor.
+  const cx = W * 0.5;
+  const baseY = H * 0.96;
+  const sx = cx - (b.minX + bw / 2) * step;
+  const sy = baseY - b.maxY * step;
 
-  addGrain(ctx, W, H, 6);
+  ctx.strokeStyle = "rgba(210, 225, 190, 0.92)";
+  ctx.lineWidth = 1.4;
+  ctx.lineCap = "round";
+  walk(ctx, sx, sy, step, -Math.PI / 2);
+  ctx.stroke();
+
+  addGrain(ctx, W, H, 8);
 };

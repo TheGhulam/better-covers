@@ -8,12 +8,19 @@
  * pattern shows up in MODIS satellite imagery of cloud streets behind
  * island peaks.
  *
- * The renderer places nine alternating point vortices on a staggered double
- * row downstream of the inlet. Each uses the Lamb–Oseen regularization so
- * the velocity does not blow up at the core. 18 000 streak particles released
- * just downstream of the inlet are advected through the superposition of the
- * vortex field and a uniform background drift; their stamped trails compose
- * the streakline image.
+ * Nine alternating point vortices sit on a staggered double row
+ * downstream of the inlet. Each uses the Lamb–Oseen regularization so
+ * the velocity does not blow up at the core. Streak particles released
+ * just downstream of the inlet are advected through the superposition
+ * of the vortex field and a uniform background drift; their stamped
+ * trails compose the streakline image.
+ *
+ * Geometry note
+ * The vortex spacing, core radius, and particle count all scale with the
+ * canvas dimensions so the wake reads correctly at gallery (600×315),
+ * hero (1200×630), and any intermediate size. Earlier versions used
+ * fixed pixel offsets which made the pattern hug the left margin on
+ * wide canvases and overflow narrow ones.
  *
  * Historical notes
  * - Strouhal published his frequency relation for a wire in 1878.
@@ -22,8 +29,9 @@
  *   (often called the "Bénard–Kármán" street in French sources).
  *
  * References
- * - Th. von Kármán, "Über den Mechanismus des Widerstandes, den ein bewegter
- *   Körper in einer Flüssigkeit erfährt," Göttingen Nachrichten (1911, 1912).
+ * - Th. von Kármán, "Über den Mechanismus des Widerstandes, den ein
+ *   bewegter Körper in einer Flüssigkeit erfährt," Göttingen Nachrichten
+ *   (1911, 1912).
  * - V. Strouhal, "Über eine besondere Art der Tonerregung," Annalen der
  *   Physik 241, 216 (1878).
  * - H. Lamb, *Hydrodynamics*, 6th ed. (Cambridge, 1932), §334 — Lamb–Oseen
@@ -32,7 +40,7 @@
  * @module renderers/karman
  */
 
-import { mulberry32, addGrain, type Renderer } from "../shared";
+import { addGrain, mulberry32, type Renderer } from "../shared";
 
 export const renderKarman: Renderer = (ctx, W, H, SEED) => {
   const bg = ctx.createLinearGradient(0, 0, 0, H);
@@ -41,21 +49,31 @@ export const renderKarman: Renderer = (ctx, W, H, SEED) => {
   ctx.fillStyle = bg;
   ctx.fillRect(0, 0, W, H);
 
+  // Vortex layout scales with canvas dimensions. Nine vortices fit the
+  // visible wake; spacing is W/11 so the first vortex sits at ~16% from
+  // the inlet and the last one well clear of the right edge.
   const cyAxis = H * 0.5;
-  const spacingX = 130;
-  const spacingY = 70;
+  const spacingX = W / 11;
+  const spacingY = H * 0.11;
+  // Core radius proportional to min(W, H) — at small canvases this
+  // keeps the cores from collapsing to a single pixel.
+  const rc = Math.max(18, Math.min(W, H) * 0.06);
+
   const vortices: { x: number; y: number; gamma: number; rc: number }[] = [];
-  const startX = 220;
+  const startX = W * 0.18;
   for (let i = 0; i < 9; i++) {
     const x = startX + i * spacingX;
     const sign = i % 2 === 0 ? 1 : -1;
     const y = cyAxis + sign * spacingY;
+    // Vortex strength decays downstream — real wakes diffuse with
+    // distance, and the visual benefit is a softer right edge.
     const decay = Math.exp(-i * 0.06);
-    vortices.push({ x: x, y: y, gamma: sign * 38000 * decay, rc: 32 });
+    vortices.push({ x, y, gamma: sign * 38000 * decay, rc });
   }
-  const U = 1.4;
+  const U = 1.4; // background drift
 
-  function vel(x: number, y: number) {
+  /** Velocity field: uniform U plus superposition of Lamb–Oseen vortices. */
+  function vel(x: number, y: number): { vx: number; vy: number } {
     let vx = U;
     let vy = 0;
     for (const v of vortices) {
@@ -68,34 +86,33 @@ export const renderKarman: Renderer = (ctx, W, H, SEED) => {
       vx += -dy * factor;
       vy += dx * factor;
     }
-    return { vx: vx, vy: vy };
+    return { vx, vy };
   }
 
   ctx.globalCompositeOperation = "lighter";
   const r = mulberry32(SEED);
-  const NUM_PARTICLES = 18000;
+  // Particle count scales with canvas area at ~0.08 particles per pixel
+  // — gives a dense streakline image across all sizes.
+  const NUM_PARTICLES = Math.floor(W * H * 0.08);
+  const dt = 1.2;
+  const STEPS = 700;
+
   for (let n = 0; n < NUM_PARTICLES; n++) {
     let x = -10 + r() * 80;
     let y = cyAxis - 12 + (r() - 0.5) * 24;
-    const steps = 700;
-    const dt = 1.2;
-    for (let s = 0; s < steps; s++) {
+    for (let s = 0; s < STEPS; s++) {
       const v = vel(x, y);
       x += v.vx * dt;
       y += v.vy * dt;
       if (x < 0 || x > W || y < 0 || y > H) break;
-      const a = 0.025 * Math.max(0.15, 1 - x / W);
-      ctx.fillStyle = "rgba(232, 240, 250, " + a + ")";
+      // Alpha fades downstream so vortices upstream read more strongly
+      // than the diffusing trail at the right edge.
+      const a = 0.035 * Math.max(0.15, 1 - x / W);
+      ctx.fillStyle = `rgba(232, 240, 250, ${a})`;
       ctx.fillRect(x, y, 1.2, 1.2);
     }
   }
   ctx.globalCompositeOperation = "source-over";
-
-  const guard = ctx.createLinearGradient(0, H * 0.55, 0, H);
-  guard.addColorStop(0, "rgba(8,12,18,0)");
-  guard.addColorStop(1, "rgba(8,12,18,0.85)");
-  ctx.fillStyle = guard;
-  ctx.fillRect(0, 0, W, H);
 
   addGrain(ctx, W, H, 10);
 };

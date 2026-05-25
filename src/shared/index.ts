@@ -3,24 +3,9 @@
  *
  * A deterministic toolkit: a stable string hash, a small PRNG (mulberry32),
  * a value-noise lattice with smoothstep interpolation, fractional Brownian
- * motion (fBm) built on top of it, and a uniform grain pass. Every renderer
- * pulls from this module — nothing here touches `Math.random` or the clock,
- * so the same `(W, H, SEED)` always paints the same pixels.
- *
- * @module shared
+ * motion (fBm) built on top of it, and a uniform grain pass.
  */
 
-/* -------------------------------------------------------------------------- *
- *  Renderer signature
- * -------------------------------------------------------------------------- */
-
-/**
- * Every cover is a pure `(ctx, W, H, SEED) → void` function.
- *
- * The renderer paints onto the supplied 2D context at the given `W × H`
- * size. It must be deterministic in `(W, H, SEED)` — no clocks, no
- * `Math.random`. Use {@link hashStr} on a slug to derive `SEED`.
- */
 export type Renderer = (
   ctx: CanvasRenderingContext2D,
   W: number,
@@ -28,16 +13,7 @@ export type Renderer = (
   SEED: number,
 ) => void;
 
-/* -------------------------------------------------------------------------- *
- *  String hashing
- * -------------------------------------------------------------------------- */
-
-/**
- * 32-bit FNV-1a hash of a string. Used to turn a post slug into a numeric
- * seed for the deterministic renderers below.
- *
- * Reference: Fowler–Noll–Vo hash, Glenn Fowler, Landon Curt Noll, Kiem-Phong Vo, 1991.
- */
+/** 32-bit FNV-1a hash of a string. */
 export function hashStr(s: string): number {
   let h = 2166136261;
   for (let i = 0; i < s.length; i++) {
@@ -47,18 +23,7 @@ export function hashStr(s: string): number {
   return h >>> 0;
 }
 
-/* -------------------------------------------------------------------------- *
- *  Pseudo-random number generator
- * -------------------------------------------------------------------------- */
-
-/**
- * Mulberry32 — a small, fast 32-bit PRNG. Returns a function that, on each
- * call, yields a uniform float in `[0, 1)`.
- *
- * Reference: Tommy Ettinger, "Mulberry32" (2017),
- * <https://gist.github.com/tommyettinger/46a874533244883189143505d203312c>.
- * Public domain.
- */
+/** Mulberry32 — small 32-bit PRNG. */
 export function mulberry32(a: number): () => number {
   return function () {
     a |= 0;
@@ -70,28 +35,14 @@ export function mulberry32(a: number): () => number {
   };
 }
 
-/* -------------------------------------------------------------------------- *
- *  Lattice hash & value noise
- * -------------------------------------------------------------------------- */
-
-/**
- * Spatial 2D hash — maps `(x, y, seed)` to a uniform float in `[0, 1]`.
- * Used as the lattice for the value-noise function below.
- */
+/** Spatial 2D hash. */
 export function hash2(x: number, y: number, s: number): number {
   let h = s ^ Math.imul(x | 0, 374761393) ^ Math.imul(y | 0, 668265263);
   h = Math.imul(h ^ (h >>> 13), 1274126177);
   return ((h ^ (h >>> 16)) >>> 0) / 4294967295;
 }
 
-/**
- * Bilinearly interpolated value noise with a smoothstep falloff inside each
- * lattice cell. Quintic interpolation would be smoother but this is enough
- * for the covers and ~2× cheaper.
- *
- * Reference: Ken Perlin's lattice noise tradition; the specific
- * smoothstep-on-value-noise variant is standard in the demoscene.
- */
+/** Bilinearly interpolated value noise with a smoothstep falloff. */
 export function smoothNoise(x: number, y: number, s: number): number {
   const xi = Math.floor(x);
   const yi = Math.floor(y);
@@ -106,15 +57,7 @@ export function smoothNoise(x: number, y: number, s: number): number {
   return (a * (1 - u) + b * u) * (1 - v) + (c * (1 - u) + d * u) * v;
 }
 
-/**
- * Fractional Brownian motion — `oct` octaves of {@link smoothNoise} summed
- * with amplitude halving and frequency doubling between octaves. Output
- * normalized to `[0, 1]`. Four octaves is a good default for cover-sized
- * images; six is overkill at 1200×630.
- *
- * Reference: Benoit Mandelbrot & John W. Van Ness, "Fractional Brownian
- * motions, fractional noises and applications", SIAM Review 10:4 (1968).
- */
+/** Fractional Brownian motion. */
 export function fbm(x: number, y: number, s: number, oct = 4): number {
   let v = 0;
   let amp = 1;
@@ -129,19 +72,7 @@ export function fbm(x: number, y: number, s: number, oct = 4): number {
   return v / max;
 }
 
-/* -------------------------------------------------------------------------- *
- *  Post-processing
- * -------------------------------------------------------------------------- */
-
-/**
- * Add uniform grain in-place over the full canvas. `amount` is the half-width
- * of the signed noise distribution, in 0–255 units — `amount = 24` adds ±12.
- *
- * Uses a fixed seed (0xC0FFEE) so the grain pattern is the same regardless of
- * the cover's own SEED. This keeps grain visually consistent across a feed of
- * differently seeded covers.
- */
-/** Bottom gradient for OG title legibility (~55–60% Y). */
+/** Bottom gradient for OG title legibility. */
 export function addVignette(
   ctx: CanvasRenderingContext2D,
   W: number,
@@ -212,6 +143,7 @@ export function voronoiCell(
   return best;
 }
 
+/** Add uniform grain in-place. */
 export function addGrain(
   ctx: CanvasRenderingContext2D,
   W: number,

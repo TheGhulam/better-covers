@@ -22,8 +22,8 @@ import {
   renderBatikCrackle,
   renderHypsometric,
   renderBriansBrain,
-} from "./renderers";
-import type { Renderer } from "./shared";
+} from "better-covers/renderers";
+import type { Renderer } from "better-covers/shared";
 
 export interface CoverEntry {
   id: string;

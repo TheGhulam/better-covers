@@ -8,7 +8,7 @@
  */
 
 import { COVERS, type CoverEntry } from '../covers/catalog';
-import { hashStr, mulberry32 } from '../covers/shared';
+import { hashStr, mulberry32 } from 'better-covers/shared';
 
 const REDUCED_MOTION = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const MASTER_W = 1200;

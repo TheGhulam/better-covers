@@ -1,9 +1,3 @@
-/**
- * Barrel export — every cover renderer, plus the shared utilities.
- *
- * @module renderers
- */
-
 export { renderHoarfrost } from "./01-hoarfrost";
 export { renderHarmonograph } from "./02-harmonograph";
 export { renderLichtenberg } from "./03-lichtenberg";

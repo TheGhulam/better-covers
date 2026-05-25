@@ -4,7 +4,7 @@
  */
 
 import { COVERS, type CoverEntry } from "../covers/catalog";
-import { hashStr, type Renderer } from "../covers/shared";
+import { hashStr, type Renderer } from "better-covers/shared";
 
 const COVER_BY_ID = new Map<string, CoverEntry>(COVERS.map((c) => [c.id, c]));
 let currentId = "hoarfrost";

@@ -58,7 +58,7 @@
   "sideEffects": false,
   "scripts": {
     "build": "tsup src/index.ts src/renderers/index.ts src/shared/index.ts src/Gallery.tsx --format esm --dts --clean --sourcemap",
-    "dev": "vite",
+    "dev": "npm run dev --prefix website",
     "typecheck": "tsc --noEmit",
     "lint": "eslint src --max-warnings 0",
     "format": "prettier --write \"src/**/*.{ts,tsx,js,json,md}\"",

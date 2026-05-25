@@ -1,5 +1,12 @@
 {
   "extends": "astro/tsconfigs/strict",
   "include": [".astro/types.d.ts", "**/*"],
-  "exclude": ["dist"]
+  "exclude": ["dist"],
+  "compilerOptions": {
+    "paths": {
+      "better-covers": ["../src/index.ts"],
+      "better-covers/renderers": ["../src/renderers/index.ts"],
+      "better-covers/shared": ["../src/shared/index.ts"]
+    }
+  }
 }
