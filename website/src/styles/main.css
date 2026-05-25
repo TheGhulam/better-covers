@@ -398,8 +398,8 @@ a:hover { color: var(--accent); }
 /* ---------- mobile ---------- */
 @media (max-width: 720px) {
   :root { --pad: 16px; --cover-w: calc(100vw - 32px); }
-  .corner.tr { display: none; }
-  .corner.bl { max-width: 60vw; }
+  .corner.bl { display: none; }
+  .corner.br { display: none; }
   .corner.br { font-size: 10px; }
   body { font-size: 11px; }
 }
