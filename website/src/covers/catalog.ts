@@ -1,0 +1,325 @@
+import {
+  renderHoarfrost,
+  renderHarmonograph,
+  renderLichtenberg,
+  renderSandpile,
+  renderKarman,
+  renderSchlieren,
+  renderPenrose,
+  renderLSystem,
+  renderClifford,
+  renderStippling,
+  renderPainterly,
+  renderFlow,
+  renderTopo,
+  renderLife,
+  renderAscii,
+  renderGrayScottMaze,
+  renderSpaceColonization,
+  renderRisograph,
+  renderWoodcut,
+  renderBarnsleyFern,
+  renderBatikCrackle,
+  renderHypsometric,
+  renderBriansBrain,
+} from "./renderers";
+import type { Renderer } from "./shared";
+
+export interface CoverEntry {
+  id: string;
+  num: string;
+  render: Renderer;
+  defaultSeed: string;
+  title: string;
+  subtitle: string;
+  body: string;
+  refs: string;
+  /** Cover sits on a light ground; use dark overlay text. */
+  dark?: boolean;
+  /** Approximate render budget in milliseconds — used to size the spinner. */
+  approxMs: number;
+}
+
+export const COVERS: CoverEntry[] = [
+  {
+    id: "hoarfrost",
+    num: "01",
+    render: renderHoarfrost,
+    defaultSeed: "dla-hoarfrost",
+    title: "Hoarfrost",
+    subtitle: "Inverted diffusion-limited aggregation, descending from a seed line",
+    body:
+      "Walkers drift through a void; the moment one touches an existing cluster it sticks forever. Seed the cluster along the top edge and the dendrites hang downward — frost on a window ledge, lightning in reverse. Fractal, Hausdorff ≈ 1.71.",
+    refs: "Witten & Sander 1981",
+    approxMs: 800,
+  },
+  {
+    id: "harmonograph",
+    num: "02",
+    render: renderHarmonograph,
+    defaultSeed: "harmonograph",
+    title: "Harmonograph",
+    subtitle: "Three pendulums, four damped sinusoids per axis",
+    body:
+      "Two pendulums move a pen, a third moves the paper. Their decaying sine waves interfere into the guilloché patterns you'll find on the back of any pre-2000 banknote.",
+    refs: "Blackburn 1844 · Goold 1893",
+    approxMs: 400,
+  },
+  {
+    id: "lichtenberg",
+    num: "03",
+    render: renderLichtenberg,
+    defaultSeed: "lichtenberg",
+    title: "Lichtenberg",
+    subtitle: "Dielectric breakdown captured inside acrylic",
+    body:
+      "Charge a block of acrylic with a particle accelerator, then ground it; the trapped charge punches its way out. Tip-biased DLA inspired by the η > 1 dielectric-breakdown regime.",
+    refs: "Lichtenberg 1778 · Niemeyer-Pietronero-Wiesmann 1984",
+    approxMs: 1200,
+  },
+  {
+    id: "sandpile",
+    num: "04",
+    render: renderSandpile,
+    defaultSeed: "sandpile",
+    title: "Sandpile",
+    subtitle: "A million grains dropped on one cell, stabilized",
+    body:
+      "A cell with four or more grains topples one grain to each neighbor; iterate until stable. The stabilized lattice is a Persian-miniature four-tone fractal whose continuum limit was proved by Pegden & Smart.",
+    refs: "Bak-Tang-Wiesenfeld 1987 · Dhar 1990",
+    approxMs: 1400,
+  },
+  {
+    id: "karman",
+    num: "05",
+    render: renderKarman,
+    defaultSeed: "karman",
+    title: "Kármán Street",
+    subtitle: "Staggered Lamb–Oseen vortices behind a bluff body",
+    body:
+      "A fluid past a cylinder sheds counter-rotating vortices on a staggered double row at a near-constant Strouhal number. The same pattern shows up in satellite imagery of cloud streets behind island peaks.",
+    refs: "Strouhal 1878 · Bénard 1908 · von Kármán 1911",
+    approxMs: 1600,
+  },
+  {
+    id: "schlieren",
+    num: "06",
+    render: renderSchlieren,
+    defaultSeed: "schlieren",
+    title: "Schlieren",
+    subtitle: "Heat plume rendered by its refractive-index gradient",
+    body:
+      "Toepler's knife-edge at the focal point of a collimated beam: any horizontal density gradient deflects rays past the edge and brightens the image. Heat plumes, shock fronts, candle convection become visible.",
+    refs: "Toepler 1864 · Schardin 1934",
+    approxMs: 700,
+  },
+  {
+    id: "penrose",
+    num: "07",
+    render: renderPenrose,
+    defaultSeed: "penrose",
+    title: "Penrose",
+    subtitle: "P3 rhomb tiling by inflation",
+    body:
+      "Two rhombs with matching rules that prohibit any periodic completion. Six levels of inflation from a ten-fold sun produce the quasi-crystalline geometry Lu and Steinhardt identified at the Darb-i Imam shrine in 2007.",
+    refs: "Penrose 1974 · de Bruijn 1981",
+    dark: true,
+    approxMs: 900,
+  },
+  {
+    id: "lsystem",
+    num: "08",
+    render: renderLSystem,
+    defaultSeed: "lsystem",
+    title: "Lindenmayer",
+    subtitle: "Bracketed string-rewriting interpreted as turtle moves",
+    body:
+      "Lindenmayer's parallel rewriting system applies one rule everywhere in a string at once; the result is interpreted as turtle moves with bracketed push and pop. Four iterations of F → F[+F]F[−F]F at 25.7°.",
+    refs: "Lindenmayer 1968 · Prusinkiewicz 1990",
+    approxMs: 300,
+  },
+  {
+    id: "clifford",
+    num: "09",
+    render: renderClifford,
+    defaultSeed: "clifford",
+    title: "Clifford",
+    subtitle: "Strange attractor, 4.5M points, log tonemapped",
+    body:
+      "An iterated sine-cosine map produces a smooth fractal attractor. Accumulate millions of points into a 2D histogram, log-tonemap the count — chronophotographic glow rather than neon-on-black.",
+    refs: "Pickover 1990 · de Jong 1987",
+    dark: true,
+    approxMs: 2200,
+  },
+  {
+    id: "stippling",
+    num: "10",
+    render: renderStippling,
+    defaultSeed: "stippling",
+    title: "Stippling",
+    subtitle: "Blue-noise points with minimum-distance constraint",
+    body:
+      "Bridson's algorithm maintains an active list. Each round, a seed draws thirty candidates from an annulus and accepts the first with no neighbor closer than r. The blue-noise distribution of the foveal cone mosaic.",
+    refs: "Bridson 2007 · Mitchell 1987",
+    dark: true,
+    approxMs: 1100,
+  },
+  {
+    id: "painterly",
+    num: "11",
+    render: renderPainterly,
+    defaultSeed: "painterly-atmosphere",
+    title: "Atmosphere",
+    subtitle: "Overlapping color-field blobs in a restrained palette",
+    body:
+      "Four to six soft-edged radial blobs in a restrained palette of three families — Dusk, Earth, Ember — chosen per cover from the slug seed. A film-grain pass breaks gradient banding into Rothko-adjacent atmosphere.",
+    refs: "Color-field painting tradition",
+    approxMs: 600,
+  },
+  {
+    id: "flow",
+    num: "12",
+    render: renderFlow,
+    defaultSeed: "flow-fidenza",
+    title: "Fidenza",
+    subtitle: "1400 particles drifting along an fBm vector field",
+    body:
+      "A low-frequency fBm field defines an angle at every point; particles are released into it, each leaving a low-alpha trail of short segments. The bare-minimum flow field — ink on paper rather than vector art.",
+    refs: "Hobbs 2021 (technique only)",
+    approxMs: 800,
+  },
+  {
+    id: "topo",
+    num: "13",
+    render: renderTopo,
+    defaultSeed: "topo-contour",
+    title: "Contour",
+    subtitle: "fBm heightfield read as cartographic iso-lines",
+    body:
+      "A fractional Brownian motion heightfield summed with a single Gaussian peak. Contour lines fall at fourteen evenly spaced thresholds; the peak densifies into concentric summit rings — every cover has a named hill.",
+    refs: "USGS contour ink · fBm + Gaussian summit",
+    approxMs: 900,
+  },
+  {
+    id: "life",
+    num: "14",
+    render: renderLife,
+    defaultSeed: "life-conway",
+    title: "Game of Life",
+    subtitle: "B3/S23 cellular automaton, 22 generations from a slug seed",
+    body:
+      "Seed a 120×63 grid with 32% density from the slug hash, run twenty-two generations under wraparound boundaries, freeze. Surviving cells colored amber at the centre, fading to slate at the edges.",
+    refs: "Conway / Gardner 1970",
+    approxMs: 250,
+  },
+  {
+    id: "ascii",
+    num: "15",
+    render: renderAscii,
+    defaultSeed: "ascii-landscape",
+    title: "ASCII Landscape",
+    subtitle: "Right-anchored scene sampled into γ-corrected glyphs",
+    body:
+      "A procedural landscape — sun, rays, hills, trees, water — drawn at 4× supersample on the right two-thirds. Each 7×11 cell averaged into a luminance value, γ-corrected at 0.55 to pull sub-pixel structure into mid-density glyphs.",
+    refs: "ASCII tradition · aalib 1997 · Bourke 1997",
+    approxMs: 700,
+  },
+  {
+    id: "gray-scott-maze",
+    num: "16",
+    render: renderGrayScottMaze,
+    defaultSeed: "gray-scott-maze",
+    title: "Gray-Scott Maze",
+    subtitle: "Reaction-diffusion in Pearson's labyrinth regime",
+    body:
+      "Activator V and substrate U evolve via Laplacian coupling — elongated channels winding through inhibitor walls on a coarse grid, twelve hundred steps, then upscale. Turing chemistry in the labyrinth regime.",
+    refs: "Pearson 1993 · Gray-Scott 1984",
+    approxMs: 1800,
+  },
+  {
+    id: "space-colonization",
+    num: "17",
+    render: renderSpaceColonization,
+    defaultSeed: "space-colonization",
+    title: "Colonization",
+    subtitle: "Branches growing toward attractor points in the canopy",
+    body:
+      "Scatter attractor points in the upper canopy; grow branch tips from a trunk base toward the nearest unconsumed attractor. When a tip enters the kill radius, the attractor vanishes — a winter-tree silhouette.",
+    refs: "Runions et al. 2007",
+    approxMs: 1500,
+  },
+  {
+    id: "risograph",
+    num: "18",
+    render: renderRisograph,
+    defaultSeed: "risograph",
+    title: "Risograph",
+    subtitle: "Three misregistered spot-color layers on warm paper",
+    body:
+      "Riso Kagaku's duplicator prints spot-color masters in sequence; perfect registration is optional. Three seed-offset layers — red, blue, and a mixed third pass — overprint the same fBm blob with deliberate drift.",
+    refs: "Riso Kagaku 1980s",
+    dark: true,
+    approxMs: 1100,
+  },
+  {
+    id: "woodcut",
+    num: "19",
+    render: renderWoodcut,
+    defaultSeed: "woodcut-hatch",
+    title: "Woodcut",
+    subtitle: "Crosshatched relief lines on ivory paper",
+    body:
+      "Relief woodcut builds tone from parallel hatch strokes; crossing angles darken the form. An fBm density field plus a Gaussian bump sets where lines land — technique from the Dürer woodcut tradition.",
+    refs: "Dürer woodcut technique",
+    dark: true,
+    approxMs: 600,
+  },
+  {
+    id: "barnsley-fern",
+    num: "20",
+    render: renderBarnsleyFern,
+    defaultSeed: "barnsley-fern",
+    title: "Barnsley Fern",
+    subtitle: "50000 IFS points tonemapped by visit density",
+    body:
+      "An iterated function system of four affine transformations with fixed probabilities. Fifty thousand points accumulate into a soft botanical silhouette; density tonemapping gives the frond structure depth without neon contrast.",
+    refs: "Barnsley 1988",
+    approxMs: 350,
+  },
+  {
+    id: "batik-crackle",
+    num: "21",
+    render: renderBatikCrackle,
+    defaultSeed: "batik-crackle",
+    title: "Batik Crackle",
+    subtitle: "Wax-resist crackle lines on an indigo ground",
+    body:
+      "Indonesian batik applies wax to cloth before indigo dyeing; the wax cracks under tension and leaves fine warm resist lines. Summed sinusoids with seed phase offsets extract a synthetic crackle field.",
+    refs: "Indonesian batik tradition",
+    approxMs: 500,
+  },
+  {
+    id: "hypsometric",
+    num: "22",
+    render: renderHypsometric,
+    defaultSeed: "hypsometric",
+    title: "Hypsometric Tint",
+    subtitle: "Elevation color bands from deep water to highland",
+    body:
+      "NOAA and GEBCO bathymetric charts use discrete hypsometric color bands. A scalar heightfield maps to seven bands from deep water through shallow shelf to lowland and highland — color cartography rather than iso-lines.",
+    refs: "NOAA/GEBCO symbology",
+    approxMs: 400,
+  },
+  {
+    id: "brians-brain",
+    num: "23",
+    render: renderBriansBrain,
+    defaultSeed: "brians-brain",
+    title: "Brian's Brain",
+    subtitle: "Three-state CA snapshot with glider filaments",
+    body:
+      "Off, firing, and refractory states on a toroidal grid. Off cells ignite when exactly two neighbors are firing; firing cells become refractory on the next tick. Forty-eight generations yield glider-rich filaments.",
+    refs: "Callahan 1996",
+    approxMs: 600,
+  },
+];

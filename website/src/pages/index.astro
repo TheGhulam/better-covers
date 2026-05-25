@@ -1,0 +1,72 @@
+---
+/**
+ * Home — fixed corner labels, hero with one-shot Conway's Life,
+ * vertical scroll of centered covers, bottom project strip.
+ */
+import Site from "../layouts/Site.astro";
+import { COVERS } from "../covers/catalog";
+---
+
+<Site>
+  <!-- ---------- fixed corner labels ---------- -->
+  <header class="corner tl">
+    <a href="/" class="wordmark">better<span class="em">—</span>covers</a>
+  </header>
+
+  <aside class="corner tr">
+    <a href="/studio">studio ↗</a>
+  </aside>
+
+  <aside class="corner bl">
+    an experimental gallery to generate<br />
+    and explore deterministic cover art.
+  </aside>
+
+  <aside class="corner br">
+    <span style="color: var(--fg-dim)">© 2026</span>
+  </aside>
+
+  <!-- ---------- hero: one-shot Life reveal ---------- -->
+  <section class="hero">
+    <div class="hero-stage">
+      <canvas class="hero-canvas" id="hero" width="1200" height="630"></canvas>
+      <div class="hero-caption" id="hero-cap">
+        <span class="dot"></span>computing — generation <span id="hero-gen"
+          >0</span
+        > · B3/S23
+      </div>
+    </div>
+  </section>
+
+  <!-- ---------- gallery: one cover per viewport ---------- -->
+  <main class="gallery" id="gallery">
+    {
+      COVERS.map((c, idx) => (
+        <article class="cover-slot loading" data-id={c.id} data-idx={idx}>
+          <canvas
+            class="cover-canvas"
+            width="1200"
+            height="630"
+            aria-label={c.title}
+          />
+          <div class="cover-meta">
+            <span class="n">{c.num}</span>
+            <span class="t">{c.title}</span>
+            <span>— {c.subtitle}</span>
+          </div>
+          <a
+            class="cover-link"
+            href={`/studio?cover=${c.id}&seed=${encodeURIComponent(c.defaultSeed)}`}
+          >
+            edit seed
+          </a>
+        </article>
+      ))
+    }
+  </main>
+
+<script>
+    import { initGallery } from "../scripts/gallery.ts";
+    initGallery();
+  </script>
+</Site>
