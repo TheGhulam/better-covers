@@ -3,17 +3,21 @@
    Aesthetic grammar: PRJCT-Archi layout (fixed corners, vertical
    scroll of centered covers) wearing computational typography
    (JetBrains Mono labels, Fraunces wordmark, EB Garamond body).
+
+   Studio lives as a modal <dialog>, opened by clicking any cover.
    ============================================================ */
 
 :root {
   /* palette */
   --bg: #0a0a0a;
   --bg-2: #050505;
+  --panel: #111110;
   --fg: #e8e6e1;
   --fg-dim: #6a6863;
   --fg-faint: #3a3936;
   --accent: #c8884a;            /* warm ochre — interaction only */
   --rule: rgba(232, 230, 225, 0.08);
+  --rule-2: rgba(232, 230, 225, 0.14);
 
   /* typography */
   --font-display: 'Fraunces', 'Times New Roman', serif;
@@ -23,6 +27,11 @@
   /* spatial */
   --pad: clamp(20px, 2.4vw, 36px);
   --cover-w: clamp(320px, 60vw, 1100px);
+
+  /* motion — shared easings for a coherent feel */
+  --ease-out:    cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 * { box-sizing: border-box; }
@@ -49,6 +58,12 @@ a:hover { color: var(--accent); }
 
 ::selection { background: var(--accent); color: var(--bg); }
 
+/* Suppress body scroll while the studio dialog is open */
+html:has(dialog.studio[open]),
+body:has(dialog.studio[open]) {
+  overflow: hidden;
+}
+
 /* ---------- fixed corner scaffolding (PRJCT-Archi grammar) ---------- */
 .corner {
   position: fixed;
@@ -57,16 +72,13 @@ a:hover { color: var(--accent); }
   font-size: 12px;
   line-height: 1.5;
   color: var(--fg);
-  pointer-events: none;          /* corners are passive; only links re-enable */
+  pointer-events: none;
 }
 .corner a, .corner button { pointer-events: auto; }
 .corner.tl { top: var(--pad); left: var(--pad); }
 .corner.tr { top: var(--pad); right: var(--pad); text-align: right; }
 .corner.bl { bottom: var(--pad); left: var(--pad); max-width: 320px; }
 .corner.br { bottom: var(--pad); right: var(--pad); text-align: right; }
-
-.corner.bare.bl { bottom: var(--pad); }   /* used on /studio where no bottom strip */
-.corner.bare.br { bottom: var(--pad); }
 
 .label { color: var(--fg-dim); display: block; margin-bottom: 8px; }
 
@@ -78,47 +90,29 @@ a:hover { color: var(--accent); }
 }
 .wordmark .em { color: var(--fg-dim); }
 
-.disciplines ul { margin: 0; padding: 0; list-style: none; }
-
-.back { color: var(--fg-dim); }
-.back::before { content: "← "; }
-
-/* ---------- bottom strip (project rail) ---------- */
-.strip {
-  position: fixed;
-  z-index: 40;
-  left: 0; right: 0; bottom: 0;
-  border-top: 1px solid var(--rule);
-  background: linear-gradient(to top, var(--bg) 60%, rgba(10, 10, 10, 0.92) 100%);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  overflow: hidden;
-}
-.strip-track {
-  display: flex;
-  gap: 0;
-  padding: 12px 0;
-  overflow-x: auto;
-  scroll-snap-type: x proximity;
-  scrollbar-width: none;
-}
-.strip-track::-webkit-scrollbar { display: none; }
-.strip-item {
-  flex: 0 0 auto;
-  padding: 0 22px;
-  border-right: 1px solid var(--rule);
+/* Scroll-position indicator (top-right corner). Updates as the gallery
+   scrolls so you can see where you are in the long vertical sequence. */
+.position {
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: 12px;
   letter-spacing: 0.04em;
-  color: var(--fg-dim);
-  white-space: nowrap;
-  scroll-snap-align: start;
-  transition: color 0.2s ease;
+  font-variant-numeric: tabular-nums;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 2px;
+  color: var(--fg);
 }
-.strip-item:hover { color: var(--accent); }
-.strip-item .n { color: var(--fg-faint); margin-right: 10px; }
-.strip-item:first-child { padding-left: var(--pad); }
-.strip-item:last-child { padding-right: var(--pad); border-right: none; }
+.position-current {
+  display: inline-block;
+  min-width: 1.6em;
+  text-align: right;
+  transition: color 220ms var(--ease-out);
+}
+.position-current.bumped {
+  color: var(--accent);
+}
+.position-sep { color: var(--fg-faint); padding: 0 4px; }
+.position-total { color: var(--fg-dim); }
 
 /* ---------- hero ---------- */
 .hero {
@@ -170,23 +164,64 @@ a:hover { color: var(--accent); }
   flex-direction: column;
   align-items: center;
   gap: 18vh;
-  padding: 14vh var(--pad) calc(120px + 80px);
+  padding: 14vh var(--pad) 14vh;
 }
+
+/* Cover is now a <button> — reset native button chrome, then style
+   it as a card with a smooth hover lift. The whole thing is clickable
+   and opens the studio dialog. */
 .cover-slot {
+  appearance: none;
+  background: transparent;
+  border: 0;
+  margin: 0;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+
   width: var(--cover-w);
   aspect-ratio: 1200 / 630;
   position: relative;
+  cursor: pointer;
+
+  /* reveal-on-scroll initial state */
   opacity: 0;
   transform: translateY(24px);
-  transition: opacity 1.1s cubic-bezier(.2, .7, .2, 1),
-              transform 1.1s cubic-bezier(.2, .7, .2, 1);
+  transition:
+    opacity 1.1s var(--ease-out),
+    transform 0.5s var(--ease-out);
+  will-change: transform, opacity;
 }
-.cover-slot.in { opacity: 1; transform: none; }
+.cover-slot.in {
+  opacity: 1;
+  transform: translateY(0);
+}
+.cover-slot:hover {
+  transform: translateY(-4px);
+}
+.cover-slot:focus-visible {
+  outline: 1px solid var(--accent);
+  outline-offset: 8px;
+}
+
 .cover-canvas {
   width: 100%; height: 100%;
   display: block;
   background: #0a0a0a;
+  box-shadow: 0 0 0 1px rgba(232, 230, 225, 0.04);
+  transition:
+    box-shadow 0.35s var(--ease-out),
+    filter 0.35s var(--ease-out);
 }
+.cover-slot:hover .cover-canvas {
+  box-shadow:
+    0 0 0 1px rgba(232, 230, 225, 0.12),
+    0 30px 70px -30px rgba(0, 0, 0, 0.8);
+  filter: brightness(1.04);
+}
+
+/* Numeric/title strip beneath each cover */
 .cover-meta {
   position: absolute;
   left: 0; bottom: -34px;
@@ -197,18 +232,10 @@ a:hover { color: var(--accent); }
   font-size: 11px;
   letter-spacing: 0.04em;
   color: var(--fg-dim);
+  pointer-events: none;
 }
 .cover-meta .n { color: var(--fg-faint); }
 .cover-meta .t { color: var(--fg); }
-.cover-link {
-  position: absolute;
-  right: 0; bottom: -34px;
-  font-family: var(--font-mono);
-  font-size: 11px;
-  color: var(--fg-dim);
-}
-.cover-link:hover { color: var(--accent); }
-.cover-link::after { content: " ↗"; opacity: 0.5; }
 
 /* shimmer for slots still computing */
 .cover-slot.loading::before {
@@ -222,168 +249,433 @@ a:hover { color: var(--accent); }
   pointer-events: none;
 }
 
-/* ---------- studio page ---------- */
-.studio {
-  min-height: 100vh;
-  display: grid;
-  grid-template-columns: 1fr 360px;
-  gap: 48px;
-  padding: 96px var(--pad) 96px;
-  align-items: start;
+/* ===========================================================
+   Studio dialog — modal lives on the home page now.
+   Native <dialog>: free focus trap, free ESC handling.
+   =========================================================== */
+dialog.studio {
+  border: none;
+  padding: 0;
+  background: transparent;
+  max-width: min(1180px, 94vw);
+  max-height: 92vh;
+  width: 100%;
+  color: var(--fg);
+  overflow: visible;
 }
-.stage { position: sticky; top: 96px; }
+
+/* Backdrop: tinted blur fades in. The keyframe drives the transition
+   so the open state animates from "no blur" rather than snapping. */
+dialog.studio::backdrop {
+  background: rgba(5, 5, 5, 0);
+}
+dialog.studio[open]::backdrop {
+  background: rgba(5, 5, 5, 0.7);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  animation: backdrop-in 320ms var(--ease-out);
+}
+@keyframes backdrop-in {
+  from {
+    background: rgba(5, 5, 5, 0);
+    -webkit-backdrop-filter: blur(0px);
+    backdrop-filter: blur(0px);
+  }
+}
+
+/* Inner card */
+.studio-inner {
+  position: relative;
+  background: var(--panel);
+  border: 1px solid var(--rule);
+  box-shadow:
+    0 50px 120px -30px rgba(0, 0, 0, 0.85),
+    0 10px 30px -10px rgba(0, 0, 0, 0.5);
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  overflow: hidden;
+}
+dialog.studio[open] .studio-inner {
+  animation: studio-in 440ms var(--ease-out) both;
+}
+@keyframes studio-in {
+  from { opacity: 0; transform: translateY(18px) scale(0.97); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* Stage side (left) */
+.studio-stage {
+  background: var(--bg);
+  padding: 32px 32px 22px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 18px;
+  min-width: 0;
+}
 .stage-frame {
+  position: relative;
   width: 100%;
   aspect-ratio: 1200 / 630;
-  position: relative;
   background: #0a0a0a;
+  box-shadow: 0 0 0 1px var(--rule);
+  overflow: hidden;
 }
-.stage-canvas { width: 100%; height: 100%; display: block; }
+.stage-frame canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  transition: opacity 0.42s var(--ease-out);
+}
+/* Crossfade pair — the previous canvas sits underneath while the new
+   one fades up. Once the fade settles, the previous canvas is removed. */
+.stage-frame canvas.stage-prev { z-index: 1; opacity: 1; }
+.stage-frame canvas.stage-next { z-index: 2; opacity: 0; }
+.stage-frame canvas.stage-next.is-shown { opacity: 1; }
+
+/* Progress bar across the bottom of the frame during render */
+.stage-progress {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 2px;
+  background: rgba(232, 230, 225, 0.06);
+  overflow: hidden;
+  z-index: 3;
+  opacity: 0;
+  transition: opacity 200ms ease;
+}
+.stage-progress.is-active { opacity: 1; }
+/* The fill bar is a real child element appended by JS so its width
+   can be driven imperatively. */
+
 .stage-meta {
-  margin-top: 18px;
   display: flex;
   justify-content: space-between;
   align-items: baseline;
+  font-family: var(--font-mono);
   font-size: 11px;
   color: var(--fg-dim);
   letter-spacing: 0.04em;
 }
 .stage-meta .n { color: var(--fg-faint); margin-right: 10px; }
 .stage-meta .t { color: var(--fg); }
-.stage-meta .right .v { color: var(--fg); }
+.stage-meta .v { color: var(--fg); }
 
-.spinner {
-  position: absolute; inset: 0;
-  display: none;
-  place-items: center;
-  background: rgba(10, 10, 10, 0.7);
-  backdrop-filter: blur(2px);
+/* Panel side (right) */
+.studio-panel {
+  padding: 32px 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  border-left: 1px solid var(--rule);
+  min-width: 0;
+  max-height: min(92vh, 760px);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--fg-faint) transparent;
 }
-.spinner.on { display: grid; }
-.spinner-mark {
-  width: 28px; height: 28px;
-  border: 1px solid var(--fg-faint);
-  border-top-color: var(--accent);
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
-.spinner-text {
-  position: absolute;
-  bottom: 24px; left: 0; right: 0;
-  text-align: center;
-  color: var(--fg-dim);
-  font-size: 10px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+.studio-panel::-webkit-scrollbar { width: 6px; }
+.studio-panel::-webkit-scrollbar-thumb {
+  background: var(--fg-faint);
+  border-radius: 3px;
 }
 
-.panel { display: flex; flex-direction: column; gap: 32px; }
-.field { display: flex; flex-direction: column; gap: 8px; }
-.field-label {
+.panel-head { display: flex; flex-direction: column; gap: 6px; }
+.panel-num {
+  font-family: var(--font-mono);
   font-size: 10px;
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--fg-dim);
 }
-.field input[type="text"] {
-  background: transparent;
-  border: none;
-  border-bottom: 1px solid var(--rule);
+.panel-title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 30px;
+  line-height: 1.05;
+  margin: 0;
+  letter-spacing: -0.005em;
   color: var(--fg);
-  font-family: var(--font-mono);
-  font-size: 14px;
-  padding: 10px 0;
-  width: 100%;
-  outline: none;
-  transition: border-color 0.2s ease;
 }
-.field input[type="text"]:focus { border-bottom-color: var(--accent); }
-
-.dropdown { position: relative; }
-.dropdown-toggle {
-  background: transparent;
-  border: none;
-  border-bottom: 1px solid var(--rule);
-  color: var(--fg);
-  font-family: var(--font-mono);
+.panel-subtitle {
+  font-family: var(--font-display);
+  font-style: italic;
   font-size: 14px;
-  padding: 10px 0;
-  width: 100%;
-  text-align: left;
-  cursor: pointer;
+  color: var(--fg-dim);
+  margin: 0;
+  line-height: 1.4;
+}
+.panel-body {
+  font-family: var(--font-body);
+  font-size: 15.5px;
+  line-height: 1.55;
+  color: var(--fg);
+  opacity: 0.88;
+  margin: 0;
+}
+
+/* ── Info drawer ──────────────────────────────────────────────────
+   The panel description (plate number, title, subtitle, body) is
+   hidden by default behind a small trigger. Clicking expands the
+   drawer with a smooth height + opacity animation. The grid-rows
+   0fr → 1fr trick lets us animate to auto-height without JS-measured
+   pixel heights. */
+.info {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  gap: 0;
+}
+.info-trigger {
+  display: inline-flex;
   align-items: center;
-  transition: border-color 0.2s ease;
-}
-.dropdown-toggle:hover { border-bottom-color: var(--accent); }
-.dropdown-toggle .num { color: var(--fg-faint); margin-right: 12px; }
-.dropdown-toggle .arrow { color: var(--fg-dim); font-size: 11px; }
-.dropdown-menu {
-  position: absolute;
-  top: calc(100% + 8px);
-  left: 0; right: 0;
-  background: #111110;
-  border: 1px solid var(--rule);
-  max-height: 320px;
-  overflow-y: auto;
-  z-index: 10;
-  display: none;
-  scrollbar-width: thin;
-  scrollbar-color: var(--fg-faint) transparent;
-}
-.dropdown.open .dropdown-menu { display: block; }
-.dropdown-item {
-  display: block;
-  padding: 10px 14px;
-  font-size: 12px;
-  color: var(--fg);
-  cursor: pointer;
-  border-bottom: 1px solid var(--rule);
-}
-.dropdown-item:last-child { border-bottom: none; }
-.dropdown-item:hover,
-.dropdown-item.active { color: var(--accent); }
-.dropdown-item .num { color: var(--fg-faint); margin-right: 12px; }
-
-.row { display: flex; gap: 12px; }
-.btn {
+  gap: 8px;
+  align-self: flex-start;
   background: transparent;
-  border: 1px solid var(--rule);
+  border: none;
+  padding: 4px 0;
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--fg-dim);
+  transition: color 200ms var(--ease-out);
+}
+.info-trigger:hover,
+.info-trigger:focus-visible {
+  color: var(--accent);
+  outline: none;
+}
+.info-icon {
+  flex: 0 0 auto;
+  transition: transform 320ms var(--ease-spring);
+}
+.info-trigger:hover .info-icon {
+  transform: scale(1.1);
+}
+.info-label { flex: 0 0 auto; }
+.info-chevron {
+  font-size: 12px;
+  line-height: 1;
+  transition: transform 360ms var(--ease-spring);
+  color: var(--fg-faint);
+}
+.info-trigger[aria-expanded="true"] .info-chevron {
+  transform: rotate(180deg);
+  color: var(--fg-dim);
+}
+
+/* Drawer: grid-rows trick for smooth auto-height. The inner wrapper
+   is overflow:hidden so the content clips during the squeeze. */
+.info-drawer {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition:
+    grid-template-rows 460ms var(--ease-out),
+    opacity 280ms var(--ease-out),
+    margin-top 460ms var(--ease-out);
+  margin-top: 0;
+}
+.info-drawer-inner {
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.info.is-open .info-drawer {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  margin-top: 14px;
+}
+/* When open, soften the content fade-in slightly behind the height
+   animation so the text doesn't appear before there's room for it. */
+.info.is-open .info-drawer { transition-delay: 0ms, 80ms, 0ms; }
+
+.panel-refs {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--fg-dim);
+  letter-spacing: 0.06em;
+  line-height: 1.5;
+  margin: 0;
+  padding-top: 14px;
+  border-top: 1px solid var(--rule);
+}
+.panel-refs::before { content: "Ref. "; color: var(--fg-faint); }
+
+/* Seed row — label + shuffle on top line, input below */
+.seed-row { display: flex; flex-direction: column; gap: 8px; }
+.seed-label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.seed-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--fg-dim);
+}
+
+.seed-shuffle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: none;
+  padding: 2px 0;
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--fg-dim);
+  transition:
+    color 180ms var(--ease-out),
+    transform 180ms var(--ease-out);
+}
+.seed-shuffle svg {
+  transition: transform 320ms var(--ease-spring);
+}
+.seed-shuffle:hover {
+  color: var(--accent);
+}
+.seed-shuffle:hover svg {
+  transform: rotate(180deg);
+}
+.seed-shuffle:active { transform: scale(0.96); }
+.seed-shuffle.is-spinning svg {
+  animation: shuffle-spin 520ms var(--ease-spring);
+}
+@keyframes shuffle-spin {
+  0%   { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.seed-input {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--rule-2);
+  padding: 10px 0 8px;
+  color: var(--fg);
+  outline: none;
+  transition:
+    border-color 220ms var(--ease-out),
+    padding 220ms var(--ease-out);
+}
+.seed-input:focus {
+  border-bottom-color: var(--accent);
+  padding-bottom: 7px;
+}
+
+/* Buttons */
+.btn-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 2px;
+}
+.btn {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  background: transparent;
+  border: 1px solid var(--rule-2);
   color: var(--fg);
   font-family: var(--font-mono);
   font-size: 11px;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  padding: 12px 18px;
+  padding: 13px 16px;
   cursor: pointer;
-  transition: all 0.2s ease;
-  flex: 1;
+  transition:
+    background 220ms var(--ease-out),
+    color 220ms var(--ease-out),
+    border-color 220ms var(--ease-out),
+    transform 120ms var(--ease-out);
 }
-.btn:hover { border-color: var(--accent); color: var(--accent); }
-.btn-primary { border-color: var(--fg); }
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.btn:active { transform: scale(0.985); }
+.btn[disabled] { opacity: 0.45; cursor: not-allowed; }
+.btn[disabled]:hover { border-color: var(--rule-2); color: var(--fg); }
+
+.btn-primary {
+  background: var(--fg);
+  border-color: var(--fg);
+  color: var(--bg);
+}
 .btn-primary:hover {
   background: var(--accent);
   border-color: var(--accent);
   color: var(--bg);
 }
 
-.blurb {
-  font-family: var(--font-body);
-  font-size: 17px;
-  line-height: 1.55;
+/* Saved ✓ overlay on download — slides up from below the label */
+.btn .default-label,
+.btn .saved-label {
+  display: inline-block;
+  transition:
+    opacity 240ms var(--ease-out),
+    transform 240ms var(--ease-out);
+}
+.btn .saved-label {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--accent);
+  color: var(--bg);
+  opacity: 0;
+  transform: translateY(8px);
+}
+.btn.is-saved .saved-label {
+  opacity: 1;
+  transform: translateY(0);
+}
+.btn.is-saved .default-label {
+  opacity: 0;
+  transform: translateY(-6px);
+}
+
+/* Close — top-right, rotates on hover */
+.studio-close {
+  position: absolute;
+  top: 14px; right: 14px;
+  width: 32px; height: 32px;
+  background: transparent;
+  border: 1px solid var(--rule-2);
+  border-radius: 50%;
   color: var(--fg);
-  margin: 0;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  transition:
+    background 180ms ease,
+    color 180ms ease,
+    border-color 180ms ease,
+    transform 320ms var(--ease-spring);
 }
-.blurb-meta {
-  margin-top: 14px;
-  font-size: 10px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--fg-dim);
+.studio-close:hover {
+  background: var(--fg);
+  border-color: var(--fg);
+  color: var(--bg);
+  transform: rotate(90deg);
 }
-.blurb-meta::before { content: "Ref. "; color: var(--fg-faint); }
 
 /* ---------- intro fade orchestration ---------- */
 .corner { opacity: 0; animation: fadeIn 1.2s ease 0.4s forwards; }
@@ -391,26 +683,42 @@ a:hover { color: var(--accent); }
 .corner.tr { animation-delay: 0.7s; }
 .corner.bl { animation-delay: 0.9s; }
 .corner.br { animation-delay: 1.0s; }
-.strip { opacity: 0; animation: fadeIn 1.2s ease 1.2s forwards; }
-.studio > * { opacity: 0; animation: fadeIn 1s ease 0.5s forwards; }
 @keyframes fadeIn { to { opacity: 1; } }
 
-/* ---------- mobile ---------- */
+/* ---------- responsive ---------- */
+@media (max-width: 980px) {
+  .studio-inner {
+    grid-template-columns: 1fr;
+    max-height: 92vh;
+    overflow-y: auto;
+  }
+  .studio-panel {
+    border-left: none;
+    border-top: 1px solid var(--rule);
+    max-height: none;
+  }
+}
+
 @media (max-width: 720px) {
   :root { --pad: 16px; --cover-w: calc(100vw - 32px); }
   .corner.bl { display: none; }
   .corner.br { display: none; }
-  .corner.br { font-size: 10px; }
   body { font-size: 11px; }
-}
-@media (max-width: 900px) {
-  .studio { grid-template-columns: 1fr; gap: 32px; padding: 96px var(--pad) 120px; }
-  .stage { position: static; }
+  .studio-stage { padding: 18px 18px 14px; }
+  .studio-panel { padding: 22px 20px; }
+  .panel-title { font-size: 24px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .cover-slot { transition: none; opacity: 1; transform: none; }
-  .corner, .strip, .studio > * { animation: none; opacity: 1; }
+  .cover-slot:hover { transform: none; }
+  .corner { animation: none; opacity: 1; }
   .hero-caption .dot { animation: none; }
+  dialog.studio[open] .studio-inner,
+  dialog.studio[open]::backdrop { animation: none; }
+  .stage-frame canvas { transition: none; }
+  .seed-shuffle.is-spinning svg { animation: none; }
+  .info-drawer { transition: none; }
+  .info-icon, .info-chevron { transition: none; }
 }
