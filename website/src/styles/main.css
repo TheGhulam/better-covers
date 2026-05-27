@@ -709,7 +709,16 @@ dialog.studio[open] .studio-inner {
 
 @media (max-width: 720px) {
   :root { --pad: 16px; --cover-w: calc(100vw - 32px); }
-  .corner.bl { display: none; }
+  .corner.tl { position: absolute; }
+  .corner.bl {
+    display: block;
+    position: absolute;
+    bottom: auto;
+    top: 48px;
+    left: var(--pad);
+    max-width: 280px;
+    color: var(--fg-dim);
+  }
   .corner.br { display: none; }
   body { font-size: 11px; }
   .studio-stage { padding: 18px 18px 14px; }
