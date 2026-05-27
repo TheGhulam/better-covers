@@ -101,7 +101,7 @@ function initHero() {
     paint();
     genLabel.textContent = String(TOTAL);
     cap.classList.add('frozen');
-    cap.innerHTML = `<span class="dot"></span>stabilized · generation ${TOTAL} · B3/S23`;
+    cap.innerHTML = `<span class="dot"></span>stabilized · generation ${TOTAL}`;
     return;
   }
 
@@ -115,7 +115,7 @@ function initHero() {
       setTimeout(tick, 130);
     } else {
       cap.classList.add('frozen');
-      cap.innerHTML = `<span class="dot"></span>stabilized · generation ${gen} · B3/S23`;
+      cap.innerHTML = `<span class="dot"></span>stabilized · generation ${gen}`;
     }
   };
   setTimeout(tick, 600);
