@@ -370,9 +370,9 @@ async function renderMaster(
     refs.progressFill.style.width = '95%';
   });
 
-  // Yield so the progress bar paints once before we block the thread on
-  // a heavy renderer.
-  await new Promise((r) => setTimeout(r, 30));
+  // Yield so the progress bar paints and animates completely before we block the thread on
+  // a heavy renderer. This simulates the progress bar filling smoothly over approxMs.
+  await new Promise((r) => setTimeout(r, approxMs));
 
   const dims = refs.formatSelect.value.split('x');
   const renderW = Number(dims[0]) || 1200;
