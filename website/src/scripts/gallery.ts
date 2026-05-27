@@ -253,7 +253,6 @@ interface StudioRefs {
   progressFill: HTMLElement;
   num: HTMLElement;
   title: HTMLElement;
-  titleMeta: HTMLElement;
   subtitle: HTMLElement;
   body: HTMLElement;
   refs: HTMLElement;
@@ -286,7 +285,6 @@ function bootStudio(): StudioRefs | null {
     progressFill: document.createElement('div'),
     num: document.getElementById('panel-num') as HTMLElement,
     title: document.getElementById('panel-title') as HTMLElement,
-    titleMeta: document.getElementById('panel-title-meta') as HTMLElement,
     subtitle: document.getElementById('panel-subtitle') as HTMLElement,
     body: document.getElementById('panel-body') as HTMLElement,
     refs: document.getElementById('panel-refs') as HTMLElement,
@@ -315,7 +313,6 @@ function openStudio(refs: StudioRefs, state: StudioState, entry: CoverEntry) {
 
   refs.num.textContent = entry.num;
   refs.title.textContent = entry.title;
-  refs.titleMeta.textContent = entry.title;
   refs.subtitle.textContent = entry.subtitle;
   refs.body.textContent = entry.body;
   refs.refs.textContent = entry.refs;
