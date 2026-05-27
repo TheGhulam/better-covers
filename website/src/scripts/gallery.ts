@@ -11,8 +11,6 @@ import { COVERS, type CoverEntry } from '../covers/catalog';
 import { hashStr, mulberry32 } from 'better-covers/shared';
 
 const REDUCED_MOTION = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-const MASTER_W = 1200;
-const MASTER_H = 630;
 
 /* ------------------------------------------------------------------
    Hero — one-shot Life. Cheap enough to step in realtime: 120 × 63
@@ -254,7 +252,6 @@ interface StudioRefs {
   progress: HTMLElement;
   progressFill: HTMLElement;
   num: HTMLElement;
-  num2: HTMLElement;
   title: HTMLElement;
   titleMeta: HTMLElement;
   subtitle: HTMLElement;
@@ -262,6 +259,7 @@ interface StudioRefs {
   refs: HTMLElement;
   seedMeta: HTMLElement;
   seedInput: HTMLInputElement;
+  formatSelect: HTMLSelectElement;
   btnRender: HTMLButtonElement;
   btnDownload: HTMLButtonElement;
   btnShuffle: HTMLButtonElement;
@@ -287,7 +285,6 @@ function bootStudio(): StudioRefs | null {
     progress: document.getElementById('stage-progress') as HTMLElement,
     progressFill: document.createElement('div'),
     num: document.getElementById('panel-num') as HTMLElement,
-    num2: document.getElementById('panel-num-2') as HTMLElement,
     title: document.getElementById('panel-title') as HTMLElement,
     titleMeta: document.getElementById('panel-title-meta') as HTMLElement,
     subtitle: document.getElementById('panel-subtitle') as HTMLElement,
@@ -295,6 +292,7 @@ function bootStudio(): StudioRefs | null {
     refs: document.getElementById('panel-refs') as HTMLElement,
     seedMeta: document.getElementById('panel-seed-meta') as HTMLElement,
     seedInput: document.getElementById('seed-input') as HTMLInputElement,
+    formatSelect: document.getElementById('format-select') as HTMLSelectElement,
     btnRender: document.getElementById('btn-render') as HTMLButtonElement,
     btnDownload: document.getElementById('btn-download') as HTMLButtonElement,
     btnShuffle: document.getElementById('btn-shuffle') as HTMLButtonElement,
@@ -316,7 +314,6 @@ function openStudio(refs: StudioRefs, state: StudioState, entry: CoverEntry) {
   state.activeCanvas = null;
 
   refs.num.textContent = entry.num;
-  refs.num2.textContent = entry.num;
   refs.title.textContent = entry.title;
   refs.titleMeta.textContent = entry.title;
   refs.subtitle.textContent = entry.subtitle;
@@ -380,9 +377,16 @@ async function renderMaster(
   // a heavy renderer.
   await new Promise((r) => setTimeout(r, 30));
 
+  const dims = refs.formatSelect.value.split('x');
+  const renderW = Number(dims[0]) || 1200;
+  const renderH = Number(dims[1]) || 630;
+
+  // Update stage frame aspect ratio to match the selected format
+  refs.frame.style.aspectRatio = `${renderW} / ${renderH}`;
+
   const next = document.createElement('canvas');
-  next.width = MASTER_W;
-  next.height = MASTER_H;
+  next.width = renderW;
+  next.height = renderH;
   next.className = 'stage-next';
   const ctx = next.getContext('2d');
   if (!ctx) {
@@ -393,7 +397,7 @@ async function renderMaster(
   }
 
   try {
-    entry.render(ctx, MASTER_W, MASTER_H, hashStr(seed));
+    entry.render(ctx, renderW, renderH, hashStr(seed));
   } catch (err) {
     console.error('[better-covers] render failed', err);
   }
@@ -478,6 +482,12 @@ function bindStudio(refs: StudioRefs, state: StudioState) {
     void renderMaster(refs, state, seed, { crossfade: true });
   });
 
+  refs.formatSelect.addEventListener('change', () => {
+    if (!state.active) return;
+    const seed = refs.seedInput.value.trim() || state.active.defaultSeed;
+    void renderMaster(refs, state, seed, { crossfade: true });
+  });
+
   refs.seedInput.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') {
       e.preventDefault();
@@ -536,7 +546,7 @@ export function initGallery() {
   const studioRefs = bootStudio();
   if (!studioRefs) {
     // Dialog markup missing — fall back to lazy gallery only.
-    initGalleryRenderers(() => {});
+    initGalleryRenderers(() => { });
     return;
   }
   const studioState: StudioState = {

@@ -507,9 +507,9 @@ dialog.studio[open] .studio-inner {
 }
 .panel-refs::before { content: "Ref. "; color: var(--fg-faint); }
 
-/* Seed row — label + shuffle on top line, input below */
-.seed-row { display: flex; flex-direction: column; gap: 8px; }
-.seed-label-row {
+/* Seed row + Format row */
+.seed-row, .format-row { display: flex; flex-direction: column; gap: 8px; margin-bottom: 24px; }
+.seed-label-row, .format-label-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -558,7 +558,7 @@ dialog.studio[open] .studio-inner {
   100% { transform: rotate(360deg); }
 }
 
-.seed-input {
+.seed-input, .format-select {
   font-family: var(--font-mono);
   font-size: 14px;
   background: transparent;
@@ -567,11 +567,19 @@ dialog.studio[open] .studio-inner {
   padding: 10px 0 8px;
   color: var(--fg);
   outline: none;
+  border-radius: 0;
   transition:
     border-color 220ms var(--ease-out),
     padding 220ms var(--ease-out);
 }
-.seed-input:focus {
+.format-select {
+  cursor: pointer;
+}
+.format-select option {
+  background: var(--bg);
+  color: var(--fg);
+}
+.seed-input:focus, .format-select:focus {
   border-bottom-color: var(--accent);
   padding-bottom: 7px;
 }

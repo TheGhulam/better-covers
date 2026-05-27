@@ -101,7 +101,6 @@ import { COVERS } from "../covers/catalog";
 
       <aside class="studio-panel">
         <header class="panel-head">
-          <span class="panel-num">Plate <span id="panel-num-2">00</span></span>
           <h2 class="panel-title" id="panel-title">—</h2>
         </header>
 
@@ -132,7 +131,7 @@ import { COVERS } from "../covers/catalog";
               <line x1="12" y1="16" x2="12" y2="12"></line>
               <line x1="12" y1="8" x2="12.01" y2="8"></line>
             </svg>
-            <span class="info-label">About this plate</span>
+            <span class="info-label">About this design</span>
             <span class="info-chevron" aria-hidden="true">▾</span>
           </button>
           <div
@@ -146,6 +145,20 @@ import { COVERS } from "../covers/catalog";
               <p class="panel-body" id="panel-body">—</p>
             </div>
           </div>
+        </div>
+
+        <div class="format-row">
+          <div class="format-label-row">
+            <label class="seed-label" for="format-select">Format</label>
+          </div>
+          <select class="format-select" id="format-select">
+            <option value="1200x630">OpenGraph (1200×630)</option>
+            <option value="1080x1080">Podcast / Sq (1080×1080)</option>
+            <option value="1280x720">YouTube (1280×720)</option>
+            <option value="1920x1080">Desktop / 16:9 (1920×1080)</option>
+            <option value="1500x600">Notion Cover (1500×600)</option>
+            <option value="1080x2400">Mobile (1080×2400)</option>
+          </select>
         </div>
 
         <div class="seed-row">
