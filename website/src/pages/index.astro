@@ -33,7 +33,19 @@ import { COVERS } from "../covers/catalog";
   </aside>
 
   <aside class="corner br">
-    <span style="color: var(--fg-dim)">© 2026</span>
+    <a
+      href="https://github.com/TheGhulam/better-covers"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="corner-ext-link"
+    >github</a>
+    <span class="corner-ext-sep">/</span>
+    <a
+      href="https://www.npmjs.com/package/better-covers"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="corner-ext-link"
+    >npm</a>
   </aside>
 
   <!-- ---------- hero: one-shot Life reveal ---------- -->
@@ -79,6 +91,35 @@ import { COVERS } from "../covers/catalog";
       ))
     }
   </main>
+
+  <!-- ---------- footer: computational colophon ---------- -->
+  <footer class="colophon">
+    <div class="colophon-inner">
+      <span class="colophon-line"></span>
+      <div class="colophon-content">
+        <span class="colophon-brand">better—covers</span>
+        <span class="colophon-desc">deterministic cover art generator</span>
+        <div class="colophon-links">
+          <a
+            href="https://github.com/TheGhulam/better-covers"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="colophon-link"
+          >
+            <span class="colophon-prefix">code /</span> github
+          </a>
+          <a
+            href="https://www.npmjs.com/package/better-covers"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="colophon-link"
+          >
+            <span class="colophon-prefix">pkg /</span> npm
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
 
   <!-- ---------- studio dialog (native <dialog>) ---------- -->
   <dialog class="studio" id="studio" aria-labelledby="panel-title">

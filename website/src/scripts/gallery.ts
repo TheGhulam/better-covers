@@ -540,6 +540,29 @@ function bindStudio(refs: StudioRefs, state: StudioState) {
 export function initGallery() {
   initHero();
 
+  // Slide corner elements out of view on scroll (links on all screens, description on desktop only)
+  const brEl = document.querySelector('.corner.br');
+  const blEl = document.querySelector('.corner.bl');
+  if (brEl || blEl) {
+    window.addEventListener(
+      'scroll',
+      () => {
+        const scrolled = window.scrollY > 20;
+        const isMobile = window.innerWidth <= 720;
+
+        if (brEl) {
+          if (scrolled) brEl.classList.add('scrolled');
+          else brEl.classList.remove('scrolled');
+        }
+        if (blEl) {
+          if (scrolled && !isMobile) blEl.classList.add('scrolled');
+          else blEl.classList.remove('scrolled');
+        }
+      },
+      { passive: true }
+    );
+  }
+
   const studioRefs = bootStudio();
   if (!studioRefs) {
     // Dialog markup missing — fall back to lazy gallery only.
