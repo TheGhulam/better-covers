@@ -90,18 +90,11 @@ function initHero() {
     grid = next;
   }
 
-  const genLabel = document.getElementById('hero-gen');
-  const cap = document.getElementById('hero-cap');
-  if (!genLabel || !cap) return;
-
   paint();
 
   if (REDUCED_MOTION) {
     for (let i = 0; i < TOTAL; i++) step();
     paint();
-    genLabel.textContent = String(TOTAL);
-    cap.classList.add('frozen');
-    cap.innerHTML = `<span class="dot"></span>stabilized · generation ${TOTAL}`;
     return;
   }
 
@@ -110,13 +103,10 @@ function initHero() {
     step();
     gen++;
     paint();
-    genLabel.textContent = String(gen);
     if (gen < TOTAL) {
       setTimeout(tick, 130);
-    } else {
-      cap.classList.add('frozen');
-      cap.innerHTML = `<span class="dot"></span>stabilized · generation ${gen}`;
     }
+    // Final frame stays frozen on canvas — no label needed.
   };
   setTimeout(tick, 600);
 }

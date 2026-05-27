@@ -179,31 +179,7 @@ body:has(dialog.studio[open]) {
   display: block;
   background: #0a0a0a;
 }
-.hero-caption {
-  position: absolute;
-  left: 0; bottom: -32px;
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.04em;
-  color: var(--fg-dim);
-}
-.hero-caption .dot {
-  display: inline-block;
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  background: var(--accent);
-  margin-right: 8px;
-  vertical-align: middle;
-  animation: pulse 2s ease-in-out infinite;
-}
-.hero-caption.frozen .dot {
-  background: var(--fg-faint);
-  animation: none;
-}
-@keyframes pulse {
-  0%, 100% { opacity: 0.4; }
-  50% { opacity: 1; }
-}
+
 
 /* --- Scroll Nudge --- */
 .scroll-nudge {
@@ -966,7 +942,6 @@ dialog.studio[open] .studio-inner {
   .cover-slot { transition: none; opacity: 1; transform: none; }
   .cover-slot:hover { transform: none; }
   .corner { animation: none; opacity: 1; }
-  .hero-caption .dot { animation: none; }
   dialog.studio[open] .studio-inner,
   dialog.studio[open]::backdrop { animation: none; }
   .stage-frame canvas { transition: none; }
