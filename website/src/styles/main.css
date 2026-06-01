@@ -76,11 +76,18 @@ body:has(dialog.studio[open]) {
   pointer-events: none;
 }
 .corner a, .corner button { pointer-events: auto; }
-.corner.tl { top: var(--pad); left: var(--pad); }
-.corner.tr { top: var(--pad); right: var(--pad); text-align: right; }
+.corner.tl {
+  top: calc(var(--pad) + env(safe-area-inset-top, 0px));
+  left: calc(var(--pad) + env(safe-area-inset-left, 0px));
+}
+.corner.tr {
+  top: calc(var(--pad) + env(safe-area-inset-top, 0px));
+  right: calc(var(--pad) + env(safe-area-inset-right, 0px));
+  text-align: right;
+}
 .corner.bl {
-  bottom: var(--pad);
-  left: var(--pad);
+  bottom: calc(var(--pad) + env(safe-area-inset-bottom, 0px));
+  left: calc(var(--pad) + env(safe-area-inset-left, 0px));
   max-width: 320px;
   color: rgba(232, 230, 225, 0.68);
   transition:
@@ -92,8 +99,8 @@ body:has(dialog.studio[open]) {
   opacity: 0;
 }
 .corner.br {
-  bottom: var(--pad);
-  right: var(--pad);
+  bottom: calc(var(--pad) + env(safe-area-inset-bottom, 0px));
+  right: calc(var(--pad) + env(safe-area-inset-right, 0px));
   text-align: right;
   display: flex;
   align-items: center;
@@ -163,10 +170,15 @@ body:has(dialog.studio[open]) {
 
 /* ---------- hero ---------- */
 .hero {
-  min-height: 100vh;
+  /* svh = viewport height when browser toolbars are fully expanded.
+     Prevents the hero overflowing under mobile browser chrome on first
+     paint. Falls back to 100vh on browsers that don't support svh. */
+  min-height: 100vh;  /* legacy fallback — browsers that don't know svh use this */
+  min-height: 100svh; /* small viewport height: toolbar always visible → no overflow */
   display: grid;
   place-items: center;
-  padding: 120px var(--pad) 80px;
+  padding: calc(120px + env(safe-area-inset-top, 0px)) var(--pad)
+           calc(80px  + env(safe-area-inset-bottom, 0px));
   position: relative;
 }
 .hero-stage {
@@ -899,28 +911,31 @@ dialog.studio[open] .studio-inner {
   :root { --pad: 16px; --cover-w: calc(100vw - 32px); }
   .corner.tl { position: absolute; }
 
-  /* Counter stays fixed so it's always visible while scrolling */
+  /* Counter stays fixed so it's always visible while scrolling.
+     Safe-area-inset keeps it above the notch / status bar on iOS/Android. */
   .corner.tr {
     position: fixed;
-    top: var(--pad);
-    right: var(--pad);
+    top: calc(var(--pad) + env(safe-area-inset-top, 0px));
+    right: calc(var(--pad) + env(safe-area-inset-right, 0px));
   }
 
   .corner.bl {
     display: block;
     position: absolute;
     bottom: auto;
-    top: 48px;
-    left: var(--pad);
+    /* Push below the status bar so it doesn't overlap the wordmark */
+    top: calc(48px + env(safe-area-inset-top, 0px));
+    left: calc(var(--pad) + env(safe-area-inset-left, 0px));
     max-width: 280px;
     color: var(--fg-dim);
   }
 
-  /* npm/GitHub links: keep position fixed so the slide-off transition works */
+  /* npm/GitHub links: fixed + safe-area-bottom clears the home indicator
+     and Chrome's collapsible bottom toolbar on Android. */
   .corner.br {
     position: fixed;
-    bottom: var(--pad);
-    right: var(--pad);
+    bottom: calc(var(--pad) + env(safe-area-inset-bottom, 0px));
+    right: calc(var(--pad) + env(safe-area-inset-right, 0px));
     text-align: right;
   }
 
