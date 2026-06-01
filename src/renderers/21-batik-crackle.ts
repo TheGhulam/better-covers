@@ -67,8 +67,9 @@ export const renderBatikCrackle: Renderer = (ctx, W, H, SEED) => {
         // Each wave has its own spatial frequency (1 + k·0.4 in x,
         // 0.6 + k·0.3 in y) — the multiplied sin·cos pattern gives a
         // genuine 2D interference field, not a 1D ridge stretched out.
-        v += Math.sin(nx * (1 + k * 0.4) + phases[k]) *
-             Math.cos(ny * (0.6 + k * 0.3) + phases[k]);
+        v +=
+          Math.sin(nx * (1 + k * 0.4) + phases[k]) *
+          Math.cos(ny * (0.6 + k * 0.3) + phases[k]);
       }
       v = Math.abs(v / phases.length);
 

@@ -175,8 +175,8 @@ export const COVERS: CoverEntry[] = [
         rule subdivides each fat into two fat and one thin; each thin into one
         fat and one thin. Iterate five or six levels, color tiles by deflation
         depth, and you get an Islamic-tile-inspired palette over quasi-
-        crystalline geometry — the structure Lu and Steinhardt identified at
-        the Darb-i Imam shrine in 2007.
+        crystalline geometry — the structure Lu and Steinhardt identified at the
+        Darb-i Imam shrine in 2007.
       </>
     ),
     refs: "Penrose 1974 · de Bruijn 1981 · Lu & Steinhardt 2007 · inflation rule",
@@ -469,9 +469,9 @@ export const COVERS: CoverEntry[] = [
       <>
         Brian Callahan's three-state cellular automaton: off, firing, and
         refractory. Off cells ignite when exactly two neighbors are firing;
-        firing cells become refractory on the next tick. Forty-eight
-        generations from a sparse seed yield glider-rich filaments on a dark
-        field — distinct from Conway's B3/S23 snapshot (cover 14).
+        firing cells become refractory on the next tick. Forty-eight generations
+        from a sparse seed yield glider-rich filaments on a dark field —
+        distinct from Conway's B3/S23 snapshot (cover 14).
       </>
     ),
     refs: "Callahan 1996 · 3-state CA · 48 generations · 10% seed density",

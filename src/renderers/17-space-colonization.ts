@@ -24,7 +24,7 @@ type Node = { x: number; y: number; parent: number };
 export const renderSpaceColonization: Renderer = (ctx, W, H, SEED) => {
   const r = mulberry32(SEED);
   const scale = Math.min(W, H) / 630;
-  const trunkX = W * (0.38 + (SEED % 997) / 997 * 0.24);
+  const trunkX = W * (0.38 + ((SEED % 997) / 997) * 0.24);
 
   ctx.fillStyle = rgb(10, 12, 8);
   ctx.fillRect(0, 0, W, H);
