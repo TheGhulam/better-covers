@@ -77,11 +77,9 @@ function buffersEqual(
 }
 
 /**
- * Each entry says whether SEED actually changes the output. Four of the
- * fifteen renderers (Harmonograph, Sandpile, Penrose, Clifford) take a
- * `(ctx, W, H)` signature with no SEED parameter — they produce the same
- * image regardless of the slug. That's intentional: those four are the
- * "house-style" covers, and were chosen for that reason. The test below
+ * Each entry says whether SEED actually changes the output. Three renderers
+ * (Sandpile, Penrose, Clifford) ignore SEED and produce the same image
+ * regardless of the slug — intentional "house-style" covers. The test below
  * uses this flag to decide whether to assert seed-sensitivity.
  */
 const RENDERERS: {
@@ -90,7 +88,7 @@ const RENDERERS: {
   seedIndependent: boolean;
 }[] = [
   { name: "renderHoarfrost", render: renderHoarfrost, seedIndependent: false },
-  { name: "renderHarmonograph", render: renderHarmonograph, seedIndependent: true },
+  { name: "renderHarmonograph", render: renderHarmonograph, seedIndependent: false },
   { name: "renderLichtenberg", render: renderLichtenberg, seedIndependent: false },
   { name: "renderSandpile", render: renderSandpile, seedIndependent: true },
   { name: "renderKarman", render: renderKarman, seedIndependent: false },
