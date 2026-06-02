@@ -27,9 +27,9 @@
  * @module renderers/harmonograph
  */
 
-import { addGrain, type Renderer } from "../shared";
+import { addGrain, mulberry32, type Renderer } from "../shared";
 
-export const renderHarmonograph: Renderer = (ctx, W, H) => {
+export const renderHarmonograph: Renderer = (ctx, W, H, SEED) => {
   const bg = ctx.createRadialGradient(W / 2, H / 2, 0, W / 2, H / 2, W * 0.7);
   bg.addColorStop(0, "#1a120a");
   bg.addColorStop(1, "#080604");
@@ -40,44 +40,47 @@ export const renderHarmonograph: Renderer = (ctx, W, H) => {
   const cy = H / 2 - 30;
   const scale = 220;
 
+  const r = mulberry32(SEED);
+
   // Frequencies chosen near small integer ratios for almost-closed curves;
   // damping coefficients spread by a few percent so the three traces decay
-  // at different rates.
+  // at different rates. Small seed-driven perturbations ensure each seed
+  // produces a visually distinct drawing while preserving the overall aesthetic.
   const traces = [
     {
-      fx1: 2.01,
-      fx2: 3.0,
-      fy1: 3.0,
-      fy2: 2.01,
-      px1: 0.0,
-      px2: 1.57,
-      py1: 0.78,
-      py2: 0.0,
-      d: 0.0042,
+      fx1: 2.01 + (r() - 0.5) * 0.02,
+      fx2: 3.0 + (r() - 0.5) * 0.02,
+      fy1: 3.0 + (r() - 0.5) * 0.02,
+      fy2: 2.01 + (r() - 0.5) * 0.02,
+      px1: 0.0 + (r() - 0.5) * 0.4,
+      px2: 1.57 + (r() - 0.5) * 0.4,
+      py1: 0.78 + (r() - 0.5) * 0.4,
+      py2: 0.0 + (r() - 0.5) * 0.4,
+      d: 0.0042 + (r() - 0.5) * 0.0008,
       color: "rgba(220, 165, 95, 0.55)",
     },
     {
-      fx1: 2.99,
-      fx2: 2.0,
-      fy1: 1.99,
-      fy2: 3.01,
-      px1: 0.4,
-      px2: 0.0,
-      py1: 0.0,
-      py2: 1.2,
-      d: 0.0055,
+      fx1: 2.99 + (r() - 0.5) * 0.02,
+      fx2: 2.0 + (r() - 0.5) * 0.02,
+      fy1: 1.99 + (r() - 0.5) * 0.02,
+      fy2: 3.01 + (r() - 0.5) * 0.02,
+      px1: 0.4 + (r() - 0.5) * 0.4,
+      px2: 0.0 + (r() - 0.5) * 0.4,
+      py1: 0.0 + (r() - 0.5) * 0.4,
+      py2: 1.2 + (r() - 0.5) * 0.4,
+      d: 0.0055 + (r() - 0.5) * 0.0008,
       color: "rgba(200, 130, 70, 0.5)",
     },
     {
-      fx1: 4.01,
-      fx2: 3.0,
-      fy1: 3.0,
-      fy2: 2.0,
-      px1: 0.0,
-      px2: 0.78,
-      py1: 1.57,
-      py2: 0.0,
-      d: 0.0048,
+      fx1: 4.01 + (r() - 0.5) * 0.02,
+      fx2: 3.0 + (r() - 0.5) * 0.02,
+      fy1: 3.0 + (r() - 0.5) * 0.02,
+      fy2: 2.0 + (r() - 0.5) * 0.02,
+      px1: 0.0 + (r() - 0.5) * 0.4,
+      px2: 0.78 + (r() - 0.5) * 0.4,
+      py1: 1.57 + (r() - 0.5) * 0.4,
+      py2: 0.0 + (r() - 0.5) * 0.4,
+      d: 0.0048 + (r() - 0.5) * 0.0008,
       color: "rgba(180, 100, 60, 0.45)",
     },
   ];
