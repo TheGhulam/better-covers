@@ -491,10 +491,10 @@ function bindStudio(refs: StudioRefs, state: StudioState) {
     const cleanSeed = (refs.seedInput.value || state.active.defaultSeed)
       .replace(/[^a-z0-9-_]/gi, '_')
       .slice(0, 60);
-    const url = state.activeCanvas.toDataURL('image/png');
+    const url = state.activeCanvas.toDataURL('image/jpeg', 0.82);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `better-covers_${state.active.id}_${cleanSeed}.png`;
+    a.download = `better-covers_${state.active.id}_${cleanSeed}.jpg`;
     document.body.appendChild(a);
     a.click();
     a.remove();

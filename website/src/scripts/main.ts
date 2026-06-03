@@ -198,7 +198,7 @@ downloadBtn.addEventListener("click", async () => {
   paintInto(out, cover.render, seed);
 
   const safeSeed = seed.replace(/[^a-z0-9_-]/gi, "_").slice(0, 60);
-  const filename = `${cover.id}__${safeSeed}.png`;
+  const filename = `${cover.id}__${safeSeed}.jpg`;
 
   out.toBlob((blob) => {
     if (!blob) return;
@@ -211,7 +211,7 @@ downloadBtn.addEventListener("click", async () => {
     document.body.removeChild(a);
     setTimeout(() => URL.revokeObjectURL(url), 1000);
     showFlash(`Saved · ${filename}`);
-  }, "image/png");
+  }, "image/jpeg", 0.82);
 });
 
 // ---------------------------------------------------------------------------
