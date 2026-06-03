@@ -26,16 +26,47 @@
  * @module renderers/sandpile
  */
 
-import { addGrain, type Renderer } from "../shared";
+import { addGrain, mulberry32, type Renderer } from "../shared";
 
-export const renderSandpile: Renderer = (ctx, W, H) => {
+// Four palette families. bgStops are CSS strings for createRadialGradient;
+// bgRaw holds the same three stops as [R,G,B] triples for the pixel pre-fill loop.
+// Palette 0 is the original Persian-miniature warm ochre.
+const PALETTES = [
+  {
+    bgStops: ["rgb(64,42,24)", "rgb(36,24,14)", "rgb(14,10,6)"] as const,
+    bgRaw: [[64,42,24],[36,24,14],[14,10,6]] as const,
+    cell: [[16,12,8],[88,55,30],[200,130,60],[240,215,175]] as const,
+  },
+  {
+    bgStops: ["rgb(14,22,44)", "rgb(8,14,30)", "rgb(4,6,14)"] as const,
+    bgRaw: [[14,22,44],[8,14,30],[4,6,14]] as const,
+    cell: [[8,14,28],[30,55,110],[60,120,200],[175,210,240]] as const,
+  },
+  {
+    bgStops: ["rgb(10,30,18)", "rgb(6,18,10)", "rgb(2,8,4)"] as const,
+    bgRaw: [[10,30,18],[6,18,10],[2,8,4]] as const,
+    cell: [[8,20,10],[30,80,40],[70,160,80],[190,235,195]] as const,
+  },
+  {
+    bgStops: ["rgb(30,16,40)", "rgb(18,8,26)", "rgb(8,4,12)"] as const,
+    bgRaw: [[30,16,40],[18,8,26],[8,4,12]] as const,
+    cell: [[18,8,24],[70,28,88],[150,70,190],[225,195,240]] as const,
+  },
+];
+
+export const renderSandpile: Renderer = (ctx, W, H, SEED) => {
+  const r = mulberry32(SEED);
+  const palette = PALETTES[(SEED >>> 0) % PALETTES.length];
+
   const N = 220;
   const grid = new Int32Array(N * N);
   const idx = (x: number, y: number) => y * N + x;
 
+  // Grain count varies with SEED so the fractal grows to different radii.
+  const grains = 15000 + Math.floor(r() * 10000);
   const cxg = N >> 1;
   const cyg = N >> 1;
-  grid[idx(cxg, cyg)] = 20000;
+  grid[idx(cxg, cyg)] = grains;
 
   // Topple until stable. The 4000-iteration safety cap is comfortably above
   // what 20 k grains on a 220 × 220 lattice actually requires.
@@ -59,21 +90,12 @@ export const renderSandpile: Renderer = (ctx, W, H) => {
     }
   }
 
-  // Persian-miniature four-tone palette — one color per stable height.
-  const palette: number[][] = [
-    [16, 12, 8],
-    [88, 55, 30],
-    [200, 130, 60],
-    [240, 215, 175],
-  ];
-
   const scale = 4;
   const drawSize = N * scale;
   const offX = Math.floor((W - drawSize) / 2);
   const offY = Math.floor((H - drawSize) / 2);
 
-  // Full-bleed warm wash so the fractal disk sits inside a continuous umber
-  // field rather than against a hard black edge.
+  // Full-bleed wash so the fractal disk sits against a matching field.
   const bgWash = ctx.createRadialGradient(
     W / 2,
     H / 2,
@@ -82,9 +104,9 @@ export const renderSandpile: Renderer = (ctx, W, H) => {
     H / 2,
     W * 0.7,
   );
-  bgWash.addColorStop(0, "rgb(64, 42, 24)");
-  bgWash.addColorStop(0.55, "rgb(36, 24, 14)");
-  bgWash.addColorStop(1, "rgb(14, 10, 6)");
+  bgWash.addColorStop(0, palette.bgStops[0]);
+  bgWash.addColorStop(0.55, palette.bgStops[1]);
+  bgWash.addColorStop(1, palette.bgStops[2]);
   ctx.fillStyle = bgWash;
   ctx.fillRect(0, 0, W, H);
 
@@ -101,17 +123,18 @@ export const renderSandpile: Renderer = (ctx, W, H) => {
       const dy = py - cy;
       const dist = Math.sqrt(dx * dx + dy * dy);
       const t = Math.min(1, dist / maxR);
+      const [s0, s1, s2] = palette.bgRaw;
       let R: number, G: number, B: number;
       if (t < 0.55) {
         const k = t / 0.55;
-        R = 64 + (36 - 64) * k;
-        G = 42 + (24 - 42) * k;
-        B = 24 + (14 - 24) * k;
+        R = s0[0] + (s1[0] - s0[0]) * k;
+        G = s0[1] + (s1[1] - s0[1]) * k;
+        B = s0[2] + (s1[2] - s0[2]) * k;
       } else {
         const k = (t - 0.55) / 0.45;
-        R = 36 + (14 - 36) * k;
-        G = 24 + (10 - 24) * k;
-        B = 14 + (6 - 14) * k;
+        R = s1[0] + (s2[0] - s1[0]) * k;
+        G = s1[1] + (s2[1] - s1[1]) * k;
+        B = s1[2] + (s2[2] - s1[2]) * k;
       }
       const i = (py * W + px) * 4;
       id.data[i] = R;
@@ -123,7 +146,7 @@ export const renderSandpile: Renderer = (ctx, W, H) => {
   for (let y = 0; y < N; y++) {
     for (let x = 0; x < N; x++) {
       const v = Math.min(3, Math.max(0, grid[idx(x, y)]));
-      const [cR, cG, cB] = palette[v];
+      const [cR, cG, cB] = palette.cell[v];
       for (let dy = 0; dy < scale; dy++) {
         for (let dx = 0; dx < scale; dx++) {
           const px = offX + x * scale + dx;

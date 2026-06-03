@@ -33,16 +33,21 @@
  * @module renderers/schlieren
  */
 
-import { fbm, addGrain, type Renderer } from "../shared";
+import { fbm, addGrain, mulberry32, type Renderer } from "../shared";
 
 export const renderSchlieren: Renderer = (ctx, W, H, SEED) => {
+  // Plume centre x varies per slug (30–70 % of W) so each cover shows a
+  // differently-placed heat column rather than always upwelling at 42 %.
+  const rPlume = mulberry32(SEED ^ 0x5c411e);
+  const plumeX = W * (0.30 + rPlume() * 0.40);
+
   // Build the density field: a vertical plume (Gaussian in x, decaying in y),
   // plus low-frequency swirl, plus high-frequency turbulence biased toward
   // the plume.
   const density = new Float32Array(W * H);
   for (let y = 0; y < H; y++) {
     for (let x = 0; x < W; x++) {
-      const cx = W * 0.42;
+      const cx = plumeX;
       const dx = (x - cx) / W;
       const yt = y / H;
       const swirl = fbm(x * 0.0035, y * 0.0035 - yt * 0.4, SEED, 5);
@@ -86,7 +91,7 @@ export const renderSchlieren: Renderer = (ctx, W, H, SEED) => {
   ctx.putImageData(id, 0, 0);
 
   const vg = ctx.createRadialGradient(
-    W * 0.42,
+    plumeX,
     H * 0.5,
     W * 0.15,
     W * 0.5,

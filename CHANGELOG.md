@@ -4,6 +4,33 @@ All notable changes to this project will be documented in this file. The
 format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Fixed
+
+- `renderSandpile` — SEED parameter was absent from the function signature,
+  producing identical output for every slug. Added four palette families
+  (warm ochre, navy, jade, violet) and a SEED-driven grain count (15 000–25 000)
+  so different slugs render distinct covers.
+- `renderPenrose` — SEED parameter was absent; tiling and colors were identical
+  across all slugs. Added four Islamic-tile palette families and a SEED-derived
+  rotation of the initial "sun" so each slug shows a different orientation and
+  color scheme.
+- `renderClifford` — SEED parameter was absent; the attractor always used the
+  same `(a,b,c,d)` parameters and sepia ink. Added four curated parameter sets
+  with matching paper/ink palettes, selected by SEED.
+- `renderKarman` — SEED only controlled particle launch position within a
+  narrow 80×24 px window while vortex geometry was fully fixed, making all
+  slugs look nearly identical. Row separation now varies with SEED (8–15 % of H)
+  so the vortex street is narrower or wider per slug.
+- `renderSchlieren` — Plume centre was hardcoded at `W × 0.42`; the dominant
+  structural feature (where the heat column rises) never varied. Plume x now
+  ranges 30–70 % of W, seeded independently so the vignette follows it.
+- `renderHypsometric` — SEED produced only a single phase shift on a pair of
+  sine waves, making all slugs show identical terrain scrolled sideways. The
+  elevation field is now generated with 5-octave fBm sampled at a SEED-offset
+  position, yielding genuinely different continent shapes per slug.
+
 ## [0.2.0] - 2026-05-23
 
 ### Added

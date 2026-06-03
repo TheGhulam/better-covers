@@ -28,15 +28,45 @@
  * @module renderers/penrose
  */
 
-import { addGrain, type Renderer } from "../shared";
+import { addGrain, mulberry32, type Renderer } from "../shared";
 
 type TriPt = { x: number; y: number };
 type Tri = { kind: 0 | 1; A: TriPt; B: TriPt; C: TriPt };
 
-export const renderPenrose: Renderer = (ctx, W, H) => {
+// Four Islamic-tile palette families. Each entry: [bgLight, bgDark, fat[], thin[]].
+// Palette 0 is the original turquoise/lapis/ochre scheme.
+const PALETTES = [
+  {
+    bgLight: "#f0e3c4", bgDark: "#d6c69e",
+    fat:  ["#3a7882", "#7a4d2e", "#d4a55a", "#274059"],
+    thin: ["#bf6745", "#c79350", "#7f8d7f", "#3a4e62"],
+  },
+  {
+    bgLight: "#e8ddd0", bgDark: "#c9b89a",
+    fat:  ["#8b3a3a", "#c47a2a", "#e8c56a", "#5a2020"],
+    thin: ["#d4804a", "#b05828", "#7a6040", "#3a2018"],
+  },
+  {
+    bgLight: "#d8e4e0", bgDark: "#a8c0b8",
+    fat:  ["#2a5c4a", "#1a3c5a", "#4a8870", "#8ab0a0"],
+    thin: ["#3a7060", "#285070", "#5a9878", "#a0c8b8"],
+  },
+  {
+    bgLight: "#e8e0f0", bgDark: "#c0aed8",
+    fat:  ["#4a2860", "#8a3878", "#c870a0", "#6a2048"],
+    thin: ["#784898", "#a058a8", "#d890c0", "#5a1840"],
+  },
+];
+
+export const renderPenrose: Renderer = (ctx, W, H, SEED) => {
+  const r = mulberry32(SEED);
+  const pal = PALETTES[(SEED >>> 0) % PALETTES.length];
+  // Rotate the initial sun so each slug shows a different orientation of the tiling.
+  const sunRotation = r() * Math.PI * 2;
+
   const bg = ctx.createRadialGradient(W / 2, H / 2, 0, W / 2, H / 2, W * 0.8);
-  bg.addColorStop(0, "#f0e3c4");
-  bg.addColorStop(1, "#d6c69e");
+  bg.addColorStop(0, pal.bgLight);
+  bg.addColorStop(1, pal.bgDark);
   ctx.fillStyle = bg;
   ctx.fillRect(0, 0, W, H);
 
@@ -80,8 +110,8 @@ export const renderPenrose: Renderer = (ctx, W, H) => {
   const R = 520;
   let triangles: Tri[] = [];
   for (let i = 0; i < 10; i++) {
-    const a1 = ((i * 2 - 1) * Math.PI) / 10;
-    const a2 = ((i * 2 + 1) * Math.PI) / 10;
+    const a1 = ((i * 2 - 1) * Math.PI) / 10 + sunRotation;
+    const a2 = ((i * 2 + 1) * Math.PI) / 10 + sunRotation;
     const A = { x: cx, y: cy };
     const B = { x: cx + R * Math.cos(a1), y: cy + R * Math.sin(a1) };
     const C = { x: cx + R * Math.cos(a2), y: cy + R * Math.sin(a2) };
@@ -94,17 +124,12 @@ export const renderPenrose: Renderer = (ctx, W, H) => {
 
   for (let n = 0; n < 6; n++) triangles = subdivide(triangles);
 
-  // Islamic tile palette: turquoise, lapis, ochre, ivory, deep red.
-  const palette = {
-    fat: ["#3a7882", "#7a4d2e", "#d4a55a", "#274059"],
-    thin: ["#bf6745", "#c79350", "#7f8d7f", "#3a4e62"],
-  };
   let pIdx = 0;
   for (const t of triangles) {
     const color =
       t.kind === 0
-        ? palette.fat[pIdx++ % palette.fat.length]
-        : palette.thin[pIdx++ % palette.thin.length];
+        ? pal.fat[pIdx++ % pal.fat.length]
+        : pal.thin[pIdx++ % pal.thin.length];
     ctx.fillStyle = color;
     ctx.beginPath();
     ctx.moveTo(t.A.x, t.A.y);
