@@ -9,6 +9,7 @@
 
 import { COVERS, type CoverEntry } from '../covers/catalog';
 import { hashStr, mulberry32 } from 'better-covers/shared';
+import { startReveal } from './grid-reveal';
 
 const REDUCED_MOTION = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -148,9 +149,13 @@ function initGalleryRenderers(onCoverClick: (entry: CoverEntry) => void) {
       // sessionStorage unavailable (private mode, quota); fall through
     }
 
-    // Defer the actual paint to the next frame so the IntersectionObserver
-    // callback returns quickly. The deferred setTimeout adds a 16 ms beat
-    // so the browser can honor the .in opacity transition before stalling.
+    // Start the dot-shimmer immediately so the slot shows animated dots right
+    // away — never a bare dark box — even when a fast scroll queues many heavy
+    // renders behind this one. Then defer the actual paint to the next frame so
+    // the IntersectionObserver callback returns quickly; the deferred setTimeout
+    // adds a 16 ms beat so the shimmer gets a frame in before render stalls the
+    // thread. Once the cover has painted, finish() fades the overlay out.
+    const reveal = startReveal(slot, canvas);
     requestAnimationFrame(() => {
       setTimeout(() => {
         c.render(ctx, canvas.width, canvas.height, hashStr(c.defaultSeed));
@@ -159,8 +164,7 @@ function initGalleryRenderers(onCoverClick: (entry: CoverEntry) => void) {
         } catch {
           /* over-quota; cache silently degrades */
         }
-        slot.classList.remove('loading');
-        requestAnimationFrame(() => slot.classList.add('in'));
+        reveal.finish();
       }, 16);
     });
   }

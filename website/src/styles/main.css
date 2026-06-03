@@ -356,16 +356,40 @@ body:has(dialog.studio[open]) {
 .cover-meta .n { color: var(--fg-faint); }
 .cover-meta .t { color: var(--fg); }
 
-/* shimmer for slots still computing */
-.cover-slot.loading::before {
-  content: '';
-  position: absolute; inset: 0;
-  background: repeating-linear-gradient(
-    45deg,
-    rgba(255, 255, 255, 0.015) 0 2px,
-    transparent 2px 6px
-  );
+/* Dot-shimmer loader (see scripts/grid-reveal.ts). While a fresh cover
+   computes, a stack of <canvas> layers — each a dot grid at different random
+   per-dot brightness — cross-fade their opacity on staggered keyframes, reading
+   as a per-dot twinkle. opacity is compositor-driven, so the shimmer keeps
+   moving even while the cover's synchronous render blocks the main thread (an
+   rAF loop would freeze). The whole overlay then fades out to reveal the cover
+   and is removed. The backdrop color avoids a flash of the cover beneath. */
+.grid-reveal {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
   pointer-events: none;
+  overflow: hidden;
+  background: var(--bg);
+}
+.grid-reveal canvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+@keyframes bcTwinkle {
+  0%, 100% { opacity: 0.12; }
+  50%      { opacity: 1; }
+}
+
+/* While the grid-reveal plays, pin the slot to its visible end-state with no
+   transition so the reveal isn't fighting the .in fade/slide. Removed by JS
+   on cleanup, handing hover transforms back to the normal rules above. */
+.cover-slot.revealing {
+  opacity: 1;
+  transform: none;
+  transition: none;
 }
 
 /* ===========================================================
