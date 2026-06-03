@@ -7,7 +7,7 @@
  *   1. Calling the same renderer twice with the same arguments yields
  *      byte-identical pixel buffers.
  *   2. Different seeds yield different buffers (the seed is actually
- *      doing something).
+ *      doing something) — every renderer is now slug-sensitive.
  *   3. `hashStr` produces stable, byte-identical hashes for the same input
  *      across runs.
  *
@@ -15,8 +15,8 @@
  * for a representative slug, this test will fail loudly and the reviewer
  * will ask why.
  *
- * Visual snapshot tests live in `tests/renderers/*.snapshot.test.ts`; this
- * file is the cheaper, faster guardrail that runs on every commit.
+ * This is the cheaper, faster guardrail that runs on every commit.
+ * (Visual snapshot / thumbnail regeneration is a separate manual step.)
  */
 
 import { describe, it, expect } from "vitest";
@@ -77,10 +77,10 @@ function buffersEqual(
 }
 
 /**
- * Each entry says whether SEED actually changes the output. Three renderers
- * (Sandpile, Penrose, Clifford) ignore SEED and produce the same image
- * regardless of the slug — intentional "house-style" covers. The test below
- * uses this flag to decide whether to assert seed-sensitivity.
+ * Each entry says whether SEED actually changes the output.
+ * With the 2026-06 renderer updates, *all* renderers now produce visibly
+ * different output for different seeds (no more "house-style" identical-across-slugs
+ * covers). The flag is retained for documentation / future house-style cases.
  */
 const RENDERERS: {
   name: string;
@@ -90,12 +90,12 @@ const RENDERERS: {
   { name: "renderHoarfrost", render: renderHoarfrost, seedIndependent: false },
   { name: "renderHarmonograph", render: renderHarmonograph, seedIndependent: false },
   { name: "renderLichtenberg", render: renderLichtenberg, seedIndependent: false },
-  { name: "renderSandpile", render: renderSandpile, seedIndependent: true },
+  { name: "renderSandpile", render: renderSandpile, seedIndependent: false },
   { name: "renderKarman", render: renderKarman, seedIndependent: false },
   { name: "renderSchlieren", render: renderSchlieren, seedIndependent: false },
-  { name: "renderPenrose", render: renderPenrose, seedIndependent: true },
+  { name: "renderPenrose", render: renderPenrose, seedIndependent: false },
   { name: "renderLSystem", render: renderLSystem, seedIndependent: false },
-  { name: "renderClifford", render: renderClifford, seedIndependent: true },
+  { name: "renderClifford", render: renderClifford, seedIndependent: false },
   { name: "renderStippling", render: renderStippling, seedIndependent: false },
   { name: "renderPainterly", render: renderPainterly, seedIndependent: false },
   { name: "renderFlow", render: renderFlow, seedIndependent: false },
@@ -143,7 +143,7 @@ describe("determinism", () => {
     });
 
     if (seedIndependent) {
-      it("ignores SEED (documented house-style cover)", () => {
+      it("ignores SEED (house-style / slug-invariant cover)", () => {
         const a = renderOnce(render, hashStr("slug-one"));
         const b = renderOnce(render, hashStr("slug-two"));
         expect(buffersEqual(a, b)).toBe(true);
