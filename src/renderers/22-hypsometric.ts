@@ -11,7 +11,7 @@
  * @module renderers/hypsometric
  */
 
-import { addGrain, addVignette, mulberry32, type Renderer } from "../shared";
+import { addGrain, addVignette, fbm, mulberry32, type Renderer } from "../shared";
 
 const BANDS = [
   { lo: -1.0, r: 26, g: 40, b: 64 },
@@ -23,17 +23,13 @@ const BANDS = [
   { lo: 1.0, r: 220, g: 210, b: 190 },
 ];
 
-function elevation(x: number, y: number, s: number): number {
-  return (
-    Math.sin(x * 0.005 + s) * Math.cos(y * 0.004) +
-    0.35 * Math.sin(x * 0.011 + y * 0.008 + s * 0.5) +
-    0.15
-  );
-}
-
 export const renderHypsometric: Renderer = (ctx, W, H, SEED) => {
+  // Sample offset shifts the fBm field so each slug lands on a different
+  // region of the infinite noise lattice — producing genuinely distinct
+  // terrain rather than the same mountains scrolled sideways.
   const r = mulberry32(SEED);
-  const phase = r() * Math.PI * 2;
+  const ox = r() * 4000;
+  const oy = r() * 4000;
 
   const id = ctx.createImageData(W, H);
   const d = id.data;
@@ -41,7 +37,9 @@ export const renderHypsometric: Renderer = (ctx, W, H, SEED) => {
 
   for (let y = 0; y < H; y += stride) {
     for (let x = 0; x < W; x += stride) {
-      const h = elevation(x, y, phase);
+      // fBm at 5 octaves gives continent-scale ridges down to fine valleys.
+      // Rescale from [0,1] to [-0.85, 1.15] to span all seven bands.
+      const h = fbm((x + ox) * 0.003, (y + oy) * 0.003, SEED, 5) * 2 - 0.85;
       let band = BANDS[0];
       for (let i = BANDS.length - 1; i >= 0; i--) {
         if (h >= BANDS[i].lo) {

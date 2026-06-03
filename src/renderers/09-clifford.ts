@@ -33,17 +33,26 @@
 
 import { addGrain, type Renderer } from "../shared";
 
-export const renderClifford: Renderer = (ctx, W, H) => {
+// Four curated Clifford parameter sets, each producing a visually distinct
+// attractor. Parameters (a,b,c,d) for x←sin(ay)+c·cos(ax), y←sin(bx)+d·cos(by).
+// Ink and paper colors are tuned per preset so the photographic look holds.
+const PRESETS = [
+  { a: -1.7, b:  1.3, c: -0.1, d: -1.2, bgLight: "#f0e5d0", bgDark: "#d6c4a0", ink: [60,  38,  24] as const },
+  { a: -1.4, b:  1.6, c:  1.0, d:  0.7, bgLight: "#d8e4f0", bgDark: "#a8c0d8", ink: [20,  40,  80] as const },
+  { a:  1.6, b: -0.6, c: -1.2, d:  1.6, bgLight: "#f0ead0", bgDark: "#d8c870", ink: [60,  44,   8] as const },
+  { a: -1.7, b:  1.8, c: -1.9, d: -0.4, bgLight: "#e8f0e8", bgDark: "#a8c8a8", ink: [18,  52,  36] as const },
+];
+
+export const renderClifford: Renderer = (ctx, W, H, SEED) => {
+  const preset = PRESETS[(SEED >>> 0) % PRESETS.length];
+
   const bg = ctx.createRadialGradient(W / 2, H / 2, 0, W / 2, H / 2, W * 0.8);
-  bg.addColorStop(0, "#f0e5d0");
-  bg.addColorStop(1, "#d6c4a0");
+  bg.addColorStop(0, preset.bgLight);
+  bg.addColorStop(1, preset.bgDark);
   ctx.fillStyle = bg;
   ctx.fillRect(0, 0, W, H);
 
-  const a = -1.7;
-  const b = 1.3;
-  const c = -0.1;
-  const d = -1.2;
+  const { a, b, c, d } = preset;
   const N = 4_500_000;
   const hist = new Uint32Array(W * H);
 
@@ -86,9 +95,7 @@ export const renderClifford: Renderer = (ctx, W, H) => {
     const v = hist[i];
     if (v === 0) continue;
     const t = Math.log(1 + v) / logMax;
-    const inkR = 60;
-    const inkG = 38;
-    const inkB = 24;
+    const [inkR, inkG, inkB] = preset.ink;
     const alpha = Math.min(0.97, Math.pow(t, 0.6));
     id.data[k] = id.data[k] * (1 - alpha) + inkR * alpha;
     id.data[k + 1] = id.data[k + 1] * (1 - alpha) + inkG * alpha;

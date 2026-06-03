@@ -52,9 +52,12 @@ export const renderKarman: Renderer = (ctx, W, H, SEED) => {
   // Vortex layout scales with canvas dimensions. Nine vortices fit the
   // visible wake; spacing is W/11 so the first vortex sits at ~16% from
   // the inlet and the last one well clear of the right edge.
+  const rGeom = mulberry32(SEED ^ 0xf1a1d);
   const cyAxis = H * 0.5;
   const spacingX = W / 11;
-  const spacingY = H * 0.11;
+  // Row separation varies with SEED (8–15% of H) so slugs produce
+  // narrower or wider vortex streets — the dominant structural difference.
+  const spacingY = H * (0.08 + rGeom() * 0.07);
   // Core radius proportional to min(W, H) — at small canvases this
   // keeps the cores from collapsing to a single pixel.
   const rc = Math.max(18, Math.min(W, H) * 0.06);
