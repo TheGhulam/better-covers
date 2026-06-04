@@ -487,15 +487,15 @@ export const COVERS: CoverEntry[] = [
     h2: "A boundary between order and chaos",
     body: (
       <>
-        Fix a complex constant c and iterate z → z² + c from every pixel.
-        Orbits that escape to infinity paint the exterior; those that stay
-        bounded fill the solid Julia set. The smooth iteration count (
-        <em>continuous potential</em>) eliminates banding by measuring how
-        far the orbit overshot the bailout radius, while an orbit-trap pass
-        accents the fine filaments near the fractal boundary. The SEED
-        selects one of eight topologically distinct c values — from the
-        three-lobed Douady rabbit to interlocking dragon spirals — plus an
-        independent colour palette.
+        Fix a complex constant c and iterate z → z² + c from every pixel. Orbits
+        that escape to infinity paint the exterior; those that stay bounded fill
+        the solid Julia set. The smooth iteration count (
+        <em>continuous potential</em>) eliminates banding by measuring how far
+        the orbit overshot the bailout radius, while an orbit-trap pass accents
+        the fine filaments near the fractal boundary. The SEED selects one of
+        eight topologically distinct c values — from the three-lobed Douady
+        rabbit to interlocking dragon spirals — plus an independent colour
+        palette.
       </>
     ),
     refs: "Douady & Hubbard 1984 · Rampe 2002 (SIC) · Bourke 2006 (orbit trap) · 8 presets",
