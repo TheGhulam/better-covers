@@ -33,6 +33,7 @@ import {
   renderBatikCrackle,
   renderHypsometric,
   renderBriansBrain,
+  renderJulia,
 } from "../src/renderers";
 import type { Renderer } from "../src/shared";
 
@@ -72,6 +73,7 @@ const COVERS: { slug: string; render: Renderer }[] = [
   { slug: "batik-crackle", render: renderBatikCrackle },
   { slug: "hypsometric", render: renderHypsometric },
   { slug: "brians-brain", render: renderBriansBrain },
+  { slug: "julia-dragon", render: renderJulia },
 ];
 
 mkdirSync(OUT_DIR, { recursive: true });
