@@ -74,20 +74,11 @@ export const renderJulia: Renderer = (ctx, W, H, SEED) => {
   const { cr, ci } = PRESETS[(SEED >>> 0) % PRESETS.length];
   const pal        = PALETTES[((SEED >>> 3) + 1) % PALETTES.length];
 
-  // Flood-fill with the background colour so interior pixels inherit it via
-  // the alpha-composite path at the putImageData step.
-  ctx.fillStyle = `rgb(${pal.bg[0]},${pal.bg[1]},${pal.bg[2]})`;
-  ctx.fillRect(0, 0, W, H);
-
-  // Map canvas pixels to the complex plane centred at the origin.
-  // At aspect 1200 × 630 a viewport of 4.0 real units wide gives ≈ 2.1
-  // imaginary units tall — wide enough to capture the full Julia set plus
-  // its outer corona without cropping.
   const scale = 4.0 / W;
   const ox    = W * 0.5;
   const oy    = H * 0.5;
 
-  const id  = ctx.getImageData(0, 0, W, H);
+  const id  = ctx.createImageData(W, H);
   const pix = id.data;
 
   for (let py = 0; py < H; py++) {
@@ -143,7 +134,8 @@ export const renderJulia: Renderer = (ctx, W, H, SEED) => {
       // Cycle the smooth count to produce visible iso-potential bands across
       // the exterior, then mix in the orbit-trap proximity to accent the
       // fine filaments concentrated near the Julia-set boundary.
-      const band = (mu * 0.05) % 1.0;
+      const raw  = mu * 0.05;
+      const band = raw - Math.floor(raw);
       const trap = Math.min(1.0, Math.sqrt(minZ2) * 0.5);
       const t    = Math.min(1.0, band * 0.72 + trap * 0.28);
 
