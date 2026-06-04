@@ -21,3 +21,4 @@ export { renderBarnsleyFern } from "./20-barnsley-fern";
 export { renderBatikCrackle } from "./21-batik-crackle";
 export { renderHypsometric } from "./22-hypsometric";
 export { renderBriansBrain } from "./23-brians-brain";
+export { renderJulia } from "./24-julia";
