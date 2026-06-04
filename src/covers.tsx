@@ -480,7 +480,7 @@ export const COVERS: CoverEntry[] = [
   {
     render: renderJulia,
     seed: "julia-dragon",
-    title: "Julia Set",
+    title: "Julia set",
     subtitle:
       "Escape-time fractal with smooth iteration count and orbit-trap colouring",
     num: "24 · Julia set (escape-time fractal)",

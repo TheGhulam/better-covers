@@ -97,6 +97,11 @@ const INTERIOR_GLOW = 0.42;
 const INTERIOR_DECAY = 1.2;
 // GRAIN_AMOUNT: film-grain intensity passed to addGrain.
 const GRAIN_AMOUNT = 14;
+// VIGNETTE_INNER / VIGNETTE_OUTER: radial gradient radii as fractions of W.
+const VIGNETTE_INNER = 0.27;
+const VIGNETTE_OUTER = 0.76;
+// VIGNETTE_ALPHA: opacity of the darkened edge ring.
+const VIGNETTE_ALPHA = 0.6;
 
 export const renderJulia: Renderer = (ctx, W, H, SEED) => {
   const { cr, ci } = PRESETS[(SEED >>> 0) % PRESETS.length];
@@ -190,13 +195,13 @@ export const renderJulia: Renderer = (ctx, W, H, SEED) => {
   const vg = ctx.createRadialGradient(
     W * 0.5,
     H * 0.5,
-    W * 0.27,
+    W * VIGNETTE_INNER,
     W * 0.5,
     H * 0.5,
-    W * 0.76,
+    W * VIGNETTE_OUTER,
   );
   vg.addColorStop(0, "rgba(0,0,0,0)");
-  vg.addColorStop(1, `rgba(${pal.bg[0]},${pal.bg[1]},${pal.bg[2]},0.60)`);
+  vg.addColorStop(1, `rgba(${bgR},${bgG},${bgB},${VIGNETTE_ALPHA})`);
   ctx.fillStyle = vg;
   ctx.fillRect(0, 0, W, H);
 
