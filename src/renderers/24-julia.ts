@@ -1,5 +1,5 @@
 /**
- * 24 · Julia set — escape-time fractal with smooth iteration colouring
+ * 24 · Julia's Fracture — escape-time fractal with smooth iteration colouring
  *
  * A Julia set Jc is the boundary of the set of complex numbers z whose
  * orbits z → z² + c remain bounded. Unlike the Mandelbrot set (where both

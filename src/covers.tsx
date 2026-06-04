@@ -480,22 +480,21 @@ export const COVERS: CoverEntry[] = [
   {
     render: renderJulia,
     seed: "julia-dragon",
-    title: "Julia set",
+    title: "Julia's Fracture",
     subtitle:
       "Escape-time fractal with smooth iteration count and orbit-trap colouring",
-    num: "24 · Julia set (escape-time fractal)",
+    num: "24 · Julia's fracture (escape-time fractal)",
     h2: "A boundary between order and chaos",
     body: (
       <>
         Fix a complex constant c and iterate z → z² + c from every pixel. Orbits
         that escape to infinity paint the exterior; those that stay bounded fill
-        the solid Julia set. The smooth iteration count (
-        <em>continuous potential</em>) eliminates banding by measuring how far
-        the orbit overshot the bailout radius, while an orbit-trap pass accents
-        the fine filaments near the fractal boundary. The SEED selects one of
-        eight topologically distinct c values — from the three-lobed Douady
-        rabbit to interlocking dragon spirals — plus an independent colour
-        palette.
+        the solid set. The smooth iteration count (<em>continuous potential</em>
+        ) eliminates banding by measuring how far the orbit overshot the bailout
+        radius, while an orbit-trap pass accents the fine filaments near the
+        fractal boundary. The SEED selects one of eight topologically distinct c
+        values — from the three-lobed Douady rabbit to interlocking dragon
+        spirals — plus an independent colour palette.
       </>
     ),
     refs: "Douady & Hubbard 1984 · Rampe 2002 (SIC) · Bourke 2006 (orbit trap) · 8 presets",
