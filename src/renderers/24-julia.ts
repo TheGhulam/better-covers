@@ -109,6 +109,17 @@ export const renderJulia: Renderer = (ctx, W, H, SEED) => {
   const id = ctx.createImageData(W, H);
   const pix = id.data;
 
+  // Hoist palette channels and deltas out of the pixel loop.
+  const [bgR, bgG, bgB] = pal.bg;
+  const [loR, loG, loB] = pal.lo;
+  const [hiR, hiG, hiB] = pal.hi;
+  const dBgLoR = loR - bgR;
+  const dBgLoG = loG - bgG;
+  const dBgLoB = loB - bgB;
+  const dLoHiR = hiR - loR;
+  const dLoHiG = hiG - loG;
+  const dLoHiB = hiB - loB;
+
   for (let py = 0; py < H; py++) {
     const zi0 = (py - oy) * scale;
 
@@ -117,63 +128,54 @@ export const renderJulia: Renderer = (ctx, W, H, SEED) => {
       let zi = zi0;
 
       let iter = 0;
-      let minZ2 = zr * zr + zi * zi;
-      let lastZ2 = minZ2;
+      let lastZ2 = zr * zr + zi * zi;
+      let minZ2 = lastZ2;
 
       while (iter < MAX_ITER) {
-        const zr2 = zr * zr;
-        const zi2 = zi * zi;
-        lastZ2 = zr2 + zi2;
         if (lastZ2 > BAILOUT_SQ) break;
 
+        const zr2 = zr * zr;
+        const zi2 = zi * zi;
         zi = 2.0 * zr * zi + ci;
         zr = zr2 - zi2 + cr;
         iter++;
 
-        const z2 = zr * zr + zi * zi;
-        if (z2 < minZ2) minZ2 = z2;
+        lastZ2 = zr * zr + zi * zi;
+        if (lastZ2 < minZ2) minZ2 = lastZ2;
       }
 
       const idx = (py * W + px) * 4;
       const minAbsZ = Math.sqrt(minZ2);
 
       if (iter === MAX_ITER) {
-        // Proximity: orbits that swing close to the origin get a glow.
         const prox = Math.exp(-minAbsZ * INTERIOR_DECAY);
-        pix[idx] = Math.round(
-          pal.bg[0] + (pal.lo[0] - pal.bg[0]) * prox * INTERIOR_GLOW,
-        );
-        pix[idx + 1] = Math.round(
-          pal.bg[1] + (pal.lo[1] - pal.bg[1]) * prox * INTERIOR_GLOW,
-        );
-        pix[idx + 2] = Math.round(
-          pal.bg[2] + (pal.lo[2] - pal.bg[2]) * prox * INTERIOR_GLOW,
-        );
+        const g = prox * INTERIOR_GLOW;
+        pix[idx] = Math.round(bgR + dBgLoR * g);
+        pix[idx + 1] = Math.round(bgG + dBgLoG * g);
+        pix[idx + 2] = Math.round(bgB + dBgLoB * g);
         pix[idx + 3] = 255;
         continue;
       }
 
-      // Reuse lastZ2 from the escape check instead of recomputing.
       const logZ2 = Math.log(lastZ2);
       const mu = iter + 2.0 - Math.log(logZ2) / LOG2;
 
       const raw = mu * BAND_FREQ;
       const band = raw - Math.floor(raw);
-      // Invert distance into proximity: orbits near the origin → high trap.
       const trap = Math.exp(-minAbsZ * TRAP_DECAY);
       const t = Math.min(1.0, band * BAND_WEIGHT + trap * TRAP_WEIGHT);
 
       let r: number, g: number, b: number;
       if (t < 0.5) {
         const u = t * 2.0;
-        r = Math.round(pal.bg[0] + (pal.lo[0] - pal.bg[0]) * u);
-        g = Math.round(pal.bg[1] + (pal.lo[1] - pal.bg[1]) * u);
-        b = Math.round(pal.bg[2] + (pal.lo[2] - pal.bg[2]) * u);
+        r = Math.round(bgR + dBgLoR * u);
+        g = Math.round(bgG + dBgLoG * u);
+        b = Math.round(bgB + dBgLoB * u);
       } else {
         const u = (t - 0.5) * 2.0;
-        r = Math.round(pal.lo[0] + (pal.hi[0] - pal.lo[0]) * u);
-        g = Math.round(pal.lo[1] + (pal.hi[1] - pal.lo[1]) * u);
-        b = Math.round(pal.lo[2] + (pal.hi[2] - pal.lo[2]) * u);
+        r = Math.round(loR + dLoHiR * u);
+        g = Math.round(loG + dLoHiG * u);
+        b = Math.round(loB + dLoHiB * u);
       }
 
       pix[idx] = r;
