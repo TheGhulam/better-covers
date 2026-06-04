@@ -39,46 +39,73 @@
 
 import { addGrain, type Renderer } from "../shared";
 
-// Eight curated Julia-set parameter values c = cr + ci·i, each producing a
-// distinct topological class. All c values lie at or near the Mandelbrot
-// boundary so their Julia sets are connected; points well outside the set
-// yield disconnected Cantor-dust Julia sets that render as sparse clouds.
 const PRESETS = [
-  { cr: -0.7269, ci:  0.1889 },  // dragon spirals — intricate winding arms
-  { cr: -0.4,    ci:  0.6    },  // Douady rabbit — three-lobed period-3 basin
-  { cr:  0.285,  ci:  0.01   },  // fern dendrite — fine filaments on a broad crown
-  { cr: -0.835,  ci: -0.2321 },  // cauliflower nebula — soft rounded corona
-  { cr: -0.8,    ci:  0.156  },  // lightning — branched starburst dendrite
-  { cr:  0.45,   ci:  0.1428 },  // seahorse valley — coiled spiral clusters
-  { cr: -0.7,    ci:  0.27   },  // pinwheel — balanced rotational symmetry
-  { cr:  0.285,  ci:  0.013  },  // archipelago — scattered island basins
+  { cr: -0.7269, ci: 0.1889 }, // dragon spirals
+  { cr: -0.4, ci: 0.6 }, // Douady rabbit
+  { cr: 0.285, ci: 0.01 }, // fern dendrite
+  { cr: -0.835, ci: -0.2321 }, // cauliflower nebula
+  { cr: -0.8, ci: 0.156 }, // lightning
+  { cr: 0.45, ci: 0.1428 }, // seahorse valley
+  { cr: -0.7, ci: 0.27 }, // pinwheel
+  { cr: 0.285, ci: 0.013 }, // archipelago
 ] as const;
 
-// Colour palettes: bg (background / filled interior), lo (deep exterior),
-// hi (edge glow near the fractal boundary). Palette index is offset from
-// the preset index so adjacent SEED values still look distinct.
 const PALETTES = [
-  { bg: [4,  8, 22] as const, lo: [18,  52, 120] as const, hi: [150, 210, 255] as const }, // arctic
-  { bg: [22, 8,  4] as const, lo: [110, 42,  14] as const, hi: [255, 198,  90] as const }, // ember
-  { bg: [4, 20, 10] as const, lo: [16,  86,  34] as const, hi: [130, 255, 165] as const }, // grove
-  { bg: [18, 4, 22] as const, lo: [72,  18, 108] as const, hi: [228, 148, 255] as const }, // violet
+  {
+    bg: [4, 8, 22] as const,
+    lo: [18, 52, 120] as const,
+    hi: [150, 210, 255] as const,
+  }, // arctic
+  {
+    bg: [22, 8, 4] as const,
+    lo: [110, 42, 14] as const,
+    hi: [255, 198, 90] as const,
+  }, // ember
+  {
+    bg: [4, 20, 10] as const,
+    lo: [16, 86, 34] as const,
+    hi: [130, 255, 165] as const,
+  }, // grove
+  {
+    bg: [18, 4, 22] as const,
+    lo: [72, 18, 108] as const,
+    hi: [228, 148, 255] as const,
+  }, // violet
 ] as const;
 
-// Bailout at |z|² > 1e5 (|z| > 316) keeps the SIC formula well away from
-// the log-of-log singularity that arises when |z| barely clears 2.
+// The SIC formula requires log(|z|²) > 0, i.e. |z|² > 1. A large bailout
+// (|z|² > 1e5, i.e. |z| > 316) keeps log(|z|²) ≈ 11.5, far from zero,
+// which gives smoother SIC values and avoids numeric instability near the
+// domain boundary.
 const BAILOUT_SQ = 1e5;
-const MAX_ITER   = 200;
-const LOG2       = Math.log(2);
+const MAX_ITER = 200;
+const LOG2 = Math.log(2);
+
+// --- Tuning constants for the colouring pipeline ----------------------------
+// BAND_FREQ: how many iso-potential bands per unit of smooth iteration count.
+const BAND_FREQ = 0.05;
+// BAND_WEIGHT / TRAP_WEIGHT: mix ratio between SIC banding and orbit-trap
+// proximity. Higher trap weight accents filament detail near the boundary.
+const BAND_WEIGHT = 0.72;
+const TRAP_WEIGHT = 0.28;
+// TRAP_SCALE: how quickly the orbit-trap proximity reaches full intensity.
+const TRAP_SCALE = 0.5;
+// INTERIOR_GLOW: strength of the inner orbit-proximity tint (0 = flat fill).
+const INTERIOR_GLOW = 0.42;
+// INTERIOR_TRAP_SCALE: sensitivity of interior shading to orbit proximity.
+const INTERIOR_TRAP_SCALE = 0.85;
+// GRAIN_AMOUNT: film-grain intensity passed to addGrain.
+const GRAIN_AMOUNT = 14;
 
 export const renderJulia: Renderer = (ctx, W, H, SEED) => {
   const { cr, ci } = PRESETS[(SEED >>> 0) % PRESETS.length];
-  const pal        = PALETTES[((SEED >>> 3) + 1) % PALETTES.length];
+  const pal = PALETTES[((SEED >>> 3) + 1) % PALETTES.length];
 
   const scale = 4.0 / W;
-  const ox    = W * 0.5;
-  const oy    = H * 0.5;
+  const ox = W * 0.5;
+  const oy = H * 0.5;
 
-  const id  = ctx.createImageData(W, H);
+  const id = ctx.createImageData(W, H);
   const pix = id.data;
 
   for (let py = 0; py < H; py++) {
@@ -89,9 +116,6 @@ export const renderJulia: Renderer = (ctx, W, H, SEED) => {
       let zi = zi0;
 
       let iter = 0;
-      // Orbit trap: track the minimum |z|² visited so far. Starting value
-      // is the initial |z|² of this pixel — captures proximity even on
-      // trajectories that escape on the first iteration.
       let minZ2 = zr * zr + zi * zi;
 
       while (iter < MAX_ITER) {
@@ -99,7 +123,6 @@ export const renderJulia: Renderer = (ctx, W, H, SEED) => {
         const zi2 = zi * zi;
         if (zr2 + zi2 > BAILOUT_SQ) break;
 
-        // z ← z² + c
         zi = 2.0 * zr * zi + ci;
         zr = zr2 - zi2 + cr;
         iter++;
@@ -110,34 +133,28 @@ export const renderJulia: Renderer = (ctx, W, H, SEED) => {
 
       const idx = (py * W + px) * 4;
 
-      // --- Interior: orbit stayed bounded ------------------------------------
       if (iter === MAX_ITER) {
-        // Shade the filled set by orbit proximity rather than a flat fill:
-        // points whose orbits swung close to the origin get a faint inner
-        // glow, preserving some structure inside the solid regions.
-        const t = Math.min(1.0, Math.sqrt(minZ2) * 0.85);
-        pix[idx]     = Math.round(pal.bg[0] + (pal.lo[0] - pal.bg[0]) * t * 0.42);
-        pix[idx + 1] = Math.round(pal.bg[1] + (pal.lo[1] - pal.bg[1]) * t * 0.42);
-        pix[idx + 2] = Math.round(pal.bg[2] + (pal.lo[2] - pal.bg[2]) * t * 0.42);
+        const t = Math.min(1.0, Math.sqrt(minZ2) * INTERIOR_TRAP_SCALE);
+        pix[idx] = Math.round(
+          pal.bg[0] + (pal.lo[0] - pal.bg[0]) * t * INTERIOR_GLOW,
+        );
+        pix[idx + 1] = Math.round(
+          pal.bg[1] + (pal.lo[1] - pal.bg[1]) * t * INTERIOR_GLOW,
+        );
+        pix[idx + 2] = Math.round(
+          pal.bg[2] + (pal.lo[2] - pal.bg[2]) * t * INTERIOR_GLOW,
+        );
         pix[idx + 3] = 255;
         continue;
       }
 
-      // --- Exterior: orbit escaped — smooth iteration count -----------------
-      // Use the final zr, zi after the loop exits (|z|² > BAILOUT_SQ).
-      // SIC formula:  μ = iter + 2 − log₂(log(|z|²))
-      // With BAILOUT_SQ = 1e5: log(|z|²) > log(1e5) ≈ 11.5 > 1, so the
-      // inner log is always positive and the expression is always finite.
       const logZ2 = Math.log(zr * zr + zi * zi);
-      const mu    = iter + 2.0 - Math.log(logZ2) / LOG2;
+      const mu = iter + 2.0 - Math.log(logZ2) / LOG2;
 
-      // Cycle the smooth count to produce visible iso-potential bands across
-      // the exterior, then mix in the orbit-trap proximity to accent the
-      // fine filaments concentrated near the Julia-set boundary.
-      const raw  = mu * 0.05;
+      const raw = mu * BAND_FREQ;
       const band = raw - Math.floor(raw);
-      const trap = Math.min(1.0, Math.sqrt(minZ2) * 0.5);
-      const t    = Math.min(1.0, band * 0.72 + trap * 0.28);
+      const trap = Math.min(1.0, Math.sqrt(minZ2) * TRAP_SCALE);
+      const t = Math.min(1.0, band * BAND_WEIGHT + trap * TRAP_WEIGHT);
 
       let r: number, g: number, b: number;
       if (t < 0.5) {
@@ -152,7 +169,7 @@ export const renderJulia: Renderer = (ctx, W, H, SEED) => {
         b = Math.round(pal.lo[2] + (pal.hi[2] - pal.lo[2]) * u);
       }
 
-      pix[idx]     = r;
+      pix[idx] = r;
       pix[idx + 1] = g;
       pix[idx + 2] = b;
       pix[idx + 3] = 255;
@@ -161,16 +178,18 @@ export const renderJulia: Renderer = (ctx, W, H, SEED) => {
 
   ctx.putImageData(id, 0, 0);
 
-  // Radial vignette: darken corners to frame the set and draw the eye
-  // toward the fractal boundary at centre.
   const vg = ctx.createRadialGradient(
-    W * 0.5, H * 0.5, W * 0.27,
-    W * 0.5, H * 0.5, W * 0.76,
+    W * 0.5,
+    H * 0.5,
+    W * 0.27,
+    W * 0.5,
+    H * 0.5,
+    W * 0.76,
   );
   vg.addColorStop(0, "rgba(0,0,0,0)");
   vg.addColorStop(1, `rgba(${pal.bg[0]},${pal.bg[1]},${pal.bg[2]},0.60)`);
   ctx.fillStyle = vg;
   ctx.fillRect(0, 0, W, H);
 
-  addGrain(ctx, W, H, 14);
+  addGrain(ctx, W, H, GRAIN_AMOUNT);
 };
