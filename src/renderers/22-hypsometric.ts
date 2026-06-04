@@ -11,7 +11,13 @@
  * @module renderers/hypsometric
  */
 
-import { addGrain, addVignette, fbm, mulberry32, type Renderer } from "../shared";
+import {
+  addGrain,
+  addVignette,
+  fbm,
+  mulberry32,
+  type Renderer,
+} from "../shared";
 
 const BANDS = [
   { lo: -1.0, r: 26, g: 40, b: 64 },

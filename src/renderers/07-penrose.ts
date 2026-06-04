@@ -37,23 +37,27 @@ type Tri = { kind: 0 | 1; A: TriPt; B: TriPt; C: TriPt };
 // Palette 0 is the original turquoise/lapis/ochre scheme.
 const PALETTES = [
   {
-    bgLight: "#f0e3c4", bgDark: "#d6c69e",
-    fat:  ["#3a7882", "#7a4d2e", "#d4a55a", "#274059"],
+    bgLight: "#f0e3c4",
+    bgDark: "#d6c69e",
+    fat: ["#3a7882", "#7a4d2e", "#d4a55a", "#274059"],
     thin: ["#bf6745", "#c79350", "#7f8d7f", "#3a4e62"],
   },
   {
-    bgLight: "#e8ddd0", bgDark: "#c9b89a",
-    fat:  ["#8b3a3a", "#c47a2a", "#e8c56a", "#5a2020"],
+    bgLight: "#e8ddd0",
+    bgDark: "#c9b89a",
+    fat: ["#8b3a3a", "#c47a2a", "#e8c56a", "#5a2020"],
     thin: ["#d4804a", "#b05828", "#7a6040", "#3a2018"],
   },
   {
-    bgLight: "#d8e4e0", bgDark: "#a8c0b8",
-    fat:  ["#2a5c4a", "#1a3c5a", "#4a8870", "#8ab0a0"],
+    bgLight: "#d8e4e0",
+    bgDark: "#a8c0b8",
+    fat: ["#2a5c4a", "#1a3c5a", "#4a8870", "#8ab0a0"],
     thin: ["#3a7060", "#285070", "#5a9878", "#a0c8b8"],
   },
   {
-    bgLight: "#e8e0f0", bgDark: "#c0aed8",
-    fat:  ["#4a2860", "#8a3878", "#c870a0", "#6a2048"],
+    bgLight: "#e8e0f0",
+    bgDark: "#c0aed8",
+    fat: ["#4a2860", "#8a3878", "#c870a0", "#6a2048"],
     thin: ["#784898", "#a058a8", "#d890c0", "#5a1840"],
   },
 ];
