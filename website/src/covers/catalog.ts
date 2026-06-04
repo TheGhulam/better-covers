@@ -306,7 +306,7 @@ export const COVERS: CoverEntry[] = [
     num: "24",
     render: renderJulia,
     defaultSeed: "julia-dragon",
-    title: "Julia set",
+    title: "Julia's Fracture",
     subtitle: "Escape-time fractal with smooth iteration count and orbit trap",
     body: "Fix a complex constant c and iterate z → z² + c from every pixel. The smooth iteration count eliminates banding; an orbit-trap pass accents filaments near the fractal boundary. Eight curated c values span distinct topological classes.",
     refs: "Douady & Hubbard 1984 · Rampe 2002 · Bourke 2006",
