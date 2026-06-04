@@ -88,12 +88,13 @@ const BAND_FREQ = 0.05;
 // proximity. Higher trap weight accents filament detail near the boundary.
 const BAND_WEIGHT = 0.72;
 const TRAP_WEIGHT = 0.28;
-// TRAP_SCALE: how quickly the orbit-trap proximity reaches full intensity.
-const TRAP_SCALE = 0.5;
+// TRAP_DECAY: controls how quickly proximity falls off with orbit distance.
+// Higher values make the glow tighter around the fractal boundary.
+const TRAP_DECAY = 1.8;
 // INTERIOR_GLOW: strength of the inner orbit-proximity tint (0 = flat fill).
 const INTERIOR_GLOW = 0.42;
-// INTERIOR_TRAP_SCALE: sensitivity of interior shading to orbit proximity.
-const INTERIOR_TRAP_SCALE = 0.85;
+// INTERIOR_DECAY: decay rate for interior proximity shading.
+const INTERIOR_DECAY = 1.2;
 // GRAIN_AMOUNT: film-grain intensity passed to addGrain.
 const GRAIN_AMOUNT = 14;
 
@@ -117,11 +118,13 @@ export const renderJulia: Renderer = (ctx, W, H, SEED) => {
 
       let iter = 0;
       let minZ2 = zr * zr + zi * zi;
+      let lastZ2 = minZ2;
 
       while (iter < MAX_ITER) {
         const zr2 = zr * zr;
         const zi2 = zi * zi;
-        if (zr2 + zi2 > BAILOUT_SQ) break;
+        lastZ2 = zr2 + zi2;
+        if (lastZ2 > BAILOUT_SQ) break;
 
         zi = 2.0 * zr * zi + ci;
         zr = zr2 - zi2 + cr;
@@ -132,28 +135,32 @@ export const renderJulia: Renderer = (ctx, W, H, SEED) => {
       }
 
       const idx = (py * W + px) * 4;
+      const minAbsZ = Math.sqrt(minZ2);
 
       if (iter === MAX_ITER) {
-        const t = Math.min(1.0, Math.sqrt(minZ2) * INTERIOR_TRAP_SCALE);
+        // Proximity: orbits that swing close to the origin get a glow.
+        const prox = Math.exp(-minAbsZ * INTERIOR_DECAY);
         pix[idx] = Math.round(
-          pal.bg[0] + (pal.lo[0] - pal.bg[0]) * t * INTERIOR_GLOW,
+          pal.bg[0] + (pal.lo[0] - pal.bg[0]) * prox * INTERIOR_GLOW,
         );
         pix[idx + 1] = Math.round(
-          pal.bg[1] + (pal.lo[1] - pal.bg[1]) * t * INTERIOR_GLOW,
+          pal.bg[1] + (pal.lo[1] - pal.bg[1]) * prox * INTERIOR_GLOW,
         );
         pix[idx + 2] = Math.round(
-          pal.bg[2] + (pal.lo[2] - pal.bg[2]) * t * INTERIOR_GLOW,
+          pal.bg[2] + (pal.lo[2] - pal.bg[2]) * prox * INTERIOR_GLOW,
         );
         pix[idx + 3] = 255;
         continue;
       }
 
-      const logZ2 = Math.log(zr * zr + zi * zi);
+      // Reuse lastZ2 from the escape check instead of recomputing.
+      const logZ2 = Math.log(lastZ2);
       const mu = iter + 2.0 - Math.log(logZ2) / LOG2;
 
       const raw = mu * BAND_FREQ;
       const band = raw - Math.floor(raw);
-      const trap = Math.min(1.0, Math.sqrt(minZ2) * TRAP_SCALE);
+      // Invert distance into proximity: orbits near the origin → high trap.
+      const trap = Math.exp(-minAbsZ * TRAP_DECAY);
       const t = Math.min(1.0, band * BAND_WEIGHT + trap * TRAP_WEIGHT);
 
       let r: number, g: number, b: number;
