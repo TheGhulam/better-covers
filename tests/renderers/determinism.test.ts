@@ -46,6 +46,7 @@ import {
   renderBatikCrackle,
   renderHypsometric,
   renderBriansBrain,
+  renderJulia,
 } from "../../src";
 import type { Renderer } from "../../src";
 
@@ -109,6 +110,7 @@ const RENDERERS: {
   { name: "renderBatikCrackle", render: renderBatikCrackle, seedIndependent: false },
   { name: "renderHypsometric", render: renderHypsometric, seedIndependent: false },
   { name: "renderBriansBrain", render: renderBriansBrain, seedIndependent: false },
+  { name: "renderJulia",       render: renderJulia,       seedIndependent: false },
   // The ASCII renderer uses document.createElement('canvas') internally
   // for its supersampled scratch canvas. That works in jsdom but is
   // slow; covered by its own dedicated test.

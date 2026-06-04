@@ -1,7 +1,7 @@
 /**
  * better-covers — programmatic OG-image covers.
  *
- * Twenty-three deterministic 1200 × 630 canvas renderers drawn from physics
+ * Twenty-four deterministic 1200 × 630 canvas renderers drawn from physics
  * (Witten & Sander, Bak-Tang-Wiesenfeld, von Kármán, Toepler), mathematics
  * (Penrose, Conway, Lindenmayer), generative art (Pickover, Hobbs, Bridson),
  * and cartographic / painterly convention (USGS contours, ASCII brightness
@@ -71,4 +71,5 @@ export {
   renderBatikCrackle,
   renderHypsometric,
   renderBriansBrain,
+  renderJulia,
 } from "./renderers";
