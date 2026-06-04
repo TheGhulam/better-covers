@@ -39,7 +39,7 @@ export const renderSchlieren: Renderer = (ctx, W, H, SEED) => {
   // Plume centre x varies per slug (30–70 % of W) so each cover shows a
   // differently-placed heat column rather than always upwelling at 42 %.
   const rPlume = mulberry32(SEED ^ 0x5c411e);
-  const plumeX = W * (0.30 + rPlume() * 0.40);
+  const plumeX = W * (0.3 + rPlume() * 0.4);
 
   // Build the density field: a vertical plume (Gaussian in x, decaying in y),
   // plus low-frequency swirl, plus high-frequency turbulence biased toward

@@ -37,10 +37,42 @@ import { addGrain, type Renderer } from "../shared";
 // attractor. Parameters (a,b,c,d) for x←sin(ay)+c·cos(ax), y←sin(bx)+d·cos(by).
 // Ink and paper colors are tuned per preset so the photographic look holds.
 const PRESETS = [
-  { a: -1.7, b:  1.3, c: -0.1, d: -1.2, bgLight: "#f0e5d0", bgDark: "#d6c4a0", ink: [60,  38,  24] as const },
-  { a: -1.4, b:  1.6, c:  1.0, d:  0.7, bgLight: "#d8e4f0", bgDark: "#a8c0d8", ink: [20,  40,  80] as const },
-  { a:  1.6, b: -0.6, c: -1.2, d:  1.6, bgLight: "#f0ead0", bgDark: "#d8c870", ink: [60,  44,   8] as const },
-  { a: -1.7, b:  1.8, c: -1.9, d: -0.4, bgLight: "#e8f0e8", bgDark: "#a8c8a8", ink: [18,  52,  36] as const },
+  {
+    a: -1.7,
+    b: 1.3,
+    c: -0.1,
+    d: -1.2,
+    bgLight: "#f0e5d0",
+    bgDark: "#d6c4a0",
+    ink: [60, 38, 24] as const,
+  },
+  {
+    a: -1.4,
+    b: 1.6,
+    c: 1.0,
+    d: 0.7,
+    bgLight: "#d8e4f0",
+    bgDark: "#a8c0d8",
+    ink: [20, 40, 80] as const,
+  },
+  {
+    a: 1.6,
+    b: -0.6,
+    c: -1.2,
+    d: 1.6,
+    bgLight: "#f0ead0",
+    bgDark: "#d8c870",
+    ink: [60, 44, 8] as const,
+  },
+  {
+    a: -1.7,
+    b: 1.8,
+    c: -1.9,
+    d: -0.4,
+    bgLight: "#e8f0e8",
+    bgDark: "#a8c8a8",
+    ink: [18, 52, 36] as const,
+  },
 ];
 
 export const renderClifford: Renderer = (ctx, W, H, SEED) => {
