@@ -460,6 +460,7 @@ dialog.studio[open] .studio-inner {
   position: relative;
   width: 100%;
   aspect-ratio: 1200 / 630;
+  max-height: 70vh;
   background: #0a0a0a;
   box-shadow: 0 0 0 1px var(--rule);
   overflow: hidden;
