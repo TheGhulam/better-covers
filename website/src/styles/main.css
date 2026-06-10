@@ -968,6 +968,8 @@ dialog.studio[open] .studio-inner {
   .studio-stage { padding: 18px 18px 14px; }
   .studio-panel { padding: 22px 20px; }
   .panel-title { font-size: 24px; }
+  .stage-frame { max-height: 48vh; }
+  .studio-stage { gap: 12px; }
 
   /* Colophon responsiveness */
   .colophon-content {
