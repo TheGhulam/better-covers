@@ -269,7 +269,7 @@ those are not copied here.
 - Seven discrete bands from deep water to highland; distinct from cover 13
   iso-line contours.
 
-### 23 · Brian's Brain
+### 24 · Brian's Brain
 
 - **Brian Callahan**, 1996 (popularization of the three-state rule).
 - Off / firing / refractory cellular automaton on a toroidal grid; distinct

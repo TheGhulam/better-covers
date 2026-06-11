@@ -1,14 +1,13 @@
 {
   "name": "better-covers",
   "version": "0.2.0",
-  "description": "Programmatic 1200×630 OG-image covers. Twenty-three deterministic canvas renderers from physics, generative art, and cartographic tradition. No AI, no API calls, just math and your slug.",
+  "description": "Programmatic 1200\u00d7630 OG-image covers. Twenty-four deterministic canvas renderers from physics, generative art, and cartographic tradition. No AI, no API calls, just math and your slug.",
   "keywords": [
     "og-image",
     "open-graph",
     "canvas",
     "generative-art",
     "deterministic",
-    "react",
     "satori",
     "vercel-og",
     "blog",
@@ -41,10 +40,6 @@
       "types": "./dist/shared/index.d.ts",
       "import": "./dist/shared/index.js"
     },
-    "./gallery": {
-      "types": "./dist/Gallery.d.ts",
-      "import": "./dist/Gallery.js"
-    },
     "./package.json": "./package.json"
   },
   "files": [
@@ -57,7 +52,7 @@
   ],
   "sideEffects": false,
   "scripts": {
-    "build": "tsup src/index.ts src/renderers/index.ts src/shared/index.ts src/Gallery.tsx --format esm --dts --clean --sourcemap",
+    "build": "tsup src/index.ts src/renderers/index.ts src/shared/index.ts --format esm --dts --clean --sourcemap",
     "dev": "npm run dev --prefix website",
     "typecheck": "tsc --noEmit",
     "lint": "eslint src --max-warnings 0",
@@ -68,14 +63,6 @@
     "test:visual": "vitest run --update",
     "thumbnails": "tsx scripts/generate-thumbnails.ts",
     "prepublishOnly": "npm run typecheck && npm run lint && npm run test && npm run build"
-  },
-  "peerDependencies": {
-    "react": "^18.0.0 || ^19.0.0"
-  },
-  "peerDependenciesMeta": {
-    "react": {
-      "optional": false
-    }
   },
   "devDependencies": {
     "@eslint/js": "^9.39.4",
