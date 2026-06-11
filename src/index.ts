@@ -11,24 +11,18 @@
  *
  * Quick start:
  *
- * ```tsx
- * import { Cover, renderHoarfrost } from "better-covers";
+ * ```ts
+ * import { createCanvas } from "@napi-rs/canvas";
+ * import { renderHoarfrost } from "better-covers";
  *
- * <Cover
- *   render={renderHoarfrost}
- *   seed="my-post-slug"
- *   title="Hoarfrost"
- *   subtitle="DLA from a top seed line"
- * />
+ * const canvas = createCanvas(1200, 630);
+ * const ctx = canvas.getContext("2d");
+ * renderHoarfrost(ctx, 1200, 630, "my-post-slug");
+ * const png = canvas.toBuffer("image/png");
  * ```
  *
  * @module better-covers
  */
-
-export { Cover, type CoverProps } from "./Cover";
-export { Gallery } from "./Gallery";
-export { COVERS, type CoverEntry } from "./covers";
-export { styles } from "./styles";
 
 export type { Renderer } from "./shared";
 export {

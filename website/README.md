@@ -6,7 +6,7 @@ A risograph-zine front-end for [better-covers](https://github.com/TheGhulam/bett
 
 - **Astro 6** (static site, minimal JS)
 - **TypeScript** (strict mode)
-- 23 deterministic canvas renderers bundled in `src/covers/renderers/`
+|- 24 deterministic canvas renderers bundled in `src/covers/renderers/`
 
 ## Run it
 
@@ -22,11 +22,10 @@ npm run build      # → dist/
 src/
 ├── pages/index.astro      # the single page
 ├── styles/main.css        # full design system (Fraunces / EB Garamond / JetBrains Mono)
-├── scripts/main.ts        # interactivity (theme, render, dropdown, rails, download)
 ├── covers/
-│   ├── catalog.ts         # 23 covers with metadata
+│   ├── catalog.ts         # 24 covers with metadata
 │   ├── shared/index.ts    # hashStr, mulberry32, fbm, addGrain, etc.
-│   └── renderers/         # 01-hoarfrost.ts … 23-brians-brain.ts
+│   └── renderers/         # 01-hoarfrost.ts … 24-julia.ts
 ```
 
 ## Notes

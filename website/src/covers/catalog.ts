@@ -292,7 +292,7 @@ export const COVERS: CoverEntry[] = [
   },
   {
     id: "brians-brain",
-    num: "23",
+    num: "24",
     render: renderBriansBrain,
     defaultSeed: "brians-brain",
     title: "Brian's Brain",

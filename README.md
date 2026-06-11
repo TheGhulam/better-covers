@@ -85,7 +85,7 @@ export default function GalleryPage() {
 | 20  | <img src="docs/thumbnails/barnsley-fern.png" width="180" alt="Barnsley Fern cover">           | `barnsley-fern`        | Barnsley fern IFS attractor                     | Barnsley 1988                                        |
 | 21  | <img src="docs/thumbnails/batik-crackle.png" width="180" alt="Batik Crackle cover">           | `batik-crackle`        | Batik wax-resist crackle                        | Indonesian batik tradition                           |
 | 22  | <img src="docs/thumbnails/hypsometric.png" width="180" alt="Hypsometric Tint cover">          | `hypsometric`          | Hypsometric elevation color bands               | NOAA/GEBCO symbology                                 |
-| 23  | <img src="docs/thumbnails/brians-brain.png" width="180" alt="Brian's Brain cover">            | `brians-brain`         | Brian's Brain 3-state CA                        | Callahan 1996                                        |
+| 24  | <img src="docs/thumbnails/brians-brain.png" width="180" alt="Brian's Brain cover">            | `brians-brain`         | Brian's Brain 3-state CA                        | Callahan 1996                                        |
 | 24  | <img src="docs/thumbnails/julia-dragon.png" width="180" alt="Julia's Fracture cover">         | `julia-dragon`         | Julia's Fracture (escape-time fractal)          | Douady & Hubbard 1984                                |
 
 Full primary-source citations available in [`ATTRIBUTIONS.md`](ATTRIBUTIONS.md) and inside the doc comments of each renderer. Research prototypes and the curated HTML gallery in [`research/`](research/) and [`examples/research-gallery/`](examples/research-gallery/).
